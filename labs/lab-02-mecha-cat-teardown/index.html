@@ -424,6 +424,21 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       var ringMark = new THREE.Mesh(new THREE.RingGeometry(2.28, 2.34, 64), new THREE.MeshBasicMaterial({ color: 0xff4d00, transparent: true, opacity: 0.55, side: THREE.DoubleSide }));
       ringMark.rotation.x = -Math.PI / 2; ringMark.position.y = 0.001; scene.add(ringMark);
 
+      // Floor direction chevrons — rev-2 missing fix, added 2026-11-11.
+      // Three orange chevrons on the disc pointing +X (head-first walking direction), at z=+0.95
+      // clear of the feet, y=0.004 proud of the disc so they cannot z-fight with it.
+      // Two thin boxes per chevron meet at a tip on the +X side, so the > always reads forward.
+      (function addDirectionChevrons() {
+        var chevMat = new THREE.MeshBasicMaterial({ color: 0xff4d00, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
+        [1.25, 1.60, 1.95].forEach(function (x) {
+          var g = new THREE.Group(); g.position.set(x, 0.004, 0.95); scene.add(g);
+          var armA = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.006, 0.09), chevMat);
+          armA.position.set(-0.07, 0, 0.10); armA.rotation.y = 0.6; g.add(armA);
+          var armB = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.006, 0.09), chevMat);
+          armB.position.set(-0.07, 0, -0.10); armB.rotation.y = -0.6; g.add(armB);
+        });
+      })();
+
       // materials
       var M = {
         armor: new THREE.MeshStandardMaterial({ color: 0xe9edf1, roughness: 0.30, metalness: 0.38, flatShading: true }),
