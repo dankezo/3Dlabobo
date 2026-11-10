@@ -138,6 +138,7 @@
         </div>
         <div class="chips">
           <span class="chip">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
+          <span class="chip">REV <b>2.1.1</b></span>
           <span class="chip">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>—</b></span>
         </div>
@@ -265,7 +266,8 @@
               <li><b>Z-fighting:</b> side stripes and cheek stripes sat exactly coplanar with their plates. Every appliqué now sits proud of its surface — the standard fix from Three.js modelling practice, along with a clean parent hierarchy (body → neck → head) and no intersecting shells.</li>
               <li><b>Look:</b> flat triangular ear plates instead of cones, panel edge lines on the main armour, intake vents, a keel plate, knee caps and shorter swept-back whiskers.</li>
               <li><b>Rev 2.1 — neck still clipping:</b> the rev-2 slab behind the collar crossed the collar ring, and the gimbal block under the jaw was hit by the throat plate every gait cycle — the head counter-pitches up to ~0.07 rad, so the skull bottom dips ~0.022. Slab replaced by a small hub inside the ring, block removed, struts and piston lowered and slimmed: every neck part now tops out at y≈0.05, with ≥0.025 clearance at full head dip.</li>
-              <li><b>Rev 2.1 — layout:</b> the tour caption is no longer a gradient overlay on the canvas (it used to cover the third chevron) — it is a slim bar under the stage. The subsystem bar is no longer sticky, and the whole docs section sits collapsed behind one toggle, so the page no longer overflows with text.</li>
+              <li><b>Rev 2.1 — layout:</b> the tour caption is no longer a gradient overlay on the canvas — it is a slim bar under the stage. The subsystem bar is no longer sticky, and the whole docs section sits collapsed behind one toggle, so the page no longer overflows with text.</li>
+              <li><b>Rev 2.1.1 — chevrons:</b> moving the caption did not save the third chevron — in the default camera framing it still clipped at the stage's bottom edge. The trio moved inward, from x=1.25/1.60/1.95 to x=1.05/1.38/1.71, so all three fit the frame on load.</li>
             </ul>
           </div>
           <div class="card">
@@ -441,9 +443,11 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       // Three orange chevrons on the disc pointing +X (head-first walking direction), at z=+0.95
       // clear of the feet, y=0.004 proud of the disc so they cannot z-fight with it.
       // Two thin boxes per chevron meet at a tip on the +X side, so the > always reads forward.
+      // Rev 2.1.1: trio moved inward from x=1.25/1.60/1.95 — at 1.95 the third chevron
+      // clipped at the stage's bottom edge in the default camera framing.
       (function addDirectionChevrons() {
         var chevMat = new THREE.MeshBasicMaterial({ color: 0xff4d00, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
-        [1.25, 1.60, 1.95].forEach(function (x) {
+        [1.05, 1.38, 1.71].forEach(function (x) {
           var g = new THREE.Group(); g.position.set(x, 0.004, 0.95); scene.add(g);
           var armA = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.006, 0.09), chevMat);
           armA.position.set(-0.07, 0, 0.10); armA.rotation.y = 0.6; g.add(armA);
