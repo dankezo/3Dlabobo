@@ -52,15 +52,15 @@
       .flag{ font-family:var(--mono); font-size:11px; padding:4px 8px; border-radius:4px; background:rgba(255,255,255,.82); color:#131619; border:1px solid rgba(0,0,0,.08); }
       .flag.hot{ background:var(--warn); color:#fff; border-color:transparent; display:none; }
       .flag.hot.on{ display:block; }
-      .caption{ position:absolute; left:0; right:0; bottom:0; padding:10px 16px; background:linear-gradient(transparent, rgba(10,12,14,.72)); color:#fff; font-size:14px; display:flex; gap:10px; align-items:center; pointer-events:none; min-height:42px; }
-      .caption .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); flex:none; box-shadow:0 0 0 4px rgba(255,77,0,.25); }
-      .caption .tourtag{ font-family:var(--mono); font-size:10px; letter-spacing:.12em; border:1px solid rgba(255,255,255,.5); padding:2px 6px; border-radius:3px; flex:none; }
+      .caption{ display:flex; gap:10px; align-items:center; padding:11px 16px; background:var(--panel); color:var(--ink); font-size:14px; border-top:1px solid var(--line); min-height:42px; }
+      .caption .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); flex:none; box-shadow:0 0 0 4px rgba(255,77,0,.18); }
+      .caption .tourtag{ font-family:var(--mono); font-size:10px; letter-spacing:.12em; border:1px solid var(--line); color:var(--muted); padding:2px 6px; border-radius:3px; flex:none; }
       #cursor{ position:absolute; width:22px; height:22px; margin:-3px 0 0 -3px; z-index:30; pointer-events:none; opacity:0; transition:left .9s cubic-bezier(.5,0,.2,1), top .9s cubic-bezier(.5,0,.2,1), opacity .3s; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
       #cursor.on{ opacity:1; }
       #cursor .ring{ position:absolute; inset:0; border-radius:50%; border:2px solid var(--accent); opacity:0; }
       #cursor.click .ring{ animation:ping .5s ease-out; }
       @keyframes ping{ 0%{ opacity:1; transform:scale(.4);} 100%{ opacity:0; transform:scale(1.6);} }
-      #errbox{ display:none; position:absolute; inset:auto 12px 52px 12px; z-index:40; background:#fff1ec; color:#8f1d00; border:1px solid #ffb59d; border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:12px; white-space:pre-wrap; }
+      #errbox{ display:none; position:absolute; inset:auto 12px 12px 12px; z-index:40; background:#fff1ec; color:#8f1d00; border:1px solid #ffb59d; border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:12px; white-space:pre-wrap; }
       #errbox.on{ display:block; }
 
       .charts{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); }
@@ -86,14 +86,22 @@
       button.toggled{ background:var(--ink); color:var(--panel); border-color:var(--ink); }
       button:focus-visible, input:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-      .subbar{ position:sticky; bottom:0; z-index:20; display:flex; gap:8px; overflow-x:auto; padding:11px 16px; background:var(--panel); border-top:2px solid var(--ink); scrollbar-width:none; }
+      .subbar{ display:flex; gap:8px; overflow-x:auto; padding:10px 16px; background:var(--panel2); border-top:1px solid var(--line); scrollbar-width:none; }
       .subbar::-webkit-scrollbar{ display:none; }
       .subbar .lbl{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; color:var(--muted); align-self:center; flex:none; text-transform:uppercase; }
       .subbar button{ flex:none; border-radius:999px; padding:8px 15px; font-size:13px; }
       .subbar button.sel{ background:var(--accent); border-color:var(--accent); color:#fff; }
 
-      /* ---------- docs ---------- */
-      .docs{ margin-top:26px; }
+      /* ---------- docs (collapsed behind one toggle — no long page, no overflow) ---------- */
+      .docs{ margin-top:18px; }
+      .docs details{ border:1px solid var(--line); border-radius:12px; background:var(--panel); overflow:hidden; }
+      .docs summary{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:13px 16px; cursor:pointer; font-weight:700; font-size:14px; list-style:none; }
+      .docs summary::-webkit-details-marker{ display:none; }
+      .docs summary .hint{ font-weight:400; font-size:12.5px; color:var(--muted); flex:none; }
+      .docs details[open ] summary{ border-bottom:1px solid var(--line); }
+      .docs details > *:not(summary){ margin-left:16px; margin-right:16px; }
+      .docs details > :last-child{ margin-bottom:16px; }
+      .docs details h2{ margin-top:18px; }
       .docs h2{ font-size:21px; margin:26px 0 6px; font-weight:800; letter-spacing:-.01em; }
       .docs h2:first-child{ margin-top:0; }
       .docs p.lede{ color:var(--muted); font-size:14.5px; max-width:760px; margin:0 0 14px; line-height:1.55; }
@@ -116,7 +124,7 @@
       .srcs{ font-size:13.5px; line-height:1.7; }
       .srcs a{ color:var(--accent); font-weight:600; }
       footer{ margin-top:30px; color:var(--muted); font-size:12.5px; font-family:var(--mono); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
-      #toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--panel); padding:10px 16px; border-radius:8px; font-size:13.5px; opacity:0; pointer-events:none; transition:.25s; z-index:60; max-width:88vw; text-align:center; }
+      #toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--panel); padding:10px 16px; border-radius:8px; font-size:13.5px; opacity:0; pointer-events:none; transition:.25s; z-index:60; max-width:88vw; text-align:center; }
       #toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce){ #cursor{ transition:none; } }
     </style>
@@ -153,9 +161,9 @@
             <span class="flag" id="flagMode">ASSEMBLED</span>
             <span class="flag hot" id="flagHot">⚠ OVER-LIMIT — STRESS TEST</span>
           </div>
-          <div class="caption"><span class="dot"></span><span class="tourtag" id="tourTag">TOUR</span><span id="captionText">Tour starting…</span></div>
           <div id="errbox" role="alert"></div>
         </div>
+        <div class="caption"><span class="dot"></span><span class="tourtag" id="tourTag">TOUR</span><span id="captionText">Tour starting…</span></div>
 
         <div class="charts">
           <div class="chart"><div class="chead"><span class="cname">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
@@ -198,6 +206,8 @@
       </section>
 
       <section class="docs" aria-label="Lab documentation">
+        <details id="docsDetails">
+          <summary><span>Lab docs — workflow, specs &amp; master prompt</span><span class="hint">Bấm để mở · click to open</span></summary>
         <h2>How this lab was built — the teardown workflow</h2>
         <p class="lede">Converted from Elvar's teardown post into a nine-step workflow, reviewed and approved, then run on this machine. The same workflow rebuilds any machine with moving parts as one self-contained page. Scope note for this delivery: the interactive lab (steps 1–7) is what this page is; the step-8 video capture is a follow-on run from this same page, and step 9 ships as page + Three.js library together under 1 MB rather than one literal file.</p>
         <div class="grid2">
@@ -254,6 +264,8 @@
               <li><b>Neck flicker:</b> one fat neck cylinder was buried inside both the chest and the skull, so its surface clipped through them on every head-stabilisation frame. Rebuilt as a collar ring, twin struts and a piston running under the skull, with visible clearance on every side.</li>
               <li><b>Z-fighting:</b> side stripes and cheek stripes sat exactly coplanar with their plates. Every appliqué now sits proud of its surface — the standard fix from Three.js modelling practice, along with a clean parent hierarchy (body → neck → head) and no intersecting shells.</li>
               <li><b>Look:</b> flat triangular ear plates instead of cones, panel edge lines on the main armour, intake vents, a keel plate, knee caps and shorter swept-back whiskers.</li>
+              <li><b>Rev 2.1 — neck still clipping:</b> the rev-2 slab behind the collar crossed the collar ring, and the gimbal block under the jaw was hit by the throat plate every gait cycle — the head counter-pitches up to ~0.07 rad, so the skull bottom dips ~0.022. Slab replaced by a small hub inside the ring, block removed, struts and piston lowered and slimmed: every neck part now tops out at y≈0.05, with ≥0.025 clearance at full head dip.</li>
+              <li><b>Rev 2.1 — layout:</b> the tour caption is no longer a gradient overlay on the canvas (it used to cover the third chevron) — it is a slim bar under the stage. The subsystem bar is no longer sticky, and the whole docs section sits collapsed behind one toggle, so the page no longer overflows with text.</li>
             </ul>
           </div>
           <div class="card">
@@ -300,6 +312,7 @@ REQUIRED TOOLS: Node 20+ · the teardown skill (npx skills add elvarofficial/tea
 
 ACCEPTANCE: the page opens already moving; every subsystem detaches and returns; charts move with the model and their min/max are honest; the tour completes untouched and yields to the first touch; the stress slider pushed to 160 % raises torque, temperature and warnings together. Do not declare done until you have pressed everything yourself.</pre>
         </div>
+        </details>
 
         <footer>
           <span>LAB 02 · MECHA CAT TEARDOWN · 3D LAB</span>
@@ -535,19 +548,22 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
 
       /* ---- HEAD ---- */
       var neck = new THREE.Group(); neck.position.set(1.10, 0.18, 0); body.add(neck);
-      // Neck rebuilt as a gimbal assembly with REAL clearance: collar ring on the body,
-      // twin struts + a central piston running UNDER the skull, and a gimbal block below
-      // the jaw line. Nothing intersects the skull or the chest, so nothing can flicker
-      // (the old single fat cylinder was buried inside both and clipped through them
-      // every time the head stabilised against body pitch).
+      // Neck rebuilt as a gimbal assembly with REAL clearance (rev 2.1, 2026-11-11):
+      // collar ring + a small hub inside it, twin struts + a slim piston running
+      // UNDER the skull. The rev-2 dark slab behind the collar crossed the collar
+      // ring, and the rev-2 gimbal block under the jaw was hit by the throat plate
+      // on every gait cycle: the head counter-pitches up to ~0.07 rad, so the skull
+      // bottom dips ~0.022 and the throat sweeps through anything taller than
+      // y≈0.05 (body space). Every neck part now tops out at y≈0.05, leaving
+      // ≥0.025 clearance even at full head dip. Nothing intersects the skull,
+      // the throat or the chest, so nothing can flicker.
       var collar = new THREE.Mesh(new THREE.TorusGeometry(0.175, 0.040, 10, 28), M.steel);
       collar.rotation.y = Math.PI / 2; collar.castShadow = true; neck.add(collar);
-      box(0.07, 0.36, 0.42, M.dark, -0.05, 0, 0, neck);
+      var neckHub = cyl(0.09, 0.09, 0.10, M.dark, -0.02, 0, 0, neck, 20); neckHub.rotation.z = Math.PI / 2;
       [-1, 1].forEach(function (s) {
-        var strut = cyl(0.032, 0.032, 0.36, M.steel, 0.18, -0.13, 0.105 * s, neck, 12); strut.rotation.z = Math.PI / 2;
+        var strut = cyl(0.032, 0.032, 0.36, M.steel, 0.18, -0.16, 0.105 * s, neck, 12); strut.rotation.z = Math.PI / 2;
       });
-      var neckPiston = cyl(0.052, 0.052, 0.32, M.dark, 0.16, -0.13, 0, neck, 16); neckPiston.rotation.z = Math.PI / 2;
-      box(0.15, 0.10, 0.26, M.dark, 0.37, -0.145, 0, neck);
+      var neckPiston = cyl(0.042, 0.042, 0.32, M.dark, 0.16, -0.17, 0, neck, 16); neckPiston.rotation.z = Math.PI / 2;
       var head = new THREE.Group(); head.position.set(0.46, 0.16, 0); neck.add(head);
       reg(head, 'head', new THREE.Vector3(1, 0.35, 0), 0.78);
       /* Angular wedge head — flat planes and hard edges only, no spheres.
