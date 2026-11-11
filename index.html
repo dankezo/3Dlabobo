@@ -40,8 +40,6 @@
       .seg button{ border:1px solid transparent; background:transparent; box-shadow:none; border-radius:6px; padding:5px 13px; font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; }
       .seg button:hover{ color:var(--ink); border-color:transparent; background:transparent; box-shadow:none; }
       .seg button.on{ background:var(--panel); color:var(--ink); border-color:var(--line); box-shadow:0 1px 3px rgba(15,18,20,.12); }
-      .triallink{ flex:none; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.03em; padding:6px 11px; border:1px solid var(--line); border-radius:6px; background:var(--accent-soft); color:var(--ink); text-decoration:none; white-space:nowrap; }
-      .triallink:hover{ border-color:var(--accent); color:var(--accent); }
       .modelbar .mname{ font-family:var(--mono); font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .modelbar .mname b{ color:var(--ink); font-weight:700; }
       .modelbar .loadbtn{ margin-left:auto; flex:none; }
@@ -84,35 +82,6 @@
       .chart .cval small{ font-size:9.5px; color:#5b6670; font-weight:400; }
       .chart canvas{ width:100%; height:30px; display:block; margin-top:3px; }
       .chart .cmm{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; color:#7a8590; font-variant-numeric:tabular-nums; }
-      /* ---------- phones: the HUD leaves the canvas — stats & controls become
-         a plain strip under the stage, the page scrolls, the cat gets the
-         whole width. Desktop is untouched. ---------- */
-      @media (max-width:640px){
-        body{ overflow:auto; }
-        .wrap{ height:auto; min-height:100vh; min-height:100dvh; }
-        header.top{ flex-wrap:wrap; padding:10px 12px 6px; gap:8px 10px; }
-        header.top h1{ font-size:20px; }
-        .console{ flex:none; overflow:visible; }
-        .stagewrap{ flex:none; }
-        .stage{ flex:none; height:54vh; height:54dvh; min-height:320px; }
-        .bignum{ top:10px; left:12px; }
-        .bignum .val{ font-size:34px; }
-        .bignum .unit{ font-size:11px; }
-        .bignum .phase{ font-size:11px; }
-        .stageflags{ left:8px; bottom:10px; }
-        .flag{ font-size:9.5px; padding:3px 6px; }
-        .hud{ position:static; display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:10px 12px; background:var(--panel2); border-top:1px solid var(--line); pointer-events:auto; }
-        .hudcol{ position:static; width:auto; gap:8px; }
-        .chart{ padding:8px 10px 7px; border-radius:10px; }
-        .chart .cname{ font-size:9px; letter-spacing:.05em; }
-        .chart .cval{ font-size:15px; }
-        .chart canvas{ height:24px; }
-        .modelbar .loadbtn{ position:sticky; right:0; background:var(--panel); box-shadow:-6px 0 10px rgba(15,18,20,.08); }
-        .subbar{ position:sticky; bottom:0; z-index:20; padding:10px 12px; box-shadow:0 -6px 14px rgba(15,18,20,.10); }
-        .subbar button{ min-height:40px; padding:9px 13px; }
-        .subbar button[data-sub="none"]{ position:sticky; left:0; z-index:2; box-shadow:4px 0 8px rgba(15,18,20,.10); }
-        #toast{ bottom:64px; }
-      }
 
       /* ---------- floating control rails — sliders & buttons live in the side
          columns over the stage, not crammed into a bottom bar ---------- */
@@ -130,16 +99,6 @@
       .ctl.explode{ border-top:1px solid var(--line); padding-top:7px; margin-top:2px; }
       .ctl.explode label{ color:var(--ink); }
       .ctl.explode label output{ color:var(--accent); }
-      @media (max-width:640px){
-        .rail{ padding:9px 10px 10px; border-radius:10px; gap:7px; }
-        .rail .rhead{ font-size:9px; letter-spacing:.08em; }
-        .rail button{ font-size:12px; padding:9px 8px; border-radius:8px; min-height:40px; }
-        .ctl label{ font-size:9.5px; letter-spacing:.04em; }
-        .ctl input[type=range]{ height:28px; }
-        .ctl input[type=range]::-webkit-slider-thumb{ width:22px; height:22px; margin-top:-9.5px; }
-        .ctl input[type=range]::-moz-range-thumb{ width:18px; height:18px; }
-        .ctl.explode{ padding-top:6px; }
-      }
       button{ font-family:var(--sans); font-size:12.5px; font-weight:600; letter-spacing:.01em; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:6px; padding:7px 12px; cursor:pointer; box-shadow:0 1px 2px rgba(15,18,20,.05); transition:border-color .15s ease, background .15s ease, box-shadow .15s ease; }
       button:hover{ border-color:#9aa7b1; background:var(--panel2); box-shadow:0 1px 3px rgba(15,18,20,.08); }
       button:active{ transform:translateY(1px); box-shadow:none; }
@@ -191,6 +150,49 @@
       #toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--panel); padding:10px 16px; border-radius:8px; font-size:13.5px; opacity:0; pointer-events:none; transition:.25s; z-index:60; max-width:88vw; text-align:center; }
       #toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce){ #cursor{ transition:none; } }
+      /* ---------- phones: ONE screen, NO scroll. The page is exactly one
+         stable viewport tall (svh, not dvh — dvh changes every time the
+         browser chrome shows/hides, which reflowed the layout and made the
+         buttons keep resizing). The stage takes whatever height is left
+         after a compact fixed control panel. The model bar and the detach
+         bar are gone on phones: tap a part of the cat itself to take it
+         apart, tap it again to put it back. Desktop is untouched. ---------- */
+      @media (max-width:640px){
+        body{ overflow:hidden; }
+        .wrap{ height:100vh; height:100svh; }
+        header.top{ flex-wrap:nowrap; padding:8px 12px; gap:8px; }
+        header.top h1{ font-size:18px; }
+        .chips .chip{ display:none; }
+        .modelbar{ display:none; }
+        .subbar{ display:none; }
+        .console{ flex:1 1 auto; min-height:0; overflow:hidden; }
+        .stagewrap{ flex:1 1 auto; min-height:0; }
+        .stage{ flex:1 1 auto; height:auto; min-height:0; }
+        .bignum{ top:10px; left:12px; }
+        .bignum .val{ font-size:34px; }
+        .bignum .unit{ font-size:11px; }
+        .bignum .phase{ font-size:11px; }
+        .stageflags{ left:8px; bottom:10px; }
+        .flag{ font-size:9.5px; padding:3px 6px; }
+        .hud{ position:static; flex:none; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:10px 12px 12px; background:var(--panel2); border-top:1px solid var(--line); pointer-events:auto; }
+        .hudcol{ display:contents; }
+        .chart{ padding:6px 8px; border-radius:10px; min-width:0; }
+        .chart .chead{ justify-content:center; }
+        .chart .cname{ display:none; }
+        .chart .cval{ font-size:13px; }
+        .chart canvas{ height:16px; }
+        .chart .cmm{ display:none; }
+        .rail{ grid-column:span 2; display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px 10px; border-radius:10px; }
+        .rail .rhead{ grid-column:1 / -1; }
+        .rail button{ font-size:11px; padding:6px 4px; border-radius:8px; min-height:34px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+        .rail .ctl{ grid-column:1 / -1; }
+        .ctl label{ font-size:9.5px; letter-spacing:.04em; }
+        .ctl input[type=range]{ height:22px; }
+        .ctl input[type=range]::-webkit-slider-thumb{ width:18px; height:18px; margin-top:-7.5px; }
+        .ctl input[type=range]::-moz-range-thumb{ width:16px; height:16px; }
+        .ctl.explode{ padding-top:5px; margin-top:0; }
+        #toast{ top:56px; bottom:auto; }
+      }
     </style>
   </head>
   <body>
@@ -201,7 +203,7 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.0 · ELVAR LOOK</b></span>
+          <span class="chip opt">REV <b>3.2 · PHONE FIT</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>—</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
@@ -215,7 +217,6 @@
           <button type="button" data-model="stealth" title="Recon configuration — 85 RPM, dark shell, X-Ray on">MK-IV · Stealth</button>
           <button type="button" data-model="hazard" title="Heavy configuration — 35 RPM, 130% stress, 35% exploded view">MK-IV · Hazard</button>
         </div>
-        <a class="triallink" href="trials.html">Trial models · Dragon / Worm / Laser / Poro →</a>
         <span class="mname">Machine&nbsp;<b id="modelName">MECHA CAT MK-IV</b></span>
         <button class="loadbtn" id="btnLoadTop" type="button">Load model file…</button>
       </div>
@@ -290,8 +291,8 @@
             <ol>
               <li><b>Prep the tools</b> — Node 20+, ffmpeg, Python 3, Playwright + Chromium; read the teardown skill as reference, build with Three.js.</li>
               <li><b>Pick the machine + one reference</b> — a mecha cat. One motion input drives everything. Real numbers first, checked on paper before any code.</li>
-              <li><b>Build the model first</b> — a single solver is the source of truth; the clock and every readout read the same model. Each subsystem is a button that detaches it.</li>
-              <li><b>Build the console</b> — big live primary number top-left, one live chart per quantity with min/max, subsystem button row always visible, replay button.</li>
+              <li><b>Build the model first</b> — a single solver is the source of truth; the clock and every readout read the same model. Each subsystem detaches from its button — or by tapping the part itself on the machine.</li>
+              <li><b>Build the console</b> — big live primary number top-left, one live chart per quantity with min/max, subsystem controls always in reach, replay button.</li>
               <li><b>The look</b> — clean research model on a light studio background, soft shadow, one strong accent colour, dark text.</li>
               <li><b>Critic pass (gate)</b> — stills at every tour beat, press every button and slider yourself, fix, re-render. Nothing ships before this.</li>
               <li><b>Self-driving page</b> — the tour runs itself with a visible cursor; any touch stops the tour and hands over control. Camera stays committed, machine stays in frame.</li>
@@ -355,7 +356,15 @@
             <ul>
               <li><b>Phones:</b> the floating HUD columns covered the cat on a 390px screen, so on phones the stats and controls leave the canvas and become a plain strip under the stage, and the page scrolls — the cat gets the whole width. Desktop keeps the floating HUD.</li>
               <li><b>Detach buttons toggle:</b> tapping the active subsystem button again puts it back to Assembled — you can always exit a detach mode from the same button. The Assembled button also stays pinned to the left of the bar, and Load stays pinned to the right of the model bar, while both bars scroll.</li>
-              <li><b>Trial models:</b> the separate Trial Models page (mechanical dragon, giant sand worm, Mega Laser Gun, Mega Poro) is now live at <code>trials.html</code> in this repo and linked from the model bar — it was never on this page before.</li>
+              <li><b>Trial models:</b> the separate Trial Models page (mechanical dragon, giant sand worm, Mega Laser Gun, Mega Poro) lives at <code>trials.html</code> in this repo — the model-bar link to it was removed again in Rev 3.2 until the page is finished.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.2 — phone fit (one screen, tap-to-explode, solver untouched)</h3>
+            <ul>
+              <li><b>Phones fit one screen, no scroll:</b> the page is exactly one viewport tall on stable <code>svh</code>, not <code>dvh</code> — dvh changes whenever the browser chrome shows or hides, which reflowed the layout and made the buttons keep resizing. The stage takes whatever height is left after a compact control panel.</li>
+              <li><b>Tap the cat itself:</b> the model bar and the detach bar are gone on phones — tap any part of the machine to explode that subsystem, tap the same part again to put it back. Desktop keeps both bars.</li>
+              <li><b>Cut:</b> the Trial models link is removed from the model bar until that page is finished — the page itself (<code>trials.html</code>) still exists, just unlinked. The tour no longer auto-starts on phones, so it can't fight your taps.</li>
             </ul>
           </div>
           <div class="card">
@@ -400,7 +409,8 @@ BUILD ORDER:
 
 REQUIRED TOOLS: Node 20+ · the teardown skill (npx skills add elvarofficial/teardown) as method reference · Three.js · ffmpeg · Python 3 · Playwright + Chromium for the critic pass.
 
-ACCEPTANCE: the page opens already moving; every subsystem detaches and returns; charts move with the model and their min/max are honest; the tour completes untouched and yields to the first touch; the stress slider pushed to 160 % raises torque, temperature and warnings together. Do not declare done until you have pressed everything yourself.</pre>
+ACCEPTANCE: the page opens already moving; every subsystem detaches and returns; charts move with the model and their min/max are honest; the tour completes untouched and yields to the first touch; the stress slider pushed to 160 % raises torque, temperature and warnings together. Do not declare done until you have pressed everything yourself.
+PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the model bar and detach bar are hidden and each part detaches by tapping it directly (tap again to reassemble); the tour does not auto-start on phones.</pre>
         </div>
 
         <footer>
@@ -589,6 +599,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       /* Explodables: base position + direction; level comes from subsystem state */
       var explodables = [];
       function reg(obj, sub, dir, dist) {
+        obj.userData.sub = sub; // tags the part so tap-to-explode can find its subsystem
         explodables.push({ obj: obj, sub: sub, base: obj.position.clone(), dir: dir, dist: dist });
       }
       function regLocal(obj, sub, dir, dist) { reg(obj, sub, dir, dist); }
@@ -598,7 +609,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       var BODY_Y = SPEC.HIP_H + 0.34;
 
       /* ---- CHASSIS v3 — Elvar proportions: low, long, tapered. Dark frame underneath, ceramic shell on top, nothing is a plain box silhouette ---- */
-      var chassis = new THREE.Group(); body.add(chassis);
+      var chassis = new THREE.Group(); body.add(chassis); chassis.userData.sub = 'chassis'; // unregistered frame parts tap as chassis
       // inner frame — visible in the gaps between armour, so the machine reads as built, not moulded
       box(2.08, 0.22, 0.36, M.frame, 0, 0.10, 0, chassis);
       box(1.86, 0.12, 0.52, M.dark, -0.02, -0.18, 0, chassis);
@@ -914,16 +925,44 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
           t.z + camDist * Math.cos(camPitch) * Math.cos(camYaw));
         camera.lookAt(t);
       }
-      var dragging = false, lastPX = 0, lastPY = 0;
+      var dragging = false, lastPX = 0, lastPY = 0, downX = 0, downY = 0, downT = 0;
       var cvs = renderer.domElement;
-      cvs.addEventListener('pointerdown', function (e) { dragging = true; lastPX = e.clientX; lastPY = e.clientY; cvs.setPointerCapture(e.pointerId); stopTour(); });
+      var tapRay = new THREE.Raycaster();
+      var SUB_LABEL = { head: 'Head', core: 'Energy core', chassis: 'Chassis', tail: 'Tail', legFL: 'Leg · front-left', legFR: 'Leg · front-right', legBL: 'Leg · back-left', legBR: 'Leg · back-right' };
+      function tapPart(e) {
+        // A tap (not a drag) on a part explodes that subsystem; tapping the
+        // same part again puts it back. Works on phone and desktop.
+        var r = cvs.getBoundingClientRect();
+        var nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+        var ny = -((e.clientY - r.top) / r.height) * 2 + 1;
+        tapRay.setFromCamera({ x: nx, y: ny }, camera);
+        var hits = tapRay.intersectObject(cat, true).filter(function (h) { return h.object.isMesh; });
+        for (var i = 0; i < hits.length; i++) {
+          var o = hits[i].object;
+          while (o) { if (o.userData && o.userData.sub) return o.userData.sub; o = o.parent; }
+        }
+        return null;
+      }
+      cvs.addEventListener('pointerdown', function (e) { dragging = true; lastPX = e.clientX; lastPY = e.clientY; downX = e.clientX; downY = e.clientY; downT = performance.now(); cvs.setPointerCapture(e.pointerId); stopTour(); });
       cvs.addEventListener('pointermove', function (e) {
         if (!dragging) return;
         camYaw -= (e.clientX - lastPX) * 0.005;
         camPitch = clamp(camPitch + (e.clientY - lastPY) * 0.004, 0.08, 1.25);
         lastPX = e.clientX; lastPY = e.clientY;
       });
-      cvs.addEventListener('pointerup', function () { dragging = false; });
+      cvs.addEventListener('pointerup', function (e) {
+        dragging = false;
+        var moved = Math.hypot(e.clientX - downX, e.clientY - downY);
+        if (moved < 10 && performance.now() - downT < 400) {
+          var sub = tapPart(e);
+          if (sub) {
+            var puttingBack = (selected === sub);
+            setSelected(puttingBack ? 'none' : sub);
+            toast(puttingBack ? 'Đã ráp lại ' + SUB_LABEL[sub] : 'Đã tách ' + SUB_LABEL[sub] + ' — chạm lại vào nó để ráp');
+          }
+        }
+      });
+      cvs.addEventListener('pointercancel', function () { dragging = false; });
       cvs.addEventListener('wheel', function (e) { e.preventDefault(); camDist = clamp(camDist + e.deltaY * 0.006, 3.6, 10); }, { passive: false });
 
       /* ================= CHARTS ================= */
@@ -1187,7 +1226,10 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       }
       requestAnimationFrame(frame);
       setStress(100); setRpm(55); setSelected('none');
-      if (!reduceMotion) setTimeout(startTour, 700);
+      // The tour only auto-starts on desktop: on phones it would detach parts
+      // on load and fight the user's own taps.
+      if (!reduceMotion && window.matchMedia('(min-width:641px)').matches) setTimeout(startTour, 700);
+      else $('footState').textContent = 'solver: live · tour: stopped (manual control)';
     })();
     </script>
   </body>
