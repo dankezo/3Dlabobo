@@ -8,8 +8,8 @@
     <title>Mecha Cat Teardown — Lab 02 · 3D Lab</title>
     <style>
       :root{
-        --bg:#e9edf0; --panel:#ffffff; --panel2:#f4f6f8; --ink:#131619; --muted:#5b6670;
-        --line:#d3dade; --accent:#ff4d00; --accent-soft:#ffe9df; --ok:#0e8a4d; --warn:#d92c00;
+        --bg:#e6e9ec; --panel:#ffffff; --panel2:#eef0f2; --ink:#0f1214; --muted:#5c676f;
+        --line:#cfd6dc; --accent:#ff4d00; --accent-soft:#fff0e8; --ok:#0e8a4d; --warn:#d92c00;
         --mono:ui-monospace,"SF Mono","Cascadia Mono",Consolas,monospace;
         --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
       }
@@ -20,88 +20,130 @@
         }
       }
       *{ box-sizing:border-box; }
-      html,body{ margin:0; padding:0; }
-      body{ background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; }
-      .wrap{ max-width:1240px; margin:0 auto; padding:18px 16px 40px; }
-      header.top{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:10px 18px; margin:4px 0 14px; }
-      header.top h1{ font-size:clamp(24px,3.4vw,38px); line-height:1.05; margin:0; font-weight:800; letter-spacing:-.02em; }
+      html,body{ margin:0; padding:0; height:100%; }
+      body{ background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; overflow:hidden; }
+      .wrap{ margin:0; padding:0; height:100vh; height:100dvh; display:flex; flex-direction:column; }
+      header.top{ display:flex; flex-wrap:nowrap; align-items:center; gap:10px 16px; margin:0; padding:10px 16px 8px; flex:none; }
+      header.top h1{ font-size:clamp(20px,2.4vw,27px); line-height:1; margin:0; font-weight:850; letter-spacing:-.03em; white-space:nowrap; }
       header.top h1 .lab{ color:var(--accent); }
-      header.top p.sub{ margin:0; color:var(--muted); font-size:14px; max-width:560px; }
-      .chips{ display:flex; gap:8px; flex-wrap:wrap; margin-left:auto; }
-      .chip{ font-family:var(--mono); font-size:11px; padding:5px 9px; border:1px solid var(--line); border-radius:999px; background:var(--panel); color:var(--muted); }
+      .chips{ display:flex; gap:6px; flex-wrap:nowrap; margin-left:auto; align-items:center; overflow:hidden; }
+      .chip{ font-family:var(--mono); font-size:10.5px; padding:4px 8px; border:1px solid var(--line); border-radius:6px; background:var(--panel); color:var(--muted); white-space:nowrap; }
+      .docsbtn{ font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:7px 12px; border-radius:6px; background:var(--panel); color:var(--ink); border:1px solid var(--line); white-space:nowrap; box-shadow:0 1px 2px rgba(15,18,20,.05); transition:border-color .15s ease, background .15s ease; }
+      .docsbtn:hover{ border-color:var(--muted); background:var(--panel2); opacity:1; }
+
+      /* ---------- model switcher — its own bar under the header, always visible ---------- */
+      .modelbar{ flex:none; display:flex; align-items:center; gap:10px; padding:7px 16px; background:var(--panel); border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none; }
+      .modelbar::-webkit-scrollbar{ display:none; }
+      .modelbar .mlbl{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; flex:none; display:flex; align-items:center; gap:7px; }
+      .modelbar .mlbl::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:none; }
+      .seg{ display:flex; gap:2px; background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:2px; flex:none; }
+      .seg button{ border:1px solid transparent; background:transparent; box-shadow:none; border-radius:6px; padding:5px 13px; font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; }
+      .seg button:hover{ color:var(--ink); border-color:transparent; background:transparent; box-shadow:none; }
+      .seg button.on{ background:var(--panel); color:var(--ink); border-color:var(--line); box-shadow:0 1px 3px rgba(15,18,20,.12); }
+      .modelbar .mname{ font-family:var(--mono); font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .modelbar .mname b{ color:var(--ink); font-weight:700; }
+      .modelbar .loadbtn{ margin-left:auto; flex:none; }
+      @media (max-width:640px){ .modelbar{ padding:6px 10px; gap:8px; } .modelbar .mname{ display:none; } .seg button{ padding:5px 10px; font-size:11.5px; } }
+      @media (max-width:760px){ .chip.opt{ display:none; } }
       .chip b{ color:var(--ok); font-weight:700; }
       .chip.warn b{ color:var(--warn); }
-      .labstrip{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 14px; font-size:13px; }
-      .labstrip .lbl{ font-family:var(--mono); font-size:10.5px; letter-spacing:.12em; color:var(--muted); }
-      .labstrip a, .labstrip .cur{ border:1px solid var(--line); background:var(--panel); border-radius:8px; padding:8px 12px; color:var(--ink); text-decoration:none; font-weight:600; }
-      .labstrip a:hover{ border-color:var(--accent); color:var(--accent); }
-      .labstrip .cur{ background:var(--accent-soft); border-color:var(--accent); color:var(--ink); }
-      .labstrip .fork{ color:var(--muted); font-size:12.5px; }
 
       /* ---------- console ---------- */
-      .console{ position:relative; background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
-      .stage{ position:relative; width:100%; aspect-ratio:16/9.4; background:#eef1f3; min-height:300px; }
-      @media (max-width:640px){ .stage{ aspect-ratio:4/3.6; } }
+      .console{ position:relative; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; background:var(--panel); overflow:hidden; }
+      .stage{ position:relative; width:100%; flex:1 1 auto; min-height:0; background:radial-gradient(120% 90% at 50% 0%, #f7f8f9 0%, #e9edef 52%, #dde3e7 100%); }
       .stage canvas{ display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
       .stage canvas:active{ cursor:grabbing; }
-      .bignum{ position:absolute; top:14px; left:16px; pointer-events:none; color:#131619; }
-      .bignum .val{ font-family:var(--mono); font-size:clamp(44px,6.5vw,76px); font-weight:700; line-height:.95; letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
+      .bignum{ position:absolute; top:12px; left:14px; pointer-events:none; color:#131619; z-index:5; }
+      .bignum .val{ font-family:var(--mono); font-size:clamp(38px,5vw,58px); font-weight:700; line-height:.95; letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
       .bignum .unit{ font-family:var(--mono); font-size:13px; letter-spacing:.14em; color:#5b6670; margin-top:2px; }
       .bignum .phase{ font-family:var(--mono); font-size:12px; color:#8a95a0; font-variant-numeric:tabular-nums; }
-      .stageflags{ position:absolute; top:14px; right:14px; display:flex; flex-direction:column; gap:6px; align-items:flex-end; pointer-events:none; }
+      .stageflags{ position:absolute; left:14px; bottom:14px; display:flex; flex-direction:column; gap:6px; align-items:flex-start; pointer-events:none; z-index:6; }
       .flag{ font-family:var(--mono); font-size:11px; padding:4px 8px; border-radius:4px; background:rgba(255,255,255,.82); color:#131619; border:1px solid rgba(0,0,0,.08); }
       .flag.hot{ background:var(--warn); color:#fff; border-color:transparent; display:none; }
       .flag.hot.on{ display:block; }
-      .caption{ display:flex; gap:10px; align-items:center; padding:11px 16px; background:var(--panel); color:var(--ink); font-size:14px; border-top:1px solid var(--line); min-height:42px; }
-      .caption .dot{ width:8px; height:8px; border-radius:50%; background:var(--accent); flex:none; box-shadow:0 0 0 4px rgba(255,77,0,.18); }
-      .caption .tourtag{ font-family:var(--mono); font-size:10px; letter-spacing:.12em; border:1px solid var(--line); color:var(--muted); padding:2px 6px; border-radius:3px; flex:none; }
       #cursor{ position:absolute; width:22px; height:22px; margin:-3px 0 0 -3px; z-index:30; pointer-events:none; opacity:0; transition:left .9s cubic-bezier(.5,0,.2,1), top .9s cubic-bezier(.5,0,.2,1), opacity .3s; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
       #cursor.on{ opacity:1; }
       #cursor .ring{ position:absolute; inset:0; border-radius:50%; border:2px solid var(--accent); opacity:0; }
       #cursor.click .ring{ animation:ping .5s ease-out; }
       @keyframes ping{ 0%{ opacity:1; transform:scale(.4);} 100%{ opacity:0; transform:scale(1.6);} }
-      #errbox{ display:none; position:absolute; inset:auto 12px 12px 12px; z-index:40; background:#fff1ec; color:#8f1d00; border:1px solid #ffb59d; border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:12px; white-space:pre-wrap; }
+      #errbox{ display:none; position:absolute; inset:auto 12px 14px 12px; z-index:40; background:#fff1ec; color:#8f1d00; border:1px solid #ffb59d; border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:12px; white-space:pre-wrap; }
       #errbox.on{ display:block; }
 
-      .charts{ display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); }
-      @media (max-width:760px){ .charts{ grid-template-columns:repeat(2,1fr); } }
-      .chart{ background:var(--panel); padding:10px 12px 8px; }
+      /* ---------- floating metric HUD — left & right over the stage ---------- */
+      .hud{ position:absolute; inset:0; pointer-events:none; z-index:4; }
+      .hudcol{ position:absolute; display:flex; flex-direction:column; gap:8px; width:192px; }
+      .hudcol.left{ left:12px; top:118px; }
+      .hudcol.right{ right:12px; top:12px; }
+      .chart{ background:rgba(255,255,255,.78); -webkit-backdrop-filter:blur(12px) saturate(1.25); backdrop-filter:blur(12px) saturate(1.25); border:1px solid rgba(19,22,25,.09); border-radius:12px; box-shadow:0 8px 22px rgba(15,18,20,.10), 0 1px 3px rgba(15,18,20,.06); padding:8px 11px 7px; }
       .chart .chead{ display:flex; justify-content:space-between; align-items:baseline; gap:6px; }
-      .chart .cname{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; color:var(--muted); text-transform:uppercase; }
-      .chart .cval{ font-family:var(--mono); font-size:17px; font-weight:700; font-variant-numeric:tabular-nums; }
-      .chart .cval small{ font-size:10px; color:var(--muted); font-weight:400; }
-      .chart canvas{ width:100%; height:44px; display:block; margin-top:4px; }
-      .chart .cmm{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:10px; color:var(--muted); font-variant-numeric:tabular-nums; }
+      .chart .cname{ font-family:var(--mono); font-size:9.5px; letter-spacing:.09em; color:#5b6670; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .chart .cval{ font-family:var(--mono); font-size:16px; font-weight:700; font-variant-numeric:tabular-nums; color:#131619; white-space:nowrap; }
+      .chart .cval small{ font-size:9.5px; color:#5b6670; font-weight:400; }
+      .chart canvas{ width:100%; height:30px; display:block; margin-top:3px; }
+      .chart .cmm{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; color:#7a8590; font-variant-numeric:tabular-nums; }
+      @media (max-width:640px){
+        .hudcol{ width:118px; gap:6px; }
+        .hudcol.left{ left:8px; top:96px; }
+        .hudcol.right{ right:8px; top:10px; }
+        .chart{ padding:6px 8px 5px; border-radius:10px; }
+        .chart .cname{ font-size:8px; letter-spacing:.05em; }
+        .chart .cval{ font-size:12.5px; }
+        .chart canvas{ height:20px; }
+        .chart .cmm{ display:none; }
+        .stageflags{ left:8px; bottom:10px; }
+        .flag{ font-size:9.5px; padding:3px 6px; }
+      }
 
-      .controls{ display:flex; flex-wrap:wrap; gap:14px 22px; padding:14px 16px; border-top:1px solid var(--line); background:var(--panel2); align-items:flex-end; }
-      .ctl{ display:flex; flex-direction:column; gap:5px; min-width:150px; flex:1 1 150px; max-width:230px; }
-      .ctl label{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); display:flex; justify-content:space-between; }
+      /* ---------- floating control rails — sliders & buttons live in the side
+         columns over the stage, not crammed into a bottom bar ---------- */
+      .rail{ pointer-events:auto; background:rgba(255,255,255,.78); -webkit-backdrop-filter:blur(12px) saturate(1.25); backdrop-filter:blur(12px) saturate(1.25); border:1px solid rgba(19,22,25,.09); border-radius:12px; box-shadow:0 8px 22px rgba(15,18,20,.10), 0 1px 3px rgba(15,18,20,.06); padding:9px 11px 10px; display:flex; flex-direction:column; gap:6px; }
+      .rail .rhead{ font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#5b6670; }
+      .rail button{ width:100%; text-align:center; }
+      .ctl{ display:flex; flex-direction:column; gap:2px; width:100%; }
+      .ctl label{ font-family:var(--mono); font-size:10px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); display:flex; justify-content:space-between; gap:6px; }
       .ctl label output{ color:var(--ink); font-weight:700; font-variant-numeric:tabular-nums; }
-      .ctl input[type=range]{ width:100%; accent-color:var(--accent); height:26px; margin:0; }
-      .btns{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-      button{ font-family:var(--sans); font-size:13.5px; font-weight:600; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:8px; padding:9px 14px; cursor:pointer; }
-      button:hover{ border-color:var(--muted); }
-      button:active{ transform:translateY(1px); }
+      .ctl input[type=range]{ width:100%; accent-color:var(--accent); height:20px; margin:0; -webkit-appearance:none; appearance:none; background:transparent; cursor:pointer; }
+      .ctl input[type=range]::-webkit-slider-runnable-track{ height:3px; border-radius:2px; background:var(--line); }
+      .ctl input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width:15px; height:15px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 1px 3px rgba(15,18,20,.28); margin-top:-6px; }
+      .ctl input[type=range]::-moz-range-track{ height:3px; border-radius:2px; background:var(--line); }
+      .ctl input[type=range]::-moz-range-thumb{ width:11px; height:11px; border-radius:50%; background:var(--accent); border:2px solid #fff; box-shadow:0 1px 3px rgba(15,18,20,.28); }
+      .ctl.explode{ border-top:1px solid var(--line); padding-top:7px; margin-top:2px; }
+      .ctl.explode label{ color:var(--ink); }
+      .ctl.explode label output{ color:var(--accent); }
+      @media (max-width:640px){
+        .rail{ padding:7px 8px 8px; border-radius:10px; gap:5px; }
+        .rail .rhead{ font-size:8px; letter-spacing:.08em; }
+        .rail button{ font-size:10.5px; padding:5px 6px; border-radius:7px; }
+        .ctl label{ font-size:8px; letter-spacing:.04em; }
+        .ctl input[type=range]{ height:16px; }
+        .ctl.explode{ padding-top:5px; }
+      }
+      button{ font-family:var(--sans); font-size:12.5px; font-weight:600; letter-spacing:.01em; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:6px; padding:7px 12px; cursor:pointer; box-shadow:0 1px 2px rgba(15,18,20,.05); transition:border-color .15s ease, background .15s ease, box-shadow .15s ease; }
+      button:hover{ border-color:#9aa7b1; background:var(--panel2); box-shadow:0 1px 3px rgba(15,18,20,.08); }
+      button:active{ transform:translateY(1px); box-shadow:none; }
       button.primary{ background:var(--accent); border-color:var(--accent); color:#fff; }
+      button.primary:hover{ background:var(--accent); border-color:var(--accent); filter:brightness(.93); }
       button.toggled{ background:var(--ink); color:var(--panel); border-color:var(--ink); }
+      button.toggled:hover{ background:var(--ink); border-color:var(--ink); opacity:.88; }
       button:focus-visible, input:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
 
-      .subbar{ display:flex; gap:8px; overflow-x:auto; padding:10px 16px; background:var(--panel2); border-top:1px solid var(--line); scrollbar-width:none; }
+      .subbar{ flex:none; display:flex; gap:6px; overflow-x:auto; padding:9px 14px; background:var(--panel); border-top:1px solid var(--line); scrollbar-width:none; align-items:center; }
       .subbar::-webkit-scrollbar{ display:none; }
-      .subbar .lbl{ font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; color:var(--muted); align-self:center; flex:none; text-transform:uppercase; }
-      .subbar button{ flex:none; border-radius:999px; padding:8px 15px; font-size:13px; }
-      .subbar button.sel{ background:var(--accent); border-color:var(--accent); color:#fff; }
+      .subbar .lbl{ font-family:var(--mono); font-size:10px; letter-spacing:.12em; color:var(--muted); align-self:center; flex:none; text-transform:uppercase; margin-right:2px; }
+      .subbar button{ flex:none; border-radius:6px; padding:7px 12px; font-size:12.5px; background:var(--panel2); border-color:transparent; box-shadow:none; color:var(--muted); font-weight:600; }
+      .subbar button:hover{ color:var(--ink); border-color:var(--line); background:var(--panel); box-shadow:0 1px 2px rgba(15,18,20,.06); }
+      .subbar button.sel{ background:var(--ink); border-color:var(--ink); color:var(--panel); box-shadow:0 1px 3px rgba(15,18,20,.18); }
+      .subbar button.sel:hover{ background:var(--ink); color:var(--panel); opacity:.9; }
 
-      /* ---------- docs (collapsed behind one toggle — no long page, no overflow) ---------- */
-      .docs{ margin-top:18px; }
-      .docs details{ border:1px solid var(--line); border-radius:12px; background:var(--panel); overflow:hidden; }
-      .docs summary{ display:flex; justify-content:space-between; align-items:center; gap:10px; padding:13px 16px; cursor:pointer; font-weight:700; font-size:14px; list-style:none; }
-      .docs summary::-webkit-details-marker{ display:none; }
-      .docs summary .hint{ font-weight:400; font-size:12.5px; color:var(--muted); flex:none; }
-      .docs details[open ] summary{ border-bottom:1px solid var(--line); }
-      .docs details > *:not(summary){ margin-left:16px; margin-right:16px; }
-      .docs details > :last-child{ margin-bottom:16px; }
-      .docs details h2{ margin-top:18px; }
+      /* ---------- docs drawer — slides over, page itself never scrolls ---------- */
+      .drawer-backdrop{ position:fixed; inset:0; background:rgba(10,12,14,.45); opacity:0; pointer-events:none; transition:opacity .28s ease; z-index:70; }
+      .drawer-backdrop.on{ opacity:1; pointer-events:auto; }
+      .docs{ position:fixed; top:0; right:0; bottom:0; width:min(700px,94vw); background:var(--bg); z-index:80; transform:translateX(103%); transition:transform .32s cubic-bezier(.32,.72,.24,1); overflow-y:auto; overscroll-behavior:contain; padding:18px 20px 28px; box-shadow:-18px 0 50px rgba(15,18,20,.25); }
+      .docs.open{ transform:translateX(0); }
+      .drawerhead{ position:sticky; top:-18px; margin:-18px -20px 4px; padding:14px 20px 10px; background:var(--bg); display:flex; align-items:center; justify-content:space-between; gap:12px; z-index:2; }
+      .drawerhead .dtag{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--muted); }
+      .drawerhead button{ border-radius:6px; padding:6px 12px; font-size:12px; }
+      @media (prefers-reduced-motion: reduce){ .docs, .drawer-backdrop{ transition:none; } }
       .docs h2{ font-size:21px; margin:26px 0 6px; font-weight:800; letter-spacing:-.01em; }
       .docs h2:first-child{ margin-top:0; }
       .docs p.lede{ color:var(--muted); font-size:14.5px; max-width:760px; margin:0 0 14px; line-height:1.55; }
@@ -124,7 +166,7 @@
       .srcs{ font-size:13.5px; line-height:1.7; }
       .srcs a{ color:var(--accent); font-weight:600; }
       footer{ margin-top:30px; color:var(--muted); font-size:12.5px; font-family:var(--mono); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
-      #toast{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--panel); padding:10px 16px; border-radius:8px; font-size:13.5px; opacity:0; pointer-events:none; transition:.25s; z-index:60; max-width:88vw; text-align:center; }
+      #toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--panel); padding:10px 16px; border-radius:8px; font-size:13.5px; opacity:0; pointer-events:none; transition:.25s; z-index:60; max-width:88vw; text-align:center; }
       #toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce){ #cursor{ transition:none; } }
     </style>
@@ -134,22 +176,26 @@
       <header class="top">
         <div>
           <h1>Mecha Cat <span class="lab">Teardown</span></h1>
-          <p class="sub">Lab 02 — one crank input drives the whole machine. Every subsystem is a button: press it and that part comes off, live, while the solver keeps running.</p>
         </div>
         <div class="chips">
-          <span class="chip">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip">REV <b>2.1.1</b></span>
-          <span class="chip">SOLVER <b>LIVE</b></span>
+          <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
+          <span class="chip opt">REV <b>3.0 · ELVAR LOOK</b></span>
+          <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>—</b></span>
+          <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
         </div>
       </header>
 
-      <nav class="labstrip" aria-label="3D Lab index">
-        <span class="lbl">3D LAB</span>
-        <a href="https://dankezo.github.io/cat-jelly/press.html" target="_blank" rel="noopener">Lab 01 · Cat Jelly Press ↗</a>
-        <span class="cur">Lab 02 · Mecha Cat Teardown — this page</span>
-        <span class="fork">Fork / test a lab: copy its master prompt (Lab 02's is below), or load your own machine config with “Load this machine”.</span>
-      </nav>
+      <div class="modelbar" aria-label="Model switcher">
+        <span class="mlbl">Model</span>
+        <div class="seg" role="group" aria-label="Choose model variant">
+          <button type="button" data-model="ceramic" class="on" title="Standard configuration — 55 RPM, rated load, assembled">MK-IV · Ceramic</button>
+          <button type="button" data-model="stealth" title="Recon configuration — 85 RPM, dark shell, X-Ray on">MK-IV · Stealth</button>
+          <button type="button" data-model="hazard" title="Heavy configuration — 35 RPM, 130% stress, 35% exploded view">MK-IV · Hazard</button>
+        </div>
+        <span class="mname">Machine&nbsp;<b id="modelName">MECHA CAT MK-IV</b></span>
+        <button class="loadbtn" id="btnLoadTop" type="button">Load model file…</button>
+      </div>
 
       <section class="console" id="consoleCard" aria-label="Mecha cat teardown console">
         <div class="stage" id="stage">
@@ -162,29 +208,31 @@
             <span class="flag" id="flagMode">ASSEMBLED</span>
             <span class="flag hot" id="flagHot">⚠ OVER-LIMIT — STRESS TEST</span>
           </div>
-          <div id="errbox" role="alert"></div>
-        </div>
-        <div class="caption"><span class="dot"></span><span class="tourtag" id="tourTag">TOUR</span><span id="captionText">Tour starting…</span></div>
-
-        <div class="charts">
-          <div class="chart"><div class="chead"><span class="cname">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
-          <div class="chart"><div class="chead"><span class="cname">Core temperature</span><span class="cval" id="vTemp">0 <small>°C</small></span></div><canvas id="chTemp" width="260" height="44"></canvas><div class="cmm"><span id="mmTempMin">min 0</span><span id="mmTempMax">max 0</span></div></div>
-          <div class="chart"><div class="chead"><span class="cname">Foot lift · FL</span><span class="cval" id="vLift">0 <small>mm</small></span></div><canvas id="chLift" width="260" height="44"></canvas><div class="cmm"><span id="mmLiftMin">min 0</span><span id="mmLiftMax">max 0</span></div></div>
-          <div class="chart"><div class="chead"><span class="cname">Power draw</span><span class="cval" id="vPower">0 <small>W</small></span></div><canvas id="chPower" width="260" height="44"></canvas><div class="cmm"><span id="mmPowerMin">min 0</span><span id="mmPowerMax">max 0</span></div></div>
-        </div>
-
-        <div class="controls">
-          <div class="ctl"><label>Crank speed <output id="oRpm">55 RPM</output></label><input type="range" id="inRpm" min="0" max="120" step="1" value="55" aria-label="Crank speed in RPM" /></div>
-          <div class="ctl"><label>Stress test <output id="oStress">100%</output></label><input type="range" id="inStress" min="100" max="160" step="1" value="100" aria-label="Stress test, percent of rated load" /></div>
-          <div class="ctl"><label>Explode all <output id="oExplode">0%</output></label><input type="range" id="inExplode" min="0" max="100" step="1" value="0" aria-label="Explode all subsystems" /></div>
-          <div class="btns">
-            <button id="btnPause" type="button">Pause gait</button>
-            <button id="btnXray" type="button" aria-pressed="false">X-Ray</button>
-            <button id="btnView" type="button">Reset view</button>
-            <button id="btnTour" type="button">↻ Replay tour</button>
-            <button id="btnLoad" class="primary" type="button">Load this machine</button>
-            <input type="file" id="fileLoad" accept=".json,application/json" hidden />
+          <div class="hud" aria-label="Live metrics">
+            <div class="hudcol left">
+              <div class="chart"><div class="chead"><span class="cname">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
+              <div class="chart"><div class="chead"><span class="cname">Foot lift · FL</span><span class="cval" id="vLift">0 <small>mm</small></span></div><canvas id="chLift" width="260" height="44"></canvas><div class="cmm"><span id="mmLiftMin">min 0</span><span id="mmLiftMax">max 0</span></div></div>
+              <div class="rail" aria-label="View and tour controls">
+                <span class="rhead">View · Tour</span>
+                <button id="btnPause" type="button">Pause gait</button>
+                <button id="btnXray" type="button" aria-pressed="false">X-Ray</button>
+                <button id="btnView" type="button">Reset view</button>
+                <button id="btnTour" type="button">↻ Replay tour</button>
+              </div>
+            </div>
+            <div class="hudcol right">
+              <div class="chart"><div class="chead"><span class="cname">Core temperature</span><span class="cval" id="vTemp">0 <small>°C</small></span></div><canvas id="chTemp" width="260" height="44"></canvas><div class="cmm"><span id="mmTempMin">min 0</span><span id="mmTempMax">max 0</span></div></div>
+              <div class="chart"><div class="chead"><span class="cname">Power draw</span><span class="cval" id="vPower">0 <small>W</small></span></div><canvas id="chPower" width="260" height="44"></canvas><div class="cmm"><span id="mmPowerMin">min 0</span><span id="mmPowerMax">max 0</span></div></div>
+              <div class="rail" aria-label="Drive controls">
+                <span class="rhead">Drive</span>
+                <div class="ctl"><label>Crank speed <output id="oRpm">55 RPM</output></label><input type="range" id="inRpm" min="0" max="120" step="1" value="55" aria-label="Crank speed in RPM" /></div>
+                <div class="ctl"><label>Stress test <output id="oStress">100%</output></label><input type="range" id="inStress" min="100" max="160" step="1" value="100" aria-label="Stress test, percent of rated load" /></div>
+                <div class="ctl explode"><label>Explode all <output id="oExplode">0%</output></label><input type="range" id="inExplode" min="0" max="100" step="1" value="0" aria-label="Explode all subsystems" /></div>
+                <input type="file" id="fileLoad" accept=".json,application/json" hidden />
+              </div>
+            </div>
           </div>
+          <div id="errbox" role="alert"></div>
         </div>
 
         <nav class="subbar" id="subbar" aria-label="Subsystems — press to detach">
@@ -206,9 +254,9 @@
         </div>
       </section>
 
-      <section class="docs" aria-label="Lab documentation">
-        <details id="docsDetails">
-          <summary><span>Lab docs — workflow, specs &amp; master prompt</span><span class="hint">Bấm để mở · click to open</span></summary>
+      <div class="drawer-backdrop" id="docsBackdrop"></div>
+      <aside class="docs" id="docsDrawer" aria-label="Lab documentation" aria-hidden="true">
+        <div class="drawerhead"><span class="dtag">LAB 02 · DOCUMENTATION</span><button id="btnDocsClose" type="button">Close ✕</button></div>
         <h2>How this lab was built — the teardown workflow</h2>
         <p class="lede">Converted from Elvar's teardown post into a nine-step workflow, reviewed and approved, then run on this machine. The same workflow rebuilds any machine with moving parts as one self-contained page. Scope note for this delivery: the interactive lab (steps 1–7) is what this page is; the step-8 video capture is a follow-on run from this same page, and step 9 ships as page + Three.js library together under 1 MB rather than one literal file.</p>
         <div class="grid2">
@@ -265,9 +313,16 @@
               <li><b>Neck flicker:</b> one fat neck cylinder was buried inside both the chest and the skull, so its surface clipped through them on every head-stabilisation frame. Rebuilt as a collar ring, twin struts and a piston running under the skull, with visible clearance on every side.</li>
               <li><b>Z-fighting:</b> side stripes and cheek stripes sat exactly coplanar with their plates. Every appliqué now sits proud of its surface — the standard fix from Three.js modelling practice, along with a clean parent hierarchy (body → neck → head) and no intersecting shells.</li>
               <li><b>Look:</b> flat triangular ear plates instead of cones, panel edge lines on the main armour, intake vents, a keel plate, knee caps and shorter swept-back whiskers.</li>
-              <li><b>Rev 2.1 — neck still clipping:</b> the rev-2 slab behind the collar crossed the collar ring, and the gimbal block under the jaw was hit by the throat plate every gait cycle — the head counter-pitches up to ~0.07 rad, so the skull bottom dips ~0.022. Slab replaced by a small hub inside the ring, block removed, struts and piston lowered and slimmed: every neck part now tops out at y≈0.05, with ≥0.025 clearance at full head dip.</li>
-              <li><b>Rev 2.1 — layout:</b> the tour caption is no longer a gradient overlay on the canvas — it is a slim bar under the stage. The subsystem bar is no longer sticky, and the whole docs section sits collapsed behind one toggle, so the page no longer overflows with text.</li>
-              <li><b>Rev 2.1.1 — chevrons:</b> moving the caption did not save the third chevron — in the default camera framing it still clipped at the stage's bottom edge. The trio moved inward, from x=1.25/1.60/1.95 to x=1.05/1.38/1.71, so all three fit the frame on load.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3 — Elvar look rebuild (visual only, solver untouched)</h3>
+            <ul>
+              <li><b>Proportions:</b> longer, lower, tapered predator silhouette — extended snout, flat crown, staggered two-layer flank armour, shrinking dorsal vertebra plates. No part reads as a single plain box.</li>
+              <li><b>Material roles:</b> ceramic clearcoat shell (off-white) floats over a gunmetal frame that stays visible at every seam; polished steel for ribs, rods and rings; carbon for cables and visor; rubber only at the paws. One orange accent, used as hairlines and tips — never thick stripes.</li>
+              <li><b>Detail layer:</b> hex bolts on every plate, panel gaps with dark under-shell, louvred intakes, rear exhausts, twin hydraulic pistons per leg, exposed ribcage, full-length spine cables, caged reactor core, blade tail tip.</li>
+              <li><b>Studio:</b> soft PCF key shadow, hemisphere bounce, warm rim, turntable disc with measurement ticks and a thin orange datum ring — the clean Elvar product-viz stage.</li>
+              <li><b>Unchanged:</b> the IK solver, gait direction, neck clearance, explode / X-Ray / tour / charts and the “Load this machine” config all behave exactly as Rev 2.1.1.</li>
             </ul>
           </div>
           <div class="card">
@@ -314,13 +369,12 @@ REQUIRED TOOLS: Node 20+ · the teardown skill (npx skills add elvarofficial/tea
 
 ACCEPTANCE: the page opens already moving; every subsystem detaches and returns; charts move with the model and their min/max are honest; the tour completes untouched and yields to the first touch; the stress slider pushed to 160 % raises torque, temperature and warnings together. Do not declare done until you have pressed everything yourself.</pre>
         </div>
-        </details>
 
         <footer>
           <span>LAB 02 · MECHA CAT TEARDOWN · 3D LAB</span>
           <span id="footState">solver: live · tour: running</span>
         </footer>
-      </section>
+      </aside>
     </div>
     <div id="toast" role="status"></div>
 
@@ -403,16 +457,16 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       var renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.shadowMap.enabled = true;
-      renderer.shadowMap.type = THREE.PCFShadowMap;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.05;
+      renderer.toneMappingExposure = 1.12;
       stage.insertBefore(renderer.domElement, stage.firstChild);
 
       var scene = new THREE.Scene();
-      scene.background = new THREE.Color(0xeef1f3);
-      scene.fog = new THREE.Fog(0xeef1f3, 11, 20);
-      var camera = new THREE.PerspectiveCamera(40, 1.7, 0.1, 60);
+      scene.background = new THREE.Color(0xe9edef);
+      scene.fog = new THREE.Fog(0xe9edef, 12, 22);
+      var camera = new THREE.PerspectiveCamera(38, 1.7, 0.1, 60);
 
       // Deferred so first paint is fast; metals pick up reflections a beat later.
       setTimeout(function () {
@@ -422,53 +476,54 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         } catch (e) { /* environment is a polish step, never a blocker */ }
       }, 60);
 
-      var key = new THREE.DirectionalLight(0xffffff, 1.15);
-      key.position.set(4.5, 7, 3.5); key.castShadow = true;
+      // Elvar studio lighting: one big soft key, cool fill, warm rim, hemisphere bounce
+      var key = new THREE.DirectionalLight(0xffffff, 1.35);
+      key.position.set(4.2, 7.5, 3.2); key.castShadow = true;
       key.shadow.mapSize.set(1024, 1024);
-      key.shadow.camera.left = -4; key.shadow.camera.right = 4; key.shadow.camera.top = 4; key.shadow.camera.bottom = -4;
-      key.shadow.radius = 4; key.shadow.bias = -0.0004;
+      key.shadow.camera.left = -4.5; key.shadow.camera.right = 4.5; key.shadow.camera.top = 4.5; key.shadow.camera.bottom = -4.5;
+      key.shadow.camera.near = 1; key.shadow.camera.far = 18;
+      key.shadow.radius = 8; key.shadow.bias = -0.0003; key.shadow.normalBias = 0.02;
       scene.add(key);
-      var fill = new THREE.DirectionalLight(0xdfe9ff, 0.35); fill.position.set(-5, 3, -4); scene.add(fill);
-      var rim = new THREE.DirectionalLight(0xffe2cf, 0.5); rim.position.set(-3, 4, 5); scene.add(rim);
-      scene.add(new THREE.AmbientLight(0xffffff, 0.25));
+      var fill = new THREE.DirectionalLight(0xdceaff, 0.42); fill.position.set(-5, 3.2, -4.5); scene.add(fill);
+      var rim = new THREE.DirectionalLight(0xffe0c2, 0.72); rim.position.set(-3.5, 4.5, 5.5); scene.add(rim);
+      var under = new THREE.DirectionalLight(0xffffff, 0.18); under.position.set(0, -2, 2); scene.add(under);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x9aa3ab, 0.55));
+      scene.add(new THREE.AmbientLight(0xffffff, 0.18));
 
-      var ground = new THREE.Mesh(new THREE.CircleGeometry(9, 48), new THREE.ShadowMaterial({ opacity: 0.16 }));
-      ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
-      var disc = new THREE.Mesh(new THREE.CircleGeometry(2.6, 48), new THREE.MeshStandardMaterial({ color: 0xe2e7eb, roughness: 0.95, metalness: 0 }));
-      disc.rotation.x = -Math.PI / 2; disc.position.y = -0.002; disc.receiveShadow = true; scene.add(disc);
-      var ringMark = new THREE.Mesh(new THREE.RingGeometry(2.28, 2.34, 64), new THREE.MeshBasicMaterial({ color: 0xff4d00, transparent: true, opacity: 0.55, side: THREE.DoubleSide }));
-      ringMark.rotation.x = -Math.PI / 2; ringMark.position.y = 0.001; scene.add(ringMark);
+      var ground = new THREE.Mesh(new THREE.CircleGeometry(11, 64), new THREE.ShadowMaterial({ opacity: 0.20 }));
+      ground.rotation.x = -Math.PI / 2; ground.position.y = 0.002; ground.receiveShadow = true; scene.add(ground);
+      var disc = new THREE.Mesh(new THREE.CircleGeometry(2.85, 64), new THREE.MeshStandardMaterial({ color: 0xdde2e6, roughness: 0.92, metalness: 0.02 }));
+      disc.rotation.x = -Math.PI / 2; disc.position.y = -0.004; disc.receiveShadow = true; scene.add(disc);
+      var discInner = new THREE.Mesh(new THREE.CircleGeometry(2.15, 64), new THREE.MeshStandardMaterial({ color: 0xe8ecef, roughness: 0.88, metalness: 0.02 }));
+      discInner.rotation.x = -Math.PI / 2; discInner.position.y = -0.001; discInner.receiveShadow = true; scene.add(discInner);
+      var ringMark = new THREE.Mesh(new THREE.RingGeometry(2.62, 2.66, 96), new THREE.MeshBasicMaterial({ color: 0xff4d00, transparent: true, opacity: 0.9, side: THREE.DoubleSide }));
+      ringMark.rotation.x = -Math.PI / 2; ringMark.position.y = 0.004; scene.add(ringMark);
+      var ringThin = new THREE.Mesh(new THREE.RingGeometry(2.14, 2.16, 96), new THREE.MeshBasicMaterial({ color: 0x131619, transparent: true, opacity: 0.18, side: THREE.DoubleSide }));
+      ringThin.rotation.x = -Math.PI / 2; ringThin.position.y = 0.003; scene.add(ringThin);
+      // studio floor ticks — like a turntable measurement rig
+      for (var tk = 0; tk < 36; tk++) {
+        var ang = tk / 36 * Math.PI * 2, isMajor = tk % 9 === 0;
+        var tick = new THREE.Mesh(new THREE.BoxGeometry(isMajor ? 0.16 : 0.07, 0.004, 0.018), new THREE.MeshBasicMaterial({ color: isMajor ? 0xff4d00 : 0x6b767f, transparent: true, opacity: isMajor ? 0.95 : 0.45 }));
+        tick.position.set(Math.cos(ang) * 2.42, 0.004, Math.sin(ang) * 2.42); tick.rotation.y = -ang; scene.add(tick);
+      }
 
-      // Floor direction chevrons — rev-2 missing fix, added 2026-11-11.
-      // Three orange chevrons on the disc pointing +X (head-first walking direction), at z=+0.95
-      // clear of the feet, y=0.004 proud of the disc so they cannot z-fight with it.
-      // Two thin boxes per chevron meet at a tip on the +X side, so the > always reads forward.
-      // Rev 2.1.1: trio moved inward from x=1.25/1.60/1.95 — at 1.95 the third chevron
-      // clipped at the stage's bottom edge in the default camera framing.
-      (function addDirectionChevrons() {
-        var chevMat = new THREE.MeshBasicMaterial({ color: 0xff4d00, transparent: true, opacity: 0.85, side: THREE.DoubleSide });
-        [1.05, 1.38, 1.71].forEach(function (x) {
-          var g = new THREE.Group(); g.position.set(x, 0.004, 0.95); scene.add(g);
-          var armA = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.006, 0.09), chevMat);
-          armA.position.set(-0.07, 0, 0.10); armA.rotation.y = 0.6; g.add(armA);
-          var armB = new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.006, 0.09), chevMat);
-          armB.position.set(-0.07, 0, -0.10); armB.rotation.y = -0.6; g.add(armB);
-        });
-      })();
-
-      // materials
+      // Materials — Elvar split: ceramic shell / gunmetal frame / polished steel / rubber / single orange accent
       var M = {
-        armor: new THREE.MeshStandardMaterial({ color: 0xe9edf1, roughness: 0.30, metalness: 0.38, flatShading: true }),
-        armorB: new THREE.MeshStandardMaterial({ color: 0xcdd6de, roughness: 0.45, metalness: 0.3, flatShading: true }),
-        dark: new THREE.MeshStandardMaterial({ color: 0x23272c, roughness: 0.35, metalness: 0.85 }),
-        steel: new THREE.MeshStandardMaterial({ color: 0x9aa6b0, roughness: 0.28, metalness: 0.95 }),
-        accent: new THREE.MeshStandardMaterial({ color: 0xff4d00, roughness: 0.42, metalness: 0.15 }),
-        accentGlow: new THREE.MeshStandardMaterial({ color: 0xff7a33, roughness: 0.3, metalness: 0.1, emissive: 0xff4400, emissiveIntensity: 0.9 }),
-        eye: new THREE.MeshStandardMaterial({ color: 0x1a0d06, roughness: 0.2, metalness: 0.2, emissive: 0xff5a00, emissiveIntensity: 2.2 }),
-        glass: new THREE.MeshPhysicalMaterial({ color: 0xbfd9e2, roughness: 0.08, metalness: 0, transmission: 0.65, transparent: true, opacity: 0.85, depthWrite: false }),
-        rubber: new THREE.MeshStandardMaterial({ color: 0x14171a, roughness: 0.9, metalness: 0.05 })
+        armor: new THREE.MeshPhysicalMaterial({ color: 0xf1f2f3, roughness: 0.26, metalness: 0.08, clearcoat: 0.55, clearcoatRoughness: 0.28, flatShading: true }),
+        armorB: new THREE.MeshStandardMaterial({ color: 0xc9d1d8, roughness: 0.38, metalness: 0.32, flatShading: true }),
+        armorC: new THREE.MeshStandardMaterial({ color: 0x8793a0, roughness: 0.42, metalness: 0.55, flatShading: true }),
+        dark: new THREE.MeshStandardMaterial({ color: 0x1b1f24, roughness: 0.38, metalness: 0.88 }),
+        frame: new THREE.MeshStandardMaterial({ color: 0x242a30, roughness: 0.52, metalness: 0.78 }),
+        carbon: new THREE.MeshStandardMaterial({ color: 0x101214, roughness: 0.62, metalness: 0.35 }),
+        steel: new THREE.MeshStandardMaterial({ color: 0xb9c3cc, roughness: 0.20, metalness: 1.0 }),
+        steelDark: new THREE.MeshStandardMaterial({ color: 0x5d6872, roughness: 0.32, metalness: 0.95 }),
+        accent: new THREE.MeshStandardMaterial({ color: 0xff4d00, roughness: 0.36, metalness: 0.22, flatShading: true }),
+        accentGlow: new THREE.MeshStandardMaterial({ color: 0xff7a33, roughness: 0.28, metalness: 0.1, emissive: 0xff4400, emissiveIntensity: 1.1 }),
+        eye: new THREE.MeshStandardMaterial({ color: 0x0a0503, roughness: 0.15, metalness: 0.2, emissive: 0xff5a00, emissiveIntensity: 2.6 }),
+        glass: new THREE.MeshPhysicalMaterial({ color: 0x9fc3d1, roughness: 0.06, metalness: 0, transmission: 0.72, transparent: true, opacity: 0.88, depthWrite: false }),
+        rubber: new THREE.MeshStandardMaterial({ color: 0x121518, roughness: 0.94, metalness: 0.02 })
       };
-      var armorMats = [M.armor, M.armorB, M.accent];
+      var armorMats = [M.armor, M.armorB, M.armorC, M.accent];
       function box(w, h, d, mat, x, y, z, parent, shadow) {
         var m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
         m.position.set(x || 0, y || 0, z || 0);
@@ -477,8 +532,18 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         return m;
       }
       function addEdges(mesh, op) {
-        var eg = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 32), new THREE.LineBasicMaterial({ color: 0x232a30, transparent: true, opacity: op || 0.20 }));
+        var eg = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 28), new THREE.LineBasicMaterial({ color: 0x11161a, transparent: true, opacity: op || 0.32 }));
         mesh.add(eg); return mesh;
+      }
+      function bolt(x, y, z, parent, s) {
+        var b = new THREE.Mesh(new THREE.CylinderGeometry(0.016 * (s || 1), 0.016 * (s || 1), 0.012, 6), M.steelDark);
+        b.rotation.x = Math.PI / 2; b.position.set(x, y, z); b.castShadow = true; if (parent) parent.add(b); return b;
+      }
+      function cable(points, radius, mat, parent) {
+        var pts = points.map(function (p) { return new THREE.Vector3(p[0], p[1], p[2]); });
+        var curve = new THREE.CatmullRomCurve3(pts);
+        var m = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, radius || 0.018, 7, false), mat || M.carbon);
+        m.castShadow = true; if (parent) parent.add(m); return m;
       }
       function cyl(rt, rb, h, mat, x, y, z, parent, seg) {
         var m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 24), mat);
@@ -499,42 +564,66 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       var body = new THREE.Group(); body.position.y = SPEC.HIP_H + 0.34; cat.add(body);
       var BODY_Y = SPEC.HIP_H + 0.34;
 
-      /* ---- CHASSIS: spine, ribs, side armour ---- */
+      /* ---- CHASSIS v3 — Elvar proportions: low, long, tapered. Dark frame underneath, ceramic shell on top, nothing is a plain box silhouette ---- */
       var chassis = new THREE.Group(); body.add(chassis);
-      box(2.0, 0.20, 0.34, M.dark, 0, 0.16, 0, chassis);                 // spine beam
-      box(1.7, 0.10, 0.5, M.steel, 0, -0.16, 0, chassis);                // belly frame
-      [-0.62, -0.21, 0.21, 0.62].forEach(function (x) {
-        var rib = new THREE.Mesh(new THREE.TorusGeometry(0.40, 0.045, 10, 28), M.steel);
-        rib.position.set(x, 0, 0); rib.rotation.y = Math.PI / 2; rib.castShadow = true; chassis.add(rib);
+      // inner frame — visible in the gaps between armour, so the machine reads as built, not moulded
+      box(2.08, 0.22, 0.36, M.frame, 0, 0.10, 0, chassis);
+      box(1.86, 0.12, 0.52, M.dark, -0.02, -0.18, 0, chassis);
+      box(0.52, 0.34, 0.46, M.dark, 0.82, -0.02, 0, chassis);
+      box(0.50, 0.32, 0.48, M.dark, -0.86, -0.02, 0, chassis);
+      // exposed ribcage — 5 polished ribs the side plates float over
+      [-0.68, -0.34, 0, 0.34, 0.68].forEach(function (x) {
+        var rib = new THREE.Mesh(new THREE.TorusGeometry(0.415, 0.032, 10, 32), M.steelDark);
+        rib.position.set(x, -0.01, 0); rib.rotation.y = Math.PI / 2; rib.castShadow = true; chassis.add(rib);
       });
-      var plateL = box(1.55, 0.52, 0.07, M.armor, -0.05, 0.02, 0.40, chassis); reg(plateL, 'chassis', new THREE.Vector3(0, 0.05, 1), 0.55);
-      var plateR = box(1.55, 0.52, 0.07, M.armor, -0.05, 0.02, -0.40, chassis); reg(plateR, 'chassis', new THREE.Vector3(0, 0.05, -1), 0.55);
-      var plateTop = box(1.3, 0.07, 0.56, M.armorB, -0.05, 0.33, 0, chassis); reg(plateTop, 'chassis', new THREE.Vector3(0, 1, 0), 0.5);
-      // segmented spine armour: four angled shards riding over the top plate
-      [-0.66, -0.22, 0.22, 0.66].forEach(function (x, i) {
-        var shard = box(0.30, 0.045, 0.34, i % 2 ? M.armor : M.armorB, x, 0.415, 0, chassis);
-        shard.rotation.z = i < 2 ? 0.10 : -0.10;
-        reg(shard, 'chassis', new THREE.Vector3(0, 1, 0), 0.68 + i * 0.05);
-      });
-      var stripeL = box(1.0, 0.10, 0.02, M.accent, -0.05, 0.10, 0.458, chassis); reg(stripeL, 'chassis', new THREE.Vector3(0, 0.05, 1), 0.58);
-      var stripeR = box(1.0, 0.10, 0.02, M.accent, -0.05, 0.10, -0.458, chassis); reg(stripeR, 'chassis', new THREE.Vector3(0, 0.05, -1), 0.58);
-      var chest = box(0.42, 0.56, 0.62, M.armor, 0.79, -0.02, 0, chassis); reg(chest, 'chassis', new THREE.Vector3(1, 0, 0), 0.42);
-      addEdges(chest); addEdges(plateL); addEdges(plateR);
-      var keel = box(0.34, 0.05, 0.40, M.armorB, 0.86, -0.28, 0, chassis); keel.rotation.z = -0.38; reg(keel, 'chassis', new THREE.Vector3(0.7, -0.7, 0), 0.4);
+      // hydraulic spine + cables running the full length (the greeble layer that kills the toy look)
+      cable([[-0.95, 0.24, 0.14], [-0.4, 0.28, 0.19], [0.3, 0.28, 0.19], [0.92, 0.20, 0.12]], 0.020, M.carbon, chassis);
+      cable([[-0.95, 0.24, -0.14], [-0.4, 0.28, -0.19], [0.3, 0.28, -0.19], [0.92, 0.20, -0.12]], 0.020, M.carbon, chassis);
+      cable([[-0.8, -0.10, 0.26], [-0.1, -0.16, 0.29], [0.7, -0.10, 0.26]], 0.014, M.steelDark, chassis);
+      cable([[-0.8, -0.10, -0.26], [-0.1, -0.16, -0.29], [0.7, -0.10, -0.26]], 0.014, M.steelDark, chassis);
+      // side armour — two staggered layers per flank, angled in at the belly, with a real panel gap between them
+      var plateL = box(1.02, 0.46, 0.055, M.armor, 0.28, 0.04, 0.415, chassis); plateL.rotation.x = -0.06; reg(plateL, 'chassis', new THREE.Vector3(0, 0.05, 1), 0.60);
+      var plateR = box(1.02, 0.46, 0.055, M.armor, 0.28, 0.04, -0.415, chassis); plateR.rotation.x = 0.06; reg(plateR, 'chassis', new THREE.Vector3(0, 0.05, -1), 0.60);
+      var plateL2 = box(0.62, 0.40, 0.05, M.armorB, -0.58, 0.02, 0.425, chassis); plateL2.rotation.x = -0.05; reg(plateL2, 'chassis', new THREE.Vector3(-0.15, 0.05, 1), 0.66);
+      var plateR2 = box(0.62, 0.40, 0.05, M.armorB, -0.58, 0.02, -0.425, chassis); plateR2.rotation.x = 0.05; reg(plateR2, 'chassis', new THREE.Vector3(-0.15, 0.05, -1), 0.66);
+      addEdges(plateL, 0.38); addEdges(plateR, 0.38); addEdges(plateL2, 0.34); addEdges(plateR2, 0.34);
+      // thin accent rule — ONE orange line per flank, low and sharp, not a thick stripe
+      var stripeL = box(0.86, 0.035, 0.014, M.accent, 0.28, -0.12, 0.452, chassis); reg(stripeL, 'chassis', new THREE.Vector3(0, 0, 1), 0.64);
+      var stripeR = box(0.86, 0.035, 0.014, M.accent, 0.28, -0.12, -0.452, chassis); reg(stripeR, 'chassis', new THREE.Vector3(0, 0, -1), 0.64);
+      // panel bolts on every side plate
       [-1, 1].forEach(function (s) {
-        for (var vi = 0; vi < 3; vi++) {
-          var vent = box(0.15, 0.032, 0.016, M.dark, 0.56, 0.17 - vi * 0.075, 0.448 * s, chassis);
-          reg(vent, 'chassis', new THREE.Vector3(0, 0.1, s), 0.62);
-        }
+        [[0.68, 0.20], [0.68, -0.10], [-0.10, 0.20], [-0.10, -0.10]].forEach(function (p) { bolt(p[0], p[1], 0.448 * s, chassis, 1); });
+        [[-0.82, 0.15], [-0.36, 0.15], [-0.82, -0.11], [-0.36, -0.11]].forEach(function (p) { bolt(p[0], p[1], 0.455 * s, chassis, 0.9); });
+        // louvred intakes at the shoulder — 4 slats, angled
+        for (var vi = 0; vi < 4; vi++) { var vent = box(0.20, 0.028, 0.018, M.dark, 0.62, 0.16 - vi * 0.062, 0.452 * s, chassis); vent.rotation.z = -0.12; reg(vent, 'chassis', new THREE.Vector3(0, 0.1, s), 0.68); }
+        // rear exhaust slots
+        for (var ei = 0; ei < 3; ei++) { box(0.10, 0.024, 0.014, M.dark, -0.70, 0.10 - ei * 0.055, 0.458 * s, chassis); }
       });
-      var spineStripe = box(0.9, 0.014, 0.09, M.accent, -0.05, 0.376, 0, chassis);
-      reg(spineStripe, 'chassis', new THREE.Vector3(0, 1, 0), 0.58);
-      var hips = box(0.46, 0.5, 0.66, M.armorB, -0.88, -0.02, 0, chassis); reg(hips, 'chassis', new THREE.Vector3(-1, 0, 0), 0.42); addEdges(hips);
+      // dorsal shell — segmented vertebra plates, shrinking toward the tail, each with a centre ridge
+      var plateTop = box(1.18, 0.06, 0.54, M.armorB, 0.02, 0.335, 0, chassis); reg(plateTop, 'chassis', new THREE.Vector3(0, 1, 0), 0.52);
+      [-0.72, -0.36, 0, 0.36, 0.72].forEach(function (x, i) {
+        var sc2 = 1 - Math.abs(i - 2) * 0.10;
+        var shard = box(0.26, 0.05, 0.36 * sc2, i % 2 ? M.armor : M.armorB, x, 0.415, 0, chassis);
+        shard.rotation.z = (2 - i) * 0.045;
+        var ridge = box(0.20, 0.035, 0.07, M.armorC, x, 0.455, 0, chassis); ridge.rotation.z = (2 - i) * 0.045;
+        reg(shard, 'chassis', new THREE.Vector3(0, 1, 0), 0.70 + i * 0.045);
+        reg(ridge, 'chassis', new THREE.Vector3(0, 1, 0), 0.78 + i * 0.045);
+      });
+      var spineStripe = box(0.70, 0.012, 0.055, M.accent, 0.02, 0.372, 0, chassis); reg(spineStripe, 'chassis', new THREE.Vector3(0, 1, 0), 0.60);
+      // chest — faceted wedge breastplate, pointed keel below it
+      var chest = box(0.44, 0.58, 0.64, M.armor, 0.84, -0.01, 0, chassis); chest.rotation.y = 0; reg(chest, 'chassis', new THREE.Vector3(1, 0, 0), 0.46); addEdges(chest, 0.38);
+      var chestPlate = box(0.06, 0.38, 0.44, M.armorB, 1.08, -0.01, 0, chassis); chestPlate.rotation.z = -0.10; reg(chestPlate, 'chassis', new THREE.Vector3(1, 0, 0), 0.56);
+      var keel = box(0.38, 0.045, 0.34, M.armorC, 0.88, -0.33, 0, chassis); keel.rotation.z = -0.42; reg(keel, 'chassis', new THREE.Vector3(0.7, -0.7, 0), 0.42);
+      var hips = box(0.48, 0.52, 0.68, M.armorB, -0.92, -0.01, 0, chassis); reg(hips, 'chassis', new THREE.Vector3(-1, 0, 0), 0.46); addEdges(hips, 0.36);
+      var hipPlate = box(0.05, 0.34, 0.48, M.armor, -1.17, -0.01, 0, chassis); reg(hipPlate, 'chassis', new THREE.Vector3(-1, 0, 0), 0.56);
 
       /* ---- CORE: reactor in the chest, rings along Z ---- */
       var core = new THREE.Group(); core.position.set(0.18, -0.02, 0); body.add(core);
       var coreHub = cyl(0.13, 0.13, 0.52, M.dark, 0, 0, 0, core); coreHub.rotation.x = Math.PI / 2;
-      var coreBall = new THREE.Mesh(new THREE.OctahedronGeometry(0.175, 0), M.accentGlow);
+      var coreCage = new THREE.Mesh(new THREE.OctahedronGeometry(0.235, 0), M.steelDark); coreCage.castShadow = true; core.add(coreCage);
+      // wireframe cage edges so the reactor reads as contained, not floating
+      coreCage.add(new THREE.LineSegments(new THREE.EdgesGeometry(coreCage.geometry), new THREE.LineBasicMaterial({ color: 0x11161a, transparent: true, opacity: 0.5 })));
+      var coreBall = new THREE.Mesh(new THREE.OctahedronGeometry(0.165, 0), M.accentGlow);
       coreBall.castShadow = true; coreBall.renderOrder = 3; core.add(coreBall);
       var coreRings = [];
       [-0.17, 0, 0.17].forEach(function (z, i) {
@@ -552,22 +641,22 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
 
       /* ---- HEAD ---- */
       var neck = new THREE.Group(); neck.position.set(1.10, 0.18, 0); body.add(neck);
-      // Neck rebuilt as a gimbal assembly with REAL clearance (rev 2.1, 2026-11-11):
-      // collar ring + a small hub inside it, twin struts + a slim piston running
-      // UNDER the skull. The rev-2 dark slab behind the collar crossed the collar
-      // ring, and the rev-2 gimbal block under the jaw was hit by the throat plate
-      // on every gait cycle: the head counter-pitches up to ~0.07 rad, so the skull
-      // bottom dips ~0.022 and the throat sweeps through anything taller than
-      // y≈0.05 (body space). Every neck part now tops out at y≈0.05, leaving
-      // ≥0.025 clearance even at full head dip. Nothing intersects the skull,
-      // the throat or the chest, so nothing can flicker.
+      // Neck rebuilt as a gimbal assembly with REAL clearance: collar ring on the body,
+      // twin struts + a central piston running UNDER the skull, and a gimbal block below
+      // the jaw line. Nothing intersects the skull or the chest, so nothing can flicker
+      // (the old single fat cylinder was buried inside both and clipped through them
+      // every time the head stabilised against body pitch).
       var collar = new THREE.Mesh(new THREE.TorusGeometry(0.175, 0.040, 10, 28), M.steel);
       collar.rotation.y = Math.PI / 2; collar.castShadow = true; neck.add(collar);
-      var neckHub = cyl(0.09, 0.09, 0.10, M.dark, -0.02, 0, 0, neck, 20); neckHub.rotation.z = Math.PI / 2;
+      box(0.07, 0.36, 0.42, M.dark, -0.05, 0, 0, neck);
       [-1, 1].forEach(function (s) {
-        var strut = cyl(0.032, 0.032, 0.36, M.steel, 0.18, -0.16, 0.105 * s, neck, 12); strut.rotation.z = Math.PI / 2;
+        var strut = cyl(0.032, 0.032, 0.36, M.steel, 0.18, -0.13, 0.105 * s, neck, 12); strut.rotation.z = Math.PI / 2;
       });
-      var neckPiston = cyl(0.042, 0.042, 0.32, M.dark, 0.16, -0.17, 0, neck, 16); neckPiston.rotation.z = Math.PI / 2;
+      var neckPiston = cyl(0.052, 0.052, 0.32, M.dark, 0.16, -0.13, 0, neck, 16); neckPiston.rotation.z = Math.PI / 2;
+      var neckRod = cyl(0.026, 0.026, 0.30, M.steel, 0.17, -0.13, 0, neck, 12); neckRod.rotation.z = Math.PI / 2;
+      cable([[0.0, 0.10, 0.13], [0.18, 0.06, 0.16], [0.36, 0.02, 0.13]], 0.013, M.carbon, neck);
+      cable([[0.0, 0.10, -0.13], [0.18, 0.06, -0.16], [0.36, 0.02, -0.13]], 0.013, M.carbon, neck);
+      box(0.15, 0.10, 0.26, M.dark, 0.37, -0.145, 0, neck);
       var head = new THREE.Group(); head.position.set(0.46, 0.16, 0); neck.add(head);
       reg(head, 'head', new THREE.Vector3(1, 0.35, 0), 0.78);
       /* Angular wedge head — flat planes and hard edges only, no spheres.
@@ -584,24 +673,36 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         pm.castShadow = true; pm.receiveShadow = true;
         return pm;
       }
-      var skull = prism([[-0.30, 0.06], [-0.24, 0.22], [0.10, 0.27], [0.28, 0.13], [0.38, 0.0], [0.40, -0.10], [0.28, -0.17], [0.02, -0.24], [-0.24, -0.20]], 0.40, M.armor);
-      head.add(skull); addEdges(skull, 0.15);
+      // Longer, lower skull — predator silhouette: flat crown, steep brow, extended snout, tucked chin. Still zero spheres.
+      var skull = prism([[-0.34, 0.04], [-0.30, 0.20], [-0.08, 0.26], [0.16, 0.24], [0.34, 0.10], [0.46, -0.02], [0.48, -0.11], [0.34, -0.18], [0.04, -0.25], [-0.26, -0.22]], 0.38, M.armor);
+      head.add(skull); addEdges(skull, 0.30);
+      // underskull in gunmetal — the shell floats over a dark core, visible at every seam
+      var underskull = prism([[-0.30, 0.02], [-0.26, 0.17], [0.10, 0.21], [0.30, 0.07], [0.42, -0.04], [0.30, -0.15], [0.02, -0.21], [-0.24, -0.18]], 0.42, M.dark);
+      underskull.position.y = -0.018; head.add(underskull);
       // crown plate + brow armour: two hard slabs angled over the visor
-      var crown = box(0.34, 0.05, 0.42, M.armorB, 0.0, 0.30, 0, head); crown.rotation.z = 0.10; reg(crown, 'head', new THREE.Vector3(0.2, 1, 0), 0.4);
-      var browSlab = box(0.26, 0.055, 0.44, M.dark, 0.235, 0.155, 0, head); browSlab.rotation.z = -0.42; reg(browSlab, 'head', new THREE.Vector3(1, 0.45, 0), 0.36);
-      // cheek guards: angled plates wrapping the jaw line, accent stripe on each
+      var crown = box(0.38, 0.045, 0.40, M.armorB, -0.02, 0.285, 0, head); crown.rotation.z = 0.07; reg(crown, 'head', new THREE.Vector3(0.2, 1, 0), 0.4); addEdges(crown, 0.3);
+      var browSlab = box(0.30, 0.06, 0.44, M.dark, 0.26, 0.15, 0, head); browSlab.rotation.z = -0.46; reg(browSlab, 'head', new THREE.Vector3(1, 0.45, 0), 0.36);
+      // forehead sensor bar + twin micro-sensors
+      var sensorBar = box(0.16, 0.028, 0.20, M.carbon, 0.12, 0.27, 0, head); reg(sensorBar, 'head', new THREE.Vector3(0.3, 1, 0), 0.44);
+      [-0.05, 0.05].forEach(function (z) { var sens = new THREE.Mesh(new THREE.OctahedronGeometry(0.018, 0), M.accentGlow); sens.position.set(0.16, 0.275, z); head.add(sens); reg(sens, 'head', new THREE.Vector3(0.4, 1, 0), 0.48); });
+      // cheek guards: swept armour wrapping the jaw, with a vent cut and a hairline accent — not a thick stripe
       [-1, 1].forEach(function (s) {
-        var cheek = box(0.30, 0.16, 0.035, M.armorB, 0.08, -0.10, 0.215 * s, head);
-        cheek.rotation.y = -0.18 * s; cheek.rotation.z = -0.08;
-        reg(cheek, 'head', new THREE.Vector3(0.2, -0.1, s), 0.34);
-        var cheekStripe = box(0.18, 0.035, 0.012, M.accent, 0.10, -0.06, 0.247 * s, head);
+        var cheek = box(0.34, 0.17, 0.032, M.armorB, 0.06, -0.105, 0.212 * s, head);
+        cheek.rotation.y = -0.22 * s; cheek.rotation.z = -0.10;
+        reg(cheek, 'head', new THREE.Vector3(0.2, -0.1, s), 0.34); addEdges(cheek, 0.28);
+        var cheekStripe = box(0.20, 0.018, 0.010, M.accent, 0.08, -0.045, 0.238 * s, head);
         reg(cheekStripe, 'head', new THREE.Vector3(0.2, 0, s), 0.38);
+        for (var cv = 0; cv < 3; cv++) { box(0.07, 0.014, 0.010, M.dark, 0.02 + cv * 0.0, -0.15 + cv * 0.0, 0.232 * s, head).position.x = -0.02 + cv * 0.075; }
+        bolt(0.18, -0.04, 0.232 * s, head, 0.85); bolt(-0.06, -0.16, 0.232 * s, head, 0.85);
+        // side sensor pod behind the cheek
+        var pod = box(0.10, 0.09, 0.045, M.dark, -0.20, 0.02, 0.205 * s, head); reg(pod, 'head', new THREE.Vector3(-0.3, 0.1, s), 0.36);
       });
-      // visor band + angular eye slits (hard slant, emissive — no round eyes)
-      var visor = box(0.07, 0.115, 0.40, M.dark, 0.315, 0.03, 0, head); visor.rotation.z = -0.18; reg(visor, 'head', new THREE.Vector3(1, 0.2, 0), 0.30);
-      [-0.105, 0.105].forEach(function (z) {
-        var eye = box(0.025, 0.030, 0.115, M.eye, 0.355, 0.035, z, head);
-        eye.rotation.x = z > 0 ? -0.38 : 0.38; eye.rotation.z = -0.18;
+      // visor: deep smoked band, recessed, with a centre bridge — eyes are thin angry slits inside it
+      var visor = box(0.075, 0.105, 0.40, M.carbon, 0.335, 0.028, 0, head); visor.rotation.z = -0.20; reg(visor, 'head', new THREE.Vector3(1, 0.2, 0), 0.30);
+      var visorBridge = box(0.03, 0.10, 0.045, M.armorC, 0.345, 0.028, 0, head); visorBridge.rotation.z = -0.20; reg(visorBridge, 'head', new THREE.Vector3(1, 0.2, 0), 0.34);
+      [-0.108, 0.108].forEach(function (z) {
+        var eye = box(0.022, 0.020, 0.118, M.eye, 0.378, 0.032, z, head);
+        eye.rotation.x = z > 0 ? -0.42 : 0.42; eye.rotation.z = -0.20;
         reg(eye, 'head', new THREE.Vector3(1, 0.3, Math.sign(z)), 0.42);
       });
       // jaw: separate slab hinged under the snout, accent chin guard
@@ -620,24 +721,33 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       }
       [-1, 1].forEach(function (s) {
         var ear = new THREE.Group(); ear.position.set(-0.10, 0.26, 0.16 * s); head.add(ear);
-        var earMesh = prism([[-0.11, -0.03], [0.10, -0.03], [0.02, 0.34]], 0.055, M.armor); ear.add(earMesh);
-        var earIn = prism([[-0.055, 0.02], [0.05, 0.02], [0.015, 0.20]], 0.02, M.accent); earIn.position.set(0, 0, 0.044 * s); ear.add(earIn);
-        var earTip = new THREE.Mesh(new THREE.OctahedronGeometry(0.026, 0), M.accentGlow);
-        earTip.position.set(0.02, 0.36, 0); ear.add(earTip);
+        var earMesh = prism([[-0.12, -0.03], [0.10, -0.03], [0.015, 0.40]], 0.05, M.armor); ear.add(earMesh); addEdges(earMesh, 0.28);
+        var earIn = prism([[-0.06, 0.02], [0.05, 0.02], [0.012, 0.24]], 0.018, M.dark); earIn.position.set(0, 0, 0.042 * s); ear.add(earIn);
+        var earLine = box(0.012, 0.16, 0.012, M.accent, 0.015, 0.16, 0.055 * s, ear);
+        var earTip = new THREE.Mesh(new THREE.OctahedronGeometry(0.024, 0), M.accentGlow);
+        earTip.position.set(0.015, 0.42, 0); ear.add(earTip);
         ear.rotation.x = 0.22 * s; ear.rotation.z = 0.10;
         reg(ear, 'head', new THREE.Vector3(-0.2, 1, 0.35 * s), 0.46);
-        var whiskerBase = new THREE.Group(); whiskerBase.position.set(0.36, -0.10, 0.12 * s); head.add(whiskerBase);
+        var whiskerBase = new THREE.Group(); whiskerBase.position.set(0.34, -0.09, 0.10 * s); head.add(whiskerBase);
+        // Whiskers fan OUTWARD and sweep back: the direction's z always carries the
+        // side sign s, so they can never fold in across the face (the old build used
+        // rotation.y = +0.55*s, which pointed the +X whisker axis INTO the mid-plane
+        // on both sides). x eases down across the fan so the rear whisker trails back.
         for (var wi = 0; wi < 3; wi++) {
-          var wgeo = new THREE.CylinderGeometry(0.004, 0.004, 0.25, 5);
-          var wm = new THREE.Mesh(wgeo, M.steel);
-          wm.rotation.z = Math.PI / 2 - 0.12 + wi * 0.1; wm.rotation.y = 0.55 * s;
-          wm.position.set(0.12, (wi - 1) * 0.03, 0.05 * s);
+          var wlen = 0.23;
+          var wdir = new THREE.Vector3(0.95 - wi * 0.22, 0.10 - wi * 0.10, s * (0.45 + wi * 0.18)).normalize();
+          var wm = new THREE.Mesh(new THREE.CylinderGeometry(0.002, 0.0035, wlen, 5), M.steel);
+          wm.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), wdir);
+          wm.position.copy(wdir).multiplyScalar(wlen / 2);
+          wm.position.y += (wi - 1) * 0.022;
+          wm.castShadow = true;
           whiskerBase.add(wm);
         }
         reg(whiskerBase, 'head', new THREE.Vector3(0.7, 0, 0.8 * s), 0.3);
       });
-      // crest: a swept blade fin along the crown, plus a sensor antenna
-      var crest = box(0.34, 0.15, 0.028, M.accent, -0.10, 0.36, 0, head); crest.rotation.z = 0.38; reg(crest, 'head', new THREE.Vector3(-0.3, 1, 0), 0.48);
+      // crest: a swept blade fin along the crown in gunmetal with an orange leading edge, plus a sensor antenna
+      var crest = box(0.36, 0.14, 0.024, M.dark, -0.10, 0.355, 0, head); crest.rotation.z = 0.38; reg(crest, 'head', new THREE.Vector3(-0.3, 1, 0), 0.48);
+      var crestEdge = box(0.36, 0.022, 0.028, M.accent, -0.135, 0.415, 0, head); crestEdge.rotation.z = 0.38; reg(crestEdge, 'head', new THREE.Vector3(-0.3, 1, 0), 0.52);
       var antenna = cyl(0.008, 0.008, 0.30, M.dark, -0.24, 0.34, -0.14, head, 8); antenna.rotation.z = 0.35; reg(antenna, 'head', new THREE.Vector3(-0.4, 1, -0.3), 0.5);
       var antTip = new THREE.Mesh(new THREE.OctahedronGeometry(0.028, 0), M.accentGlow);
       antTip.position.set(-0.29, 0.48, -0.14); antTip.castShadow = true; head.add(antTip);
@@ -653,10 +763,14 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         if (ti > 0) pivot.position.x = -segLen;
         parent.add(pivot);
         var sc = 1 - ti * 0.13;
-        var seg = box(segLen * 0.92, 0.13 * sc + 0.03, 0.13 * sc + 0.03, ti % 2 ? M.armorB : M.armor, -segLen / 2, 0, 0, pivot);
+        var segCore = box(segLen * 0.94, 0.085 * sc + 0.02, 0.085 * sc + 0.02, M.frame, -segLen / 2, 0, 0, pivot);
+        var seg = box(segLen * 0.78, 0.13 * sc + 0.03, 0.13 * sc + 0.03, ti % 2 ? M.armorB : M.armor, -segLen / 2, 0.018, 0, pivot);
+        addEdges(seg, 0.26);
+        var spineFin = box(segLen * 0.55, 0.045, 0.018, ti === 4 ? M.accent : M.armorC, -segLen / 2, 0.095 * sc + 0.03, 0, pivot);
         var jointBall = new THREE.Mesh(new THREE.OctahedronGeometry(0.095 * sc + 0.02, 0), M.dark);
         jointBall.castShadow = true; pivot.add(jointBall);
-        if (ti === 4) { var tip = new THREE.Mesh(new THREE.OctahedronGeometry(0.085, 0), M.accentGlow); tip.position.set(-segLen - 0.05, 0, 0); tip.castShadow = true; pivot.add(tip); }
+        var jointRing = cyl(0.07 * sc + 0.018, 0.07 * sc + 0.018, 0.035, M.steelDark, 0, 0, 0, pivot, 16); jointRing.rotation.z = Math.PI / 2;
+        if (ti === 4) { var tip = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.16, 4), M.accent); tip.rotation.z = Math.PI / 2; tip.rotation.y = Math.PI / 4; tip.position.set(-segLen - 0.07, 0, 0); tip.castShadow = true; pivot.add(tip); var tipGlow = new THREE.Mesh(new THREE.OctahedronGeometry(0.032, 0), M.accentGlow); tipGlow.position.set(-segLen - 0.02, 0, 0); pivot.add(tipGlow); }
         tailPivots.push(pivot); tailSegs.push(seg);
         parent = pivot;
       }
@@ -666,37 +780,60 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       LEG_DEFS.forEach(function (def) {
         var side = Math.sign(def.z);
         var root = new THREE.Group(); root.position.set(def.x, -0.30, def.z); body.add(root);
-        reg(root, def.key, new THREE.Vector3(def.x * 0.25, -0.5, side), 0.95);
-        var hipMotor = cyl(0.115, 0.115, 0.16, M.dark, 0, 0, 0, root); hipMotor.rotation.x = Math.PI / 2;
-        var hipCap = cyl(0.07, 0.07, 0.19, M.accent, 0, 0, 0, root); hipCap.rotation.x = Math.PI / 2;
-        var pauldron = box(0.36, 0.30, 0.09, M.armor, 0, 0.10, side * 0.14, root);
-        pauldron.rotation.x = side * 0.28; pauldron.rotation.z = 0.06;
-        regLocal(pauldron, def.key, new THREE.Vector3(0, 0.35, side), 0.38);
+        reg(root, def.key, new THREE.Vector3(def.x * 0.25, 0.05, side), 0.95);
+        var hipMotor = cyl(0.125, 0.125, 0.17, M.dark, 0, 0, 0, root); hipMotor.rotation.x = Math.PI / 2;
+        var hipRing = cyl(0.135, 0.135, 0.05, M.steelDark, 0, 0, side * 0.055, root); hipRing.rotation.x = Math.PI / 2;
+        var hipCap = cyl(0.068, 0.068, 0.20, M.accent, 0, 0, 0, root); hipCap.rotation.x = Math.PI / 2;
+        var hipDot = cyl(0.028, 0.028, 0.215, M.dark, 0, 0, 0, root); hipDot.rotation.x = Math.PI / 2;
+        // shoulder / hip pauldron — layered: ceramic shell over a dark skirt, angled like a fender
+        var pauldron = box(0.42, 0.32, 0.085, M.armor, 0, 0.12, side * 0.15, root);
+        pauldron.rotation.x = side * 0.30; pauldron.rotation.z = 0.07;
+        regLocal(pauldron, def.key, new THREE.Vector3(0, 0.35, side), 0.38); addEdges(pauldron, 0.3);
+        var pauldronSkirt = box(0.38, 0.10, 0.07, M.dark, 0, -0.06, side * 0.145, root);
+        pauldronSkirt.rotation.x = side * 0.30;
+        regLocal(pauldronSkirt, def.key, new THREE.Vector3(0, 0.1, side), 0.34);
+        bolt(0.14, 0.20, side * 0.20, root, 0.9); bolt(-0.14, 0.20, side * 0.20, root, 0.9);
         var hipPivot = new THREE.Group(); root.add(hipPivot);
-        var upper = box(0.15, SPEC.L1, 0.13, M.armor, 0, -SPEC.L1 / 2, 0, hipPivot);
-        regLocal(upper, def.key, new THREE.Vector3(0, 0, side), 0.30);
-        var piston = cyl(0.032, 0.032, SPEC.L1 * 0.8, M.steel, 0.10, -SPEC.L1 / 2, 0, hipPivot, 12);
+        // upper leg: dark structural core + a tapered ceramic thigh shell that does NOT cover the whole leg
+        var upperCore = box(0.11, SPEC.L1, 0.095, M.frame, 0, -SPEC.L1 / 2, 0, hipPivot);
+        var upper = box(0.165, SPEC.L1 * 0.62, 0.145, M.armor, 0.012, -SPEC.L1 * 0.32, side * 0.018, hipPivot);
+        regLocal(upper, def.key, new THREE.Vector3(0, 0, side), 0.30); addEdges(upper, 0.28);
+        var thighStripe = box(0.02, SPEC.L1 * 0.42, 0.02, M.accent, 0.095, -SPEC.L1 * 0.32, 0, hipPivot);
+        regLocal(thighStripe, def.key, new THREE.Vector3(0.7, 0, 0), 0.36);
+        // twin hydraulic pistons, front and back — polished rods in dark sleeves
+        var piston = cyl(0.030, 0.030, SPEC.L1 * 0.82, M.steel, 0.105, -SPEC.L1 / 2, 0, hipPivot, 12);
         regLocal(piston, def.key, new THREE.Vector3(0.6, 0, 0), 0.34);
+        var pistonSleeve = cyl(0.042, 0.042, SPEC.L1 * 0.38, M.dark, 0.105, -SPEC.L1 * 0.22, 0, hipPivot, 12);
+        var piston2 = cyl(0.022, 0.022, SPEC.L1 * 0.78, M.steel, -0.095, -SPEC.L1 / 2, 0, hipPivot, 10);
+        regLocal(piston2, def.key, new THREE.Vector3(-0.6, 0, 0), 0.34);
+        cable([[0.06, -0.05, side * 0.06], [0.09, -0.28, side * 0.07], [0.05, -0.50, side * 0.05]], 0.012, M.carbon, hipPivot);
         var kneePivot = new THREE.Group(); kneePivot.position.y = -SPEC.L1; hipPivot.add(kneePivot);
-        var kneeMotor = cyl(0.09, 0.09, 0.14, M.dark, 0, 0, 0, kneePivot); kneeMotor.rotation.x = Math.PI / 2;
-        var kneeCap = cyl(0.055, 0.055, 0.03, M.accent, 0, 0, side * 0.09, kneePivot, 20); kneeCap.rotation.x = Math.PI / 2;
+        var kneeMotor = cyl(0.098, 0.098, 0.15, M.dark, 0, 0, 0, kneePivot); kneeMotor.rotation.x = Math.PI / 2;
+        var kneeRing = cyl(0.105, 0.105, 0.04, M.steelDark, 0, 0, side * 0.05, kneePivot); kneeRing.rotation.x = Math.PI / 2;
+        var kneeCap = cyl(0.052, 0.052, 0.03, M.accent, 0, 0, side * 0.095, kneePivot, 20); kneeCap.rotation.x = Math.PI / 2;
         regLocal(kneeCap, def.key, new THREE.Vector3(0, 0, side), 0.40);
-        var lower = box(0.11, SPEC.L2, 0.10, M.armorB, 0, -SPEC.L2 / 2, 0, kneePivot);
-        regLocal(lower, def.key, new THREE.Vector3(0, 0, side), 0.42);
-        var shin = box(0.05, SPEC.L2 * 0.7, 0.05, M.accent, -0.075, -SPEC.L2 / 2, 0, kneePivot);
+        // lower leg: slimmer dark core + angled shin guard plate with an orange hairline
+        var lowerCore = box(0.085, SPEC.L2, 0.075, M.frame, 0, -SPEC.L2 / 2, 0, kneePivot);
+        var lower = box(0.12, SPEC.L2 * 0.72, 0.11, M.armorB, -0.018, -SPEC.L2 * 0.40, 0, kneePivot);
+        regLocal(lower, def.key, new THREE.Vector3(0, 0, side), 0.42); addEdges(lower, 0.26);
+        var shin = box(0.028, SPEC.L2 * 0.58, 0.115, M.armorC, -0.082, -SPEC.L2 * 0.40, 0, kneePivot);
         regLocal(shin, def.key, new THREE.Vector3(-0.6, 0, 0), 0.4);
+        var shinLine = box(0.012, SPEC.L2 * 0.44, 0.018, M.accent, -0.10, -SPEC.L2 * 0.40, 0, kneePivot);
+        regLocal(shinLine, def.key, new THREE.Vector3(-0.7, 0, 0), 0.44);
         var pawPivot = new THREE.Group(); pawPivot.position.y = -SPEC.L2; kneePivot.add(pawPivot);
-        var paw = box(0.24, 0.09, 0.17, M.rubber, 0.05, -0.045, 0, pawPivot);
-        regLocal(paw, def.key, new THREE.Vector3(0.3, -0.5, 0), 0.3);
+        var ankle = cyl(0.055, 0.055, 0.11, M.dark, 0, -0.01, 0, pawPivot); ankle.rotation.x = Math.PI / 2;
+        var paw = box(0.27, 0.085, 0.19, M.rubber, 0.055, -0.048, 0, pawPivot);
+        regLocal(paw, def.key, new THREE.Vector3(0.3, -0.15, 0), 0.3);
+        var pawTop = box(0.20, 0.035, 0.15, M.armorB, 0.03, -0.002, 0, pawPivot); regLocal(pawTop, def.key, new THREE.Vector3(0.2, -0.2, 0), 0.32);
         [-0.055, 0.055].forEach(function (z) {
           var toe = box(0.10, 0.05, 0.05, M.dark, 0.16, -0.06, z, pawPivot);
-          regLocal(toe, def.key, new THREE.Vector3(0.8, -0.3, Math.sign(z)), 0.36);
+          regLocal(toe, def.key, new THREE.Vector3(0.8, -0.15, Math.sign(z)), 0.36);
         });
         [-0.055, 0, 0.055].forEach(function (z) {
           var claw = new THREE.Mesh(new THREE.ConeGeometry(0.020, 0.10, 4), M.steel);
           claw.rotation.z = -Math.PI / 2 + 0.25; claw.rotation.y = Math.PI / 4;
           claw.position.set(0.235, -0.075, z); claw.castShadow = true; pawPivot.add(claw);
-          regLocal(claw, def.key, new THREE.Vector3(1, -0.4, Math.sign(z)), 0.4);
+          regLocal(claw, def.key, new THREE.Vector3(1, -0.15, Math.sign(z)), 0.4);
         });
         legs[def.key] = { def: def, root: root, hipPivot: hipPivot, kneePivot: kneePivot, pawPivot: pawPivot };
       });
@@ -734,8 +871,8 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       }
 
       /* ================= CAMERA — committed orbit, drag to look ================= */
-      var camYaw = 0.72, camPitch = 0.42, camDist = 6.4;
-      var CAM_HOME = { yaw: 0.72, pitch: 0.42, dist: 6.4 };
+      var camYaw = 0.68, camPitch = 0.34, camDist = 5.9;
+      var CAM_HOME = { yaw: 0.68, pitch: 0.34, dist: 5.9 };
       function applyCamera() {
         var t = new THREE.Vector3(0, 1.12, 0);
         camera.position.set(
@@ -746,7 +883,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       }
       var dragging = false, lastPX = 0, lastPY = 0;
       var cvs = renderer.domElement;
-      cvs.addEventListener('pointerdown', function (e) { dragging = true; lastPX = e.clientX; lastPY = e.clientY; cvs.setPointerCapture(e.pointerId); stopTour('You have the controls — drag to orbit, scroll to zoom.'); });
+      cvs.addEventListener('pointerdown', function (e) { dragging = true; lastPX = e.clientX; lastPY = e.clientY; cvs.setPointerCapture(e.pointerId); stopTour(); });
       cvs.addEventListener('pointermove', function (e) {
         if (!dragging) return;
         camYaw -= (e.clientX - lastPX) * 0.005;
@@ -818,14 +955,46 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       for (var bi = 0; bi < subBtns.length; bi++) {
         subBtns[bi].addEventListener('click', function () { stopTour(); setSelected(this.getAttribute('data-sub')); });
       }
-      $('btnLoad').addEventListener('click', function () { stopTour(); $('fileLoad').click(); });
+      $('btnLoadTop').addEventListener('click', function () { stopTour(); $('fileLoad').click(); });
+
+      /* ================= MODEL SWITCHER — full machine configurations, same
+         {name, rpm, stress, explode, xray} shape as a loaded model file,
+         each with its own paint scheme ================= */
+      var MODEL_VARIANTS = {
+        ceramic: { name: 'MECHA CAT MK-IV', armor: 0xf1f2f3, armorB: 0xc9d1d8, armorC: 0x8793a0, rpm: 55, stress: 100, explode: 0, xray: false },
+        stealth: { name: 'MECHA CAT MK-IV · STEALTH', armor: 0x2e353d, armorB: 0x22282e, armorC: 0x556270, rpm: 85, stress: 100, explode: 0, xray: true },
+        hazard: { name: 'MECHA CAT MK-IV · HAZARD', armor: 0xf2b705, armorB: 0xd99a06, armorC: 0x8a6d1f, rpm: 35, stress: 130, explode: 35, xray: false }
+      };
+      function applyModel(key) {
+        var v = MODEL_VARIANTS[key]; if (!v) return;
+        M.armor.color.setHex(v.armor);
+        M.armorB.color.setHex(v.armorB);
+        M.armorC.color.setHex(v.armorC);
+        setRpm(v.rpm);
+        setStress(v.stress);
+        $('inExplode').value = v.explode;
+        setExplodeAll(v.explode / 100);
+        setXray(v.xray);
+        $('chipMachine').textContent = v.name;
+        $('modelName').textContent = v.name;
+        var btns = document.querySelectorAll('.seg button[data-model]');
+        for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('on', btns[i].getAttribute('data-model') === key);
+      }
+      var modelBtns = document.querySelectorAll('.seg button[data-model]');
+      for (var mi = 0; mi < modelBtns.length; mi++) {
+        modelBtns[mi].addEventListener('click', function () {
+          stopTour();
+          applyModel(this.getAttribute('data-model'));
+          toast('Model: ' + MODEL_VARIANTS[this.getAttribute('data-model')].name);
+        });
+      }
       $('fileLoad').addEventListener('change', function () {
         var f = this.files && this.files[0]; if (!f) return;
         var rd = new FileReader();
         rd.onload = function () {
           try {
             var cfg = JSON.parse(rd.result);
-            if (cfg.name) $('chipMachine').textContent = String(cfg.name).toUpperCase().slice(0, 28);
+            if (cfg.name) { $('chipMachine').textContent = String(cfg.name).toUpperCase().slice(0, 28); $('modelName').textContent = String(cfg.name).toUpperCase().slice(0, 28); }
             if (cfg.rpm != null) setRpm(+cfg.rpm);
             if (cfg.stress != null) setStress(+cfg.stress);
             if (cfg.explode != null) { $('inExplode').value = +cfg.explode; setExplodeAll(clamp(+cfg.explode, 0, 100) / 100); }
@@ -846,6 +1015,18 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
           document.body.removeChild(ta);
         }
       });
+
+      /* ================= DOCS DRAWER ================= */
+      var docsDrawer = $('docsDrawer'), docsBackdrop = $('docsBackdrop');
+      function setDocs(open) {
+        docsDrawer.classList.toggle('open', open);
+        docsBackdrop.classList.toggle('on', open);
+        docsDrawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+      $('btnDocs').addEventListener('click', function () { setDocs(true); });
+      $('btnDocsClose').addEventListener('click', function () { setDocs(false); });
+      docsBackdrop.addEventListener('click', function () { setDocs(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setDocs(false); });
 
       /* ================= TOUR — self-driving, yields to any touch ================= */
       var cursor = document.createElement('div'); // reuse styled node already in DOM
@@ -878,7 +1059,6 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         if (!tour.active) return;
         tour.step = (tour.step + 1) % tourSteps.length;
         var st = tourSteps[tour.step];
-        $('captionText').textContent = st.caption;
         moveCursorTo(st.target(), function () {
           if (!tour.active) return;
           st.act();
@@ -888,17 +1068,14 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       function startTour() {
         if (tour.active) return;
         tour.active = true; tour.step = -1;
-        $('tourTag').textContent = 'TOUR';
         $('footState').textContent = 'solver: live · tour: running';
         runStep();
       }
-      function stopTour(msg) {
-        if (!tour.active) { if (msg) $('captionText').textContent = msg; return; }
+      function stopTour() {
+        if (!tour.active) return;
         tour.active = false;
         clearTimeout(tour.timer);
         cursor.classList.remove('on');
-        $('tourTag').textContent = 'MANUAL';
-        $('captionText').textContent = msg || 'Tour stopped — you have the controls. Drag the cat to orbit, press a subsystem to detach it.';
         $('footState').textContent = 'solver: live · tour: stopped (manual control)';
       }
       // Any interaction anywhere on the console stops the tour (canvas + buttons handled above too)
@@ -975,8 +1152,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       }
       requestAnimationFrame(frame);
       setStress(100); setRpm(55); setSelected('none');
-      if (reduceMotion) { stopTour('Reduced-motion is on, so the tour is paused — press Replay tour or drive the console yourself.'); $('tourTag').textContent = 'MANUAL'; }
-      else setTimeout(startTour, 700);
+      if (!reduceMotion) setTimeout(startTour, 700);
     })();
     </script>
   </body>
