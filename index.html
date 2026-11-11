@@ -40,6 +40,8 @@
       .seg button{ border:1px solid transparent; background:transparent; box-shadow:none; border-radius:6px; padding:5px 13px; font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; }
       .seg button:hover{ color:var(--ink); border-color:transparent; background:transparent; box-shadow:none; }
       .seg button.on{ background:var(--panel); color:var(--ink); border-color:var(--line); box-shadow:0 1px 3px rgba(15,18,20,.12); }
+      .triallink{ flex:none; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.03em; padding:6px 11px; border:1px solid var(--line); border-radius:6px; background:var(--accent-soft); color:var(--ink); text-decoration:none; white-space:nowrap; }
+      .triallink:hover{ border-color:var(--accent); color:var(--accent); }
       .modelbar .mname{ font-family:var(--mono); font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .modelbar .mname b{ color:var(--ink); font-weight:700; }
       .modelbar .loadbtn{ margin-left:auto; flex:none; }
@@ -50,6 +52,7 @@
 
       /* ---------- console ---------- */
       .console{ position:relative; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; background:var(--panel); overflow:hidden; }
+      .stagewrap{ position:relative; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; }
       .stage{ position:relative; width:100%; flex:1 1 auto; min-height:0; background:radial-gradient(120% 90% at 50% 0%, #f7f8f9 0%, #e9edef 52%, #dde3e7 100%); }
       .stage canvas{ display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
       .stage canvas:active{ cursor:grabbing; }
@@ -81,17 +84,34 @@
       .chart .cval small{ font-size:9.5px; color:#5b6670; font-weight:400; }
       .chart canvas{ width:100%; height:30px; display:block; margin-top:3px; }
       .chart .cmm{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; color:#7a8590; font-variant-numeric:tabular-nums; }
+      /* ---------- phones: the HUD leaves the canvas — stats & controls become
+         a plain strip under the stage, the page scrolls, the cat gets the
+         whole width. Desktop is untouched. ---------- */
       @media (max-width:640px){
-        .hudcol{ width:118px; gap:6px; }
-        .hudcol.left{ left:8px; top:96px; }
-        .hudcol.right{ right:8px; top:10px; }
-        .chart{ padding:6px 8px 5px; border-radius:10px; }
-        .chart .cname{ font-size:8px; letter-spacing:.05em; }
-        .chart .cval{ font-size:12.5px; }
-        .chart canvas{ height:20px; }
-        .chart .cmm{ display:none; }
+        body{ overflow:auto; }
+        .wrap{ height:auto; min-height:100vh; min-height:100dvh; }
+        header.top{ flex-wrap:wrap; padding:10px 12px 6px; gap:8px 10px; }
+        header.top h1{ font-size:20px; }
+        .console{ flex:none; overflow:visible; }
+        .stagewrap{ flex:none; }
+        .stage{ flex:none; height:54vh; height:54dvh; min-height:320px; }
+        .bignum{ top:10px; left:12px; }
+        .bignum .val{ font-size:34px; }
+        .bignum .unit{ font-size:11px; }
+        .bignum .phase{ font-size:11px; }
         .stageflags{ left:8px; bottom:10px; }
         .flag{ font-size:9.5px; padding:3px 6px; }
+        .hud{ position:static; display:grid; grid-template-columns:1fr 1fr; gap:8px; padding:10px 12px; background:var(--panel2); border-top:1px solid var(--line); pointer-events:auto; }
+        .hudcol{ position:static; width:auto; gap:8px; }
+        .chart{ padding:8px 10px 7px; border-radius:10px; }
+        .chart .cname{ font-size:9px; letter-spacing:.05em; }
+        .chart .cval{ font-size:15px; }
+        .chart canvas{ height:24px; }
+        .modelbar .loadbtn{ position:sticky; right:0; background:var(--panel); box-shadow:-6px 0 10px rgba(15,18,20,.08); }
+        .subbar{ position:sticky; bottom:0; z-index:20; padding:10px 12px; box-shadow:0 -6px 14px rgba(15,18,20,.10); }
+        .subbar button{ min-height:40px; padding:9px 13px; }
+        .subbar button[data-sub="none"]{ position:sticky; left:0; z-index:2; box-shadow:4px 0 8px rgba(15,18,20,.10); }
+        #toast{ bottom:64px; }
       }
 
       /* ---------- floating control rails — sliders & buttons live in the side
@@ -111,12 +131,14 @@
       .ctl.explode label{ color:var(--ink); }
       .ctl.explode label output{ color:var(--accent); }
       @media (max-width:640px){
-        .rail{ padding:7px 8px 8px; border-radius:10px; gap:5px; }
-        .rail .rhead{ font-size:8px; letter-spacing:.08em; }
-        .rail button{ font-size:10.5px; padding:5px 6px; border-radius:7px; }
-        .ctl label{ font-size:8px; letter-spacing:.04em; }
-        .ctl input[type=range]{ height:16px; }
-        .ctl.explode{ padding-top:5px; }
+        .rail{ padding:9px 10px 10px; border-radius:10px; gap:7px; }
+        .rail .rhead{ font-size:9px; letter-spacing:.08em; }
+        .rail button{ font-size:12px; padding:9px 8px; border-radius:8px; min-height:40px; }
+        .ctl label{ font-size:9.5px; letter-spacing:.04em; }
+        .ctl input[type=range]{ height:28px; }
+        .ctl input[type=range]::-webkit-slider-thumb{ width:22px; height:22px; margin-top:-9.5px; }
+        .ctl input[type=range]::-moz-range-thumb{ width:18px; height:18px; }
+        .ctl.explode{ padding-top:6px; }
       }
       button{ font-family:var(--sans); font-size:12.5px; font-weight:600; letter-spacing:.01em; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:6px; padding:7px 12px; cursor:pointer; box-shadow:0 1px 2px rgba(15,18,20,.05); transition:border-color .15s ease, background .15s ease, box-shadow .15s ease; }
       button:hover{ border-color:#9aa7b1; background:var(--panel2); box-shadow:0 1px 3px rgba(15,18,20,.08); }
@@ -193,11 +215,13 @@
           <button type="button" data-model="stealth" title="Recon configuration — 85 RPM, dark shell, X-Ray on">MK-IV · Stealth</button>
           <button type="button" data-model="hazard" title="Heavy configuration — 35 RPM, 130% stress, 35% exploded view">MK-IV · Hazard</button>
         </div>
+        <a class="triallink" href="trials.html">Trial models · Dragon / Worm / Laser / Poro →</a>
         <span class="mname">Machine&nbsp;<b id="modelName">MECHA CAT MK-IV</b></span>
         <button class="loadbtn" id="btnLoadTop" type="button">Load model file…</button>
       </div>
 
       <section class="console" id="consoleCard" aria-label="Mecha cat teardown console">
+        <div class="stagewrap">
         <div class="stage" id="stage">
           <div class="bignum">
             <div class="val" id="bigRpm">0</div>
@@ -208,7 +232,9 @@
             <span class="flag" id="flagMode">ASSEMBLED</span>
             <span class="flag hot" id="flagHot">⚠ OVER-LIMIT — STRESS TEST</span>
           </div>
-          <div class="hud" aria-label="Live metrics">
+          <div id="errbox" role="alert"></div>
+        </div>
+        <div class="hud" aria-label="Live metrics">
             <div class="hudcol left">
               <div class="chart"><div class="chead"><span class="cname">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
               <div class="chart"><div class="chead"><span class="cname">Foot lift · FL</span><span class="cval" id="vLift">0 <small>mm</small></span></div><canvas id="chLift" width="260" height="44"></canvas><div class="cmm"><span id="mmLiftMin">min 0</span><span id="mmLiftMax">max 0</span></div></div>
@@ -232,7 +258,6 @@
               </div>
             </div>
           </div>
-          <div id="errbox" role="alert"></div>
         </div>
 
         <nav class="subbar" id="subbar" aria-label="Subsystems — press to detach">
@@ -323,6 +348,14 @@
               <li><b>Detail layer:</b> hex bolts on every plate, panel gaps with dark under-shell, louvred intakes, rear exhausts, twin hydraulic pistons per leg, exposed ribcage, full-length spine cables, caged reactor core, blade tail tip.</li>
               <li><b>Studio:</b> soft PCF key shadow, hemisphere bounce, warm rim, turntable disc with measurement ticks and a thin orange datum ring — the clean Elvar product-viz stage.</li>
               <li><b>Unchanged:</b> the IK solver, gait direction, neck clearance, explode / X-Ray / tour / charts and the “Load this machine” config all behave exactly as Rev 2.1.1.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.1 — phone UX (layout + buttons, solver untouched)</h3>
+            <ul>
+              <li><b>Phones:</b> the floating HUD columns covered the cat on a 390px screen, so on phones the stats and controls leave the canvas and become a plain strip under the stage, and the page scrolls — the cat gets the whole width. Desktop keeps the floating HUD.</li>
+              <li><b>Detach buttons toggle:</b> tapping the active subsystem button again puts it back to Assembled — you can always exit a detach mode from the same button. The Assembled button also stays pinned to the left of the bar, and Load stays pinned to the right of the model bar, while both bars scroll.</li>
+              <li><b>Trial models:</b> the separate Trial Models page (mechanical dragon, giant sand worm, Mega Laser Gun, Mega Poro) is now live at <code>trials.html</code> in this repo and linked from the model bar — it was never on this page before.</li>
             </ul>
           </div>
           <div class="card">
@@ -953,7 +986,9 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       $('btnTour').addEventListener('click', function () { startTour(); });
       var subBtns = document.querySelectorAll('#subbar button');
       for (var bi = 0; bi < subBtns.length; bi++) {
-        subBtns[bi].addEventListener('click', function () { stopTour(); setSelected(this.getAttribute('data-sub')); });
+        // Tapping the active subsystem again puts it back: the button toggles,
+        // so you can always get out of a detach mode without hunting for Assembled.
+        subBtns[bi].addEventListener('click', function () { stopTour(); var sub = this.getAttribute('data-sub'); setSelected(selected === sub ? 'none' : sub); });
       }
       $('btnLoadTop').addEventListener('click', function () { stopTour(); $('fileLoad').click(); });
 
