@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="data:," />
-    <title>Mecha Cat Teardown — Lab 02 · 3D Lab</title>
+    <title>Mecha Cat Teardown - Lab 02 · 3D Lab</title>
     <style>
       :root{
         --bg:#e6e9ec; --panel:#ffffff; --panel2:#eef0f2; --ink:#0f1214; --muted:#5c676f;
@@ -31,7 +31,7 @@
       .docsbtn{ font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; padding:7px 12px; border-radius:6px; background:var(--panel); color:var(--ink); border:1px solid var(--line); white-space:nowrap; box-shadow:0 1px 2px rgba(15,18,20,.05); transition:border-color .15s ease, background .15s ease; }
       .docsbtn:hover{ border-color:var(--muted); background:var(--panel2); opacity:1; }
 
-      /* ---------- model switcher — its own bar under the header, always visible ---------- */
+      /* ---------- model switcher - its own bar under the header, always visible ---------- */
       .modelbar{ flex:none; display:flex; align-items:center; gap:10px; padding:7px 16px; background:var(--panel); border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none; }
       .modelbar::-webkit-scrollbar{ display:none; }
       .modelbar .mlbl{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; flex:none; display:flex; align-items:center; gap:7px; }
@@ -71,7 +71,7 @@
       #errbox{ display:none; position:absolute; inset:auto 12px 14px 12px; z-index:40; background:#fff1ec; color:#8f1d00; border:1px solid #ffb59d; border-radius:8px; padding:10px 12px; font-family:var(--mono); font-size:12px; white-space:pre-wrap; }
       #errbox.on{ display:block; }
 
-      /* ---------- floating metric HUD — left & right over the stage ---------- */
+      /* ---------- floating metric HUD - left & right over the stage ---------- */
       .hud{ position:absolute; inset:0; pointer-events:none; z-index:4; }
       .hudcol{ position:absolute; display:flex; flex-direction:column; gap:8px; width:192px; }
       .hudcol.left{ left:12px; top:118px; }
@@ -84,7 +84,7 @@
       .chart canvas{ width:100%; height:30px; display:block; margin-top:3px; }
       .chart .cmm{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; color:#7a8590; font-variant-numeric:tabular-nums; }
 
-      /* ---------- floating control rails — sliders & buttons live in the side
+      /* ---------- floating control rails - sliders & buttons live in the side
          columns over the stage, not crammed into a bottom bar ---------- */
       .rail{ pointer-events:auto; background:rgba(255,255,255,.78); -webkit-backdrop-filter:blur(12px) saturate(1.25); backdrop-filter:blur(12px) saturate(1.25); border:1px solid rgba(19,22,25,.09); border-radius:12px; box-shadow:0 8px 22px rgba(15,18,20,.10), 0 1px 3px rgba(15,18,20,.06); padding:9px 11px 10px; display:flex; flex-direction:column; gap:6px; }
       .rail .rhead{ font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#5b6670; }
@@ -117,7 +117,7 @@
       .subbar button.sel{ background:var(--ink); border-color:var(--ink); color:var(--panel); box-shadow:0 1px 3px rgba(15,18,20,.18); }
       .subbar button.sel:hover{ background:var(--ink); color:var(--panel); opacity:.9; }
 
-      /* ---------- docs drawer — slides over, page itself never scrolls ---------- */
+      /* ---------- docs drawer - slides over, page itself never scrolls ---------- */
       .drawer-backdrop{ position:fixed; inset:0; background:rgba(10,12,14,.45); opacity:0; pointer-events:none; transition:opacity .28s ease; z-index:70; }
       .drawer-backdrop.on{ opacity:1; pointer-events:auto; }
       .docs{ position:fixed; top:0; right:0; bottom:0; width:min(700px,94vw); background:var(--bg); z-index:80; transform:translateX(103%); transition:transform .32s cubic-bezier(.32,.72,.24,1); overflow-y:auto; overscroll-behavior:contain; padding:18px 20px 28px; box-shadow:-18px 0 50px rgba(15,18,20,.25); }
@@ -152,7 +152,7 @@
       #toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce){ #cursor{ transition:none; } }
       /* ---------- phones: ONE screen, NO scroll. The page is exactly one
-         stable viewport tall (svh, not dvh — dvh changes every time the
+         stable viewport tall (svh, not dvh - dvh changes every time the
          browser chrome shows/hides, which reflowed the layout and made the
          buttons keep resizing). The stage takes whatever height is left
          after a compact fixed control panel. The model bar and the detach
@@ -211,7 +211,7 @@
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
           <span class="chip opt">REV <b>3.4 · TAP RESET</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
-          <span class="chip" id="chipFps">FPS <b>—</b></span>
+          <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
         </div>
       </header>
@@ -219,9 +219,9 @@
       <div class="modelbar" aria-label="Model switcher">
         <span class="mlbl">Model</span>
         <div class="seg" role="group" aria-label="Choose model variant">
-          <button type="button" data-model="ceramic" class="on" title="Standard configuration — 55 RPM, rated load, assembled">MK-IV · Ceramic</button>
-          <button type="button" data-model="stealth" title="Recon configuration — 85 RPM, dark shell, X-Ray on">MK-IV · Stealth</button>
-          <button type="button" data-model="hazard" title="Heavy configuration — 35 RPM, 130% stress, 35% exploded view">MK-IV · Hazard</button>
+          <button type="button" data-model="ceramic" class="on" title="Standard configuration - 55 RPM, rated load, assembled">MK-IV · Ceramic</button>
+          <button type="button" data-model="stealth" title="Recon configuration - 85 RPM, dark shell, X-Ray on">MK-IV · Stealth</button>
+          <button type="button" data-model="hazard" title="Heavy configuration - 35 RPM, 130% stress, 35% exploded view">MK-IV · Hazard</button>
         </div>
         <span class="mname">Machine&nbsp;<b id="modelName">MECHA CAT MK-IV</b></span>
         <button class="loadbtn" id="btnLoadTop" type="button">Load model file…</button>
@@ -237,7 +237,7 @@
           </div>
           <div class="stageflags">
             <span class="flag" id="flagMode">ASSEMBLED</span>
-            <span class="flag hot" id="flagHot">⚠ OVER-LIMIT — STRESS TEST</span>
+            <span class="flag hot" id="flagHot">⚠ OVER-LIMIT - STRESS TEST</span>
           </div>
           <div class="zoombar" aria-label="Zoom">
             <button type="button" id="btnZoomIn" aria-label="Zoom in">+</button>
@@ -272,7 +272,7 @@
           </div>
         </div>
 
-        <nav class="subbar" id="subbar" aria-label="Subsystems — press to detach">
+        <nav class="subbar" id="subbar" aria-label="Subsystems - press to detach">
           <span class="lbl">Detach →</span>
           <button type="button" data-sub="none" class="sel">Assembled</button>
           <button type="button" data-sub="head">Head</button>
@@ -294,29 +294,29 @@
       <div class="drawer-backdrop" id="docsBackdrop"></div>
       <aside class="docs" id="docsDrawer" aria-label="Lab documentation" aria-hidden="true">
         <div class="drawerhead"><span class="dtag">LAB 02 · DOCUMENTATION</span><button id="btnDocsClose" type="button">Close ✕</button></div>
-        <h2>How this lab was built — the teardown workflow</h2>
-        <p class="lede">Converted from Elvar's teardown post into a nine-step workflow, reviewed and approved, then run on this machine. The same workflow rebuilds any machine with moving parts as one self-contained page. Scope note for this delivery: the interactive lab (steps 1–7) is what this page is; the step-8 video capture is a follow-on run from this same page, and step 9 ships as page + Three.js library together under 1 MB rather than one literal file.</p>
+        <h2>How this lab was built - the teardown workflow</h2>
+        <p class="lede">Converted from Elvar's teardown post into a nine-step workflow, reviewed and approved, then run on this machine. The same workflow rebuilds any machine with moving parts as one self-contained page. Scope note for this delivery: the interactive lab (steps 1-7) is what this page is; the step-8 video capture is a follow-on run from this same page, and step 9 ships as page + Three.js library together under 1 MB rather than one literal file.</p>
         <div class="grid2">
           <div class="card">
             <h3>The 9-step workflow</h3>
             <ol>
-              <li><b>Prep the tools</b> — Node 20+, ffmpeg, Python 3, Playwright + Chromium; read the teardown skill as reference, build with Three.js.</li>
-              <li><b>Pick the machine + one reference</b> — a mecha cat. One motion input drives everything. Real numbers first, checked on paper before any code.</li>
-              <li><b>Build the model first</b> — a single solver is the source of truth; the clock and every readout read the same model. Each subsystem detaches from its button — or by tapping the part itself on the machine. Tapping empty space puts the whole machine back together.</li>
-              <li><b>Build the console</b> — big live primary number top-left, one live chart per quantity with min/max, subsystem controls always in reach, replay button.</li>
-              <li><b>The look</b> — clean research model on a light studio background, soft shadow, one strong accent colour, dark text.</li>
-              <li><b>Critic pass (gate)</b> — stills at every tour beat, press every button and slider yourself, fix, re-render. Nothing ships before this.</li>
-              <li><b>Self-driving page</b> — the tour starts only from the Replay button, with a visible cursor; any touch stops the tour and hands over control. Camera stays committed, machine stays in frame.</li>
-              <li><b>Video</b> — render(t) as a pure function of time, 60 fps, 1920×1080, 30 s cut, music laid in with ffmpeg on the same timeline. (Follow-on step, run from this page; no video file ships inside it.)</li>
-              <li><b>Ship it</b> — page + library under 1 MB total, a “Load this machine” button, no sign-in, phone + integrated-GPU tested, alive in the first 3 seconds. Bonus: a stress slider that pushes the machine past its rated limit.</li>
+              <li><b>Prep the tools</b> - Node 20+, ffmpeg, Python 3, Playwright + Chromium; read the teardown skill as reference, build with Three.js.</li>
+              <li><b>Pick the machine + one reference</b> - a mecha cat. One motion input drives everything. Real numbers first, checked on paper before any code.</li>
+              <li><b>Build the model first</b> - a single solver is the source of truth; the clock and every readout read the same model. Each subsystem detaches from its button - or by tapping the part itself on the machine. Tapping empty space puts the whole machine back together.</li>
+              <li><b>Build the console</b> - big live primary number top-left, one live chart per quantity with min/max, subsystem controls always in reach, replay button.</li>
+              <li><b>The look</b> - clean research model on a light studio background, soft shadow, one strong accent colour, dark text.</li>
+              <li><b>Critic pass (gate)</b> - stills at every tour beat, press every button and slider yourself, fix, re-render. Nothing ships before this.</li>
+              <li><b>Self-driving page</b> - the tour starts only from the Replay button, with a visible cursor; any touch stops the tour and hands over control. Camera stays committed, machine stays in frame.</li>
+              <li><b>Video</b> - render(t) as a pure function of time, 60 fps, 1920×1080, 30 s cut, music laid in with ffmpeg on the same timeline. (Follow-on step, run from this page; no video file ships inside it.)</li>
+              <li><b>Ship it</b> - page + library under 1 MB total, a “Load this machine” button, no sign-in, phone + integrated-GPU tested, alive in the first 3 seconds. Bonus: a stress slider that pushes the machine past its rated limit.</li>
             </ol>
           </div>
           <div class="card">
-            <h3>Machine spec — the numbers, checked on paper</h3>
+            <h3>Machine spec - the numbers, checked on paper</h3>
             <table class="spec">
               <tr><td>Drive input</td><td>1 crank / servo phase φ</td></tr>
               <tr><td>Head</td><td>angular wedge plate · visor slits · 0 spheres</td></tr>
-              <tr><td>Crank range</td><td>0 – 120 RPM</td></tr>
+              <tr><td>Crank range</td><td>0 - 120 RPM</td></tr>
               <tr><td>Gait</td><td>trot · FORWARD, head-first (+X) · FL+BR φ+0°, FR+BL φ+180°</td></tr>
               <tr><td>Neck</td><td>gimbal collar + twin struts · clear of skull &amp; chest</td></tr>
               <tr><td>Upper leg (L1)</td><td>0.55 m</td></tr>
@@ -327,117 +327,117 @@
               <tr><td>Leg solver</td><td>2-bone IK, law of cosines</td></tr>
               <tr><td>Body bob</td><td>0.022 m · sin 2φ</td></tr>
               <tr><td>Tail</td><td>5 segments · travelling wave</td></tr>
-              <tr><td>Stress range</td><td>100 – 160 % of rated load</td></tr>
+              <tr><td>Stress range</td><td>100 - 160 % of rated load</td></tr>
               <tr><td>Rated core temp</td><td>≤ 74 °C at 120 RPM / 100 %</td></tr>
             </table>
           </div>
           <div class="card">
             <h3>Required tools · CLI · skills to reproduce this lab</h3>
             <ul>
-              <li><b>Runtime</b> — Node.js 20+ (<code>node --version</code>)</li>
-              <li><b>Teardown skill</b> — <code>npx skills add elvarofficial/teardown</code> (reference method; MIT)</li>
-              <li><b>3D</b> — Three.js (classic build, global <code>THREE</code>), procedural modelling, no external model files</li>
-              <li><b>Video / audio</b> — ffmpeg (<code>ffmpeg -version</code>), Python 3 for capture helpers</li>
-              <li><b>QA</b> — Playwright + Chromium for stills at every tour beat and the critic pass</li>
-              <li><b>Browser APIs</b> — WebGL, Canvas 2D (charts), Web Audio–free build: this lab is silent by design</li>
-              <li><b>Config</b> — “Load this machine” accepts a JSON config: <code>{"name","rpm","stress","explode","xray"}</code></li>
+              <li><b>Runtime</b> - Node.js 20+ (<code>node --version</code>)</li>
+              <li><b>Teardown skill</b> - <code>npx skills add elvarofficial/teardown</code> (reference method; MIT)</li>
+              <li><b>3D</b> - Three.js (classic build, global <code>THREE</code>), procedural modelling, no external model files</li>
+              <li><b>Video / audio</b> - ffmpeg (<code>ffmpeg -version</code>), Python 3 for capture helpers</li>
+              <li><b>QA</b> - Playwright + Chromium for stills at every tour beat and the critic pass</li>
+              <li><b>Browser APIs</b> - WebGL, Canvas 2D (charts), Web Audio-free build: this lab is silent by design</li>
+              <li><b>Config</b> - “Load this machine” accepts a JSON config: <code>{"name","rpm","stress","explode","xray"}</code></li>
             </ul>
           </div>
           <div class="card">
-            <h3>Revision pass — reverse gait + neck flicker fixed</h3>
+            <h3>Revision pass - reverse gait + neck flicker fixed</h3>
             <ul>
-              <li><b>Walked backwards:</b> the foot target swept forward while planted and backward while lifted — exactly inverted. Sign flipped and checked on paper: stance now sweeps back, swing returns forward in the air, head leads.</li>
+              <li><b>Walked backwards:</b> the foot target swept forward while planted and backward while lifted - exactly inverted. Sign flipped and checked on paper: stance now sweeps back, swing returns forward in the air, head leads.</li>
               <li><b>Neck flicker:</b> one fat neck cylinder was buried inside both the chest and the skull, so its surface clipped through them on every head-stabilisation frame. Rebuilt as a collar ring, twin struts and a piston running under the skull, with visible clearance on every side.</li>
-              <li><b>Z-fighting:</b> side stripes and cheek stripes sat exactly coplanar with their plates. Every appliqué now sits proud of its surface — the standard fix from Three.js modelling practice, along with a clean parent hierarchy (body → neck → head) and no intersecting shells.</li>
+              <li><b>Z-fighting:</b> side stripes and cheek stripes sat exactly coplanar with their plates. Every appliqué now sits proud of its surface - the standard fix from Three.js modelling practice, along with a clean parent hierarchy (body → neck → head) and no intersecting shells.</li>
               <li><b>Look:</b> flat triangular ear plates instead of cones, panel edge lines on the main armour, intake vents, a keel plate, knee caps and shorter swept-back whiskers.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Rev 3 — Elvar look rebuild (visual only, solver untouched)</h3>
+            <h3>Rev 3 - Elvar look rebuild (visual only, solver untouched)</h3>
             <ul>
-              <li><b>Proportions:</b> longer, lower, tapered predator silhouette — extended snout, flat crown, staggered two-layer flank armour, shrinking dorsal vertebra plates. No part reads as a single plain box.</li>
-              <li><b>Material roles:</b> ceramic clearcoat shell (off-white) floats over a gunmetal frame that stays visible at every seam; polished steel for ribs, rods and rings; carbon for cables and visor; rubber only at the paws. One orange accent, used as hairlines and tips — never thick stripes.</li>
+              <li><b>Proportions:</b> longer, lower, tapered predator silhouette - extended snout, flat crown, staggered two-layer flank armour, shrinking dorsal vertebra plates. No part reads as a single plain box.</li>
+              <li><b>Material roles:</b> ceramic clearcoat shell (off-white) floats over a gunmetal frame that stays visible at every seam; polished steel for ribs, rods and rings; carbon for cables and visor; rubber only at the paws. One orange accent, used as hairlines and tips - never thick stripes.</li>
               <li><b>Detail layer:</b> hex bolts on every plate, panel gaps with dark under-shell, louvred intakes, rear exhausts, twin hydraulic pistons per leg, exposed ribcage, full-length spine cables, caged reactor core, blade tail tip.</li>
-              <li><b>Studio:</b> soft PCF key shadow, hemisphere bounce, warm rim, turntable disc with measurement ticks and a thin orange datum ring — the clean Elvar product-viz stage.</li>
+              <li><b>Studio:</b> soft PCF key shadow, hemisphere bounce, warm rim, turntable disc with measurement ticks and a thin orange datum ring - the clean Elvar product-viz stage.</li>
               <li><b>Unchanged:</b> the IK solver, gait direction, neck clearance, explode / X-Ray / tour / charts and the “Load this machine” config all behave exactly as Rev 2.1.1.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Rev 3.1 — phone UX (layout + buttons, solver untouched)</h3>
+            <h3>Rev 3.1 - phone UX (layout + buttons, solver untouched)</h3>
             <ul>
-              <li><b>Phones:</b> the floating HUD columns covered the cat on a 390px screen, so on phones the stats and controls leave the canvas and become a plain strip under the stage, and the page scrolls — the cat gets the whole width. Desktop keeps the floating HUD.</li>
-              <li><b>Detach buttons toggle:</b> tapping the active subsystem button again puts it back to Assembled — you can always exit a detach mode from the same button. The Assembled button also stays pinned to the left of the bar, and Load stays pinned to the right of the model bar, while both bars scroll.</li>
-              <li><b>Trial models:</b> the separate Trial Models page (mechanical dragon, giant sand worm, Mega Laser Gun, Mega Poro) lives at <code>trials.html</code> in this repo — the model-bar link to it was removed again in Rev 3.2 until the page is finished.</li>
+              <li><b>Phones:</b> the floating HUD columns covered the cat on a 390px screen, so on phones the stats and controls leave the canvas and become a plain strip under the stage, and the page scrolls - the cat gets the whole width. Desktop keeps the floating HUD.</li>
+              <li><b>Detach buttons toggle:</b> tapping the active subsystem button again puts it back to Assembled - you can always exit a detach mode from the same button. The Assembled button also stays pinned to the left of the bar, and Load stays pinned to the right of the model bar, while both bars scroll.</li>
+              <li><b>Trial models:</b> the separate Trial Models page (mechanical dragon, giant sand worm, Mega Laser Gun, Mega Poro) lives at <code>trials.html</code> in this repo - the model-bar link to it was removed again in Rev 3.2 until the page is finished.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Rev 3.2 — phone fit (one screen, tap-to-explode, solver untouched)</h3>
+            <h3>Rev 3.2 - phone fit (one screen, tap-to-explode, solver untouched)</h3>
             <ul>
-              <li><b>Phones fit one screen, no scroll:</b> the page is exactly one viewport tall on stable <code>svh</code>, not <code>dvh</code> — dvh changes whenever the browser chrome shows or hides, which reflowed the layout and made the buttons keep resizing. The stage takes whatever height is left after a compact control panel.</li>
-              <li><b>Tap the cat itself:</b> the model bar and the detach bar are gone on phones — tap any part of the machine to explode that subsystem, tap the same part again to put it back. Desktop keeps both bars.</li>
-              <li><b>Cut:</b> the Trial models link is removed from the model bar until that page is finished — the page itself (<code>trials.html</code>) still exists, just unlinked. The tour no longer auto-starts on phones, so it can't fight your taps.</li>
+              <li><b>Phones fit one screen, no scroll:</b> the page is exactly one viewport tall on stable <code>svh</code>, not <code>dvh</code> - dvh changes whenever the browser chrome shows or hides, which reflowed the layout and made the buttons keep resizing. The stage takes whatever height is left after a compact control panel.</li>
+              <li><b>Tap the cat itself:</b> the model bar and the detach bar are gone on phones - tap any part of the machine to explode that subsystem, tap the same part again to put it back. Desktop keeps both bars.</li>
+              <li><b>Cut:</b> the Trial models link is removed from the model bar until that page is finished - the page itself (<code>trials.html</code>) still exists, just unlinked. The tour no longer auto-starts on phones, so it can't fight your taps.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Rev 3.3 — zoom bar + filled stat cards (phones, solver untouched)</h3>
+            <h3>Rev 3.3 - zoom bar + filled stat cards (phones, solver untouched)</h3>
             <ul>
-              <li><b>Zoom bar:</b> a slim vertical pill on the stage's right edge, phones only — + and − buttons with a level track between them. Tap to step the zoom, hold to keep zooming. Desktop keeps scroll-wheel zoom.</li>
+              <li><b>Zoom bar:</b> a slim vertical pill on the stage's right edge, phones only - + and − buttons with a level track between them. Tap to step the zoom, hold to keep zooming. Desktop keeps scroll-wheel zoom.</li>
               <li><b>Stat cards:</b> the four telemetry cards used to stretch to the rails' row height with the sparkline stuck at the top and the rest empty. Each card is now a flex column and the sparkline fills the whole card, so they read as real telemetry tiles.</li>
-              <li><b>Clip fix:</b> the tour button read “↻ Replay tour” and was clipped to “↻ Replay t…” in the phone 2×2 button grid — it now reads “↻ Replay”.</li>
+              <li><b>Clip fix:</b> the tour button read “↻ Replay tour” and was clipped to “↻ Replay t…” in the phone 2×2 button grid - it now reads “↻ Replay”.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Rev 3.4 — tap outside to reassemble, calm taps (solver untouched)</h3>
+            <h3>Rev 3.4 - tap outside to reassemble, calm taps (solver untouched)</h3>
             <ul>
               <li><b>Tap empty space, everything reassembles:</b> on desktop and phones, tapping the stage outside the machine puts the whole machine back together (explode slider back to 0). No more hunting for the Assembled button.</li>
-              <li><b>Only the tapped part moves:</b> selecting a subsystem used to shove every other part to 18% explode as well, so each tap reshuffled the whole machine — worst on the yellow Hazard model, which already sits at 35% explode. Now a tap moves only the part you tapped; the rest hold their level.</li>
+              <li><b>Only the tapped part moves:</b> selecting a subsystem used to shove every other part to 18% explode as well, so each tap reshuffled the whole machine - worst on the yellow Hazard model, which already sits at 35% explode. Now a tap moves only the part you tapped; the rest hold their level.</li>
               <li><b>Tour never auto-starts:</b> it used to cycle detach states on load by itself, which read as the expand jumping around on its own. It now starts only from the ↻ Replay button, on desktop and phones alike.</li>
             </ul>
           </div>
           <div class="card">
             <h3>Sources</h3>
             <p class="srcs">
-              Original post: <a href="https://x.com/elvar_official/status/2116174609355571402" target="_blank" rel="noopener">Elvar — “How I Turn Any Machine Into a 3D Simulator You Can Take Apart”</a><br />
+              Original post: <a href="https://x.com/elvar_official/status/2116174609355571402" target="_blank" rel="noopener">Elvar - “How I Turn Any Machine Into a 3D Simulator You Can Take Apart”</a><br />
               Skill repo (MIT): <a href="https://github.com/elvarofficial/teardown" target="_blank" rel="noopener">github.com/elvarofficial/teardown</a><br />
-              Lab 01 in this series: Cat Jelly Press — the jelly-cat press this lab sits next to in the 3D Lab.
+              Lab 01 in this series: Cat Jelly Press - the jelly-cat press this lab sits next to in the 3D Lab.
             </p>
           </div>
         </div>
 
-        <h2>Master prompt — rebuild this lab from scratch</h2>
+        <h2>Master prompt - rebuild this lab from scratch</h2>
         <p class="lede">Paste this into a coding agent with the required tools above. It carries the whole workflow, the machine numbers and the acceptance gate.</p>
         <div class="card promptbox">
-          <div class="copyrow"><button id="btnCopy" type="button">Copy master prompt</button><span id="copyState">Verbatim — edit the machine name and numbers to retarget it.</span></div>
-          <pre id="masterPrompt">MASTER PROMPT — TEARDOWN LAB
+          <div class="copyrow"><button id="btnCopy" type="button">Copy master prompt</button><span id="copyState">Verbatim - edit the machine name and numbers to retarget it.</span></div>
+          <pre id="masterPrompt">MASTER PROMPT - TEARDOWN LAB
 
 Role: you are a teardown engineer. Turn the machine below into a 3D simulator you can take apart, in ONE self-contained HTML page, and run the task on your own until completion.
 
-MACHINE: Mecha Cat MK-IV — a quadruped robot cat.
-REFERENCE: one exploded-view / cutaway image of the machine, studied before modelling. No reference, no build — without one the machine comes out generic.
+MACHINE: Mecha Cat MK-IV - a quadruped robot cat.
+REFERENCE: one exploded-view / cutaway image of the machine, studied before modelling. No reference, no build - without one the machine comes out generic.
 
 THE NUMBERS (check on paper before coding; the solver, the clock and every chart must agree):
-- One drive input only: crank/servo phase φ, 0–120 RPM. Everything else is derived from φ.
-- Gait: trot. Phase offsets FL 0°, BR 0°, FR 180°, BL 180°. DIRECTION CHECK: the machine walks FORWARD, head first — in stance the planted foot sweeps BACKWARD relative to the body, in swing the lifted foot returns FORWARD. A flipped sign walks it backwards; verify the sign on paper before shipping.
-- Legs: upper L1 = 0.55 m, lower L2 = 0.55 m, hip height 1.02 m, stride ±0.31 m, foot lift 0.16 m. Solve each leg with 2-bone IK (law of cosines) from the foot target — never hand-animate joint angles.
+- One drive input only: crank/servo phase φ, 0-120 RPM. Everything else is derived from φ.
+- Gait: trot. Phase offsets FL 0°, BR 0°, FR 180°, BL 180°. DIRECTION CHECK: the machine walks FORWARD, head first - in stance the planted foot sweeps BACKWARD relative to the body, in swing the lifted foot returns FORWARD. A flipped sign walks it backwards; verify the sign on paper before shipping.
+- Legs: upper L1 = 0.55 m, lower L2 = 0.55 m, hip height 1.02 m, stride ±0.31 m, foot lift 0.16 m. Solve each leg with 2-bone IK (law of cosines) from the foot target - never hand-animate joint angles.
 - Body bob 0.022 m at sin 2φ; head counter-pitches to stay level; tail is a 5-segment travelling wave lagging φ.
-- Stress slider 100–160 % of rated load scales stride, torque (²) and core temperature. Over 135 % the machine must visibly complain.
-- Head design: an angular wedge of folded armour plate — extruded side profile for the skull, visor-band eye slits, cheek guards, hinged jaw, blade crest fin. NO spherical or blob forms anywhere: core is a faceted octahedron, joints are octahedra, paws end in claws.
-- Neck & surfaces: mount the head on a gimbal collar (ring + struts + piston) with visible clearance from chest and skull — no shell may intersect the neck, or it will clip and flicker as the head stabilises. No stripe, decal or appliqué may sit coplanar with its plate: offset every one proud of the surface, or it z-fights in motion.
+- Stress slider 100-160 % of rated load scales stride, torque (²) and core temperature. Over 135 % the machine must visibly complain.
+- Head design: an angular wedge of folded armour plate - extruded side profile for the skull, visor-band eye slits, cheek guards, hinged jaw, blade crest fin. NO spherical or blob forms anywhere: core is a faceted octahedron, joints are octahedra, paws end in claws.
+- Neck & surfaces: mount the head on a gimbal collar (ring + struts + piston) with visible clearance from chest and skull - no shell may intersect the neck, or it will clip and flicker as the head stabilises. No stripe, decal or appliqué may sit coplanar with its plate: offset every one proud of the surface, or it z-fights in motion.
 
 BUILD ORDER:
 1. Model first: a single solver object is the source of truth. Clock, charts and 3D pose all read it. One input (φ) poses the whole mechanism.
 2. Subsystems = buttons: Head, Energy core, Chassis, Tail, Leg FL/FR/BL/BR. Pressing one detaches that subsystem in an exploded move while the rest of the machine steps aside; pressing Assembled reverses it. An Explode-all slider drives every subsystem together. An X-Ray toggle fades the armour to reveal the frame and core.
-3. Console (1600×900 discipline): big live primary number (crank RPM) top-left with φ under it; one live chart per quantity — servo torque (N·m), core temperature (°C), foot lift (mm), power draw (W) — each with running min/max; subsystem controls always in reach (button row on desktop, tap-the-part on phones); a Replay button.
+3. Console (1600×900 discipline): big live primary number (crank RPM) top-left with φ under it; one live chart per quantity - servo torque (N·m), core temperature (°C), foot lift (mm), power draw (W) - each with running min/max; subsystem controls always in reach (button row on desktop, tap-the-part on phones); a Replay button.
 4. Look: clean research model on a light studio background, soft contact shadow, ONE strong accent colour, white/translucent panels, dark text. Log every look defect as its own line and fix it.
 5. Critic gate (mandatory before showing anyone): render stills at every tour beat, press every button and slider yourself, fix what fails, re-render.
-6. Self-driving tour: the tour starts only from the Replay button and runs with a visible fake cursor that presses the real buttons. ANY user interaction stops the tour instantly and hands over control. Camera is committed — no free-fly during the tour — and the machine never leaves the frame.
+6. Self-driving tour: the tour starts only from the Replay button and runs with a visible fake cursor that presses the real buttons. ANY user interaction stops the tour instantly and hands over control. Camera is committed - no free-fly during the tour - and the machine never leaves the frame.
 7. Video: render(t) is a pure function of time; capture 60 fps at 1920×1080, cut 30 s, lay music in with ffmpeg on the same timeline.
 8. Ship: single HTML under 1 MB, works offline, no sign-in, a "Load this machine" button that loads a JSON config {name, rpm, stress, explode, xray}. Alive in the first 3 seconds on a phone and on integrated graphics, target 60 fps.
 
 REQUIRED TOOLS: Node 20+ · the teardown skill (npx skills add elvarofficial/teardown) as method reference · Three.js · ffmpeg · Python 3 · Playwright + Chromium for the critic pass.
 
 ACCEPTANCE: the page opens already moving; every subsystem detaches and returns; charts move with the model and their min/max are honest; the tour (started from the Replay button) completes untouched and yields to the first touch; the stress slider pushed to 160 % raises torque, temperature and warnings together. Do not declare done until you have pressed everything yourself.
-PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the model bar and detach bar are hidden and each part detaches by tapping it directly (tap again to reassemble, tap empty space to reassemble everything); the tour never auto-starts (start it from the Replay button); a slim vertical zoom bar sits on the stage's right edge on phones.</pre>
+PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the model bar and detach bar are hidden and each part detaches by tapping it directly (tap again to reassemble, tap empty space to reassemble everything); the tour never auto-starts (start it from the Replay button); a slim vertical zoom bar sits on the stage's right edge on phones.</pre>
         </div>
 
         <footer>
@@ -464,7 +464,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       var lerp = function (a, b, t) { return a + (b - a) * t; };
       var D2R = Math.PI / 180, R2D = 180 / Math.PI;
 
-      /* ================= THE MODEL — single solver, source of truth =================
+      /* ================= THE MODEL - single solver, source of truth =================
          One input: crank phase phi. Everything (pose, clock, charts) derives here. */
       var SPEC = { L1: 0.55, L2: 0.55, HIP_H: 1.02, STRIDE: 0.31, LIFT: 0.16, BOB: 0.022 };
       var LEG_DEFS = [
@@ -522,7 +522,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
         model.temp += (tempTarget - model.temp) * Math.min(1, dt * 0.25);
       }
 
-      /* ================= THREE — procedural mecha cat ================= */
+      /* ================= THREE - procedural mecha cat ================= */
       var stage = $('stage');
       var renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -570,14 +570,14 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       ringMark.rotation.x = -Math.PI / 2; ringMark.position.y = 0.004; scene.add(ringMark);
       var ringThin = new THREE.Mesh(new THREE.RingGeometry(2.14, 2.16, 96), new THREE.MeshBasicMaterial({ color: 0x131619, transparent: true, opacity: 0.18, side: THREE.DoubleSide }));
       ringThin.rotation.x = -Math.PI / 2; ringThin.position.y = 0.003; scene.add(ringThin);
-      // studio floor ticks — like a turntable measurement rig
+      // studio floor ticks - like a turntable measurement rig
       for (var tk = 0; tk < 36; tk++) {
         var ang = tk / 36 * Math.PI * 2, isMajor = tk % 9 === 0;
         var tick = new THREE.Mesh(new THREE.BoxGeometry(isMajor ? 0.16 : 0.07, 0.004, 0.018), new THREE.MeshBasicMaterial({ color: isMajor ? 0xff4d00 : 0x6b767f, transparent: true, opacity: isMajor ? 0.95 : 0.45 }));
         tick.position.set(Math.cos(ang) * 2.42, 0.004, Math.sin(ang) * 2.42); tick.rotation.y = -ang; scene.add(tick);
       }
 
-      // Materials — Elvar split: ceramic shell / gunmetal frame / polished steel / rubber / single orange accent
+      // Materials - Elvar split: ceramic shell / gunmetal frame / polished steel / rubber / single orange accent
       var M = {
         armor: new THREE.MeshPhysicalMaterial({ color: 0xf1f2f3, roughness: 0.26, metalness: 0.08, clearcoat: 0.55, clearcoatRoughness: 0.28, flatShading: true }),
         armorB: new THREE.MeshStandardMaterial({ color: 0xc9d1d8, roughness: 0.38, metalness: 0.32, flatShading: true }),
@@ -635,14 +635,14 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       var body = new THREE.Group(); body.position.y = SPEC.HIP_H + 0.34; cat.add(body);
       var BODY_Y = SPEC.HIP_H + 0.34;
 
-      /* ---- CHASSIS v3 — Elvar proportions: low, long, tapered. Dark frame underneath, ceramic shell on top, nothing is a plain box silhouette ---- */
+      /* ---- CHASSIS v3 - Elvar proportions: low, long, tapered. Dark frame underneath, ceramic shell on top, nothing is a plain box silhouette ---- */
       var chassis = new THREE.Group(); body.add(chassis); chassis.userData.sub = 'chassis'; // unregistered frame parts tap as chassis
-      // inner frame — visible in the gaps between armour, so the machine reads as built, not moulded
+      // inner frame - visible in the gaps between armour, so the machine reads as built, not moulded
       box(2.08, 0.22, 0.36, M.frame, 0, 0.10, 0, chassis);
       box(1.86, 0.12, 0.52, M.dark, -0.02, -0.18, 0, chassis);
       box(0.52, 0.34, 0.46, M.dark, 0.82, -0.02, 0, chassis);
       box(0.50, 0.32, 0.48, M.dark, -0.86, -0.02, 0, chassis);
-      // exposed ribcage — 5 polished ribs the side plates float over
+      // exposed ribcage - 5 polished ribs the side plates float over
       [-0.68, -0.34, 0, 0.34, 0.68].forEach(function (x) {
         var rib = new THREE.Mesh(new THREE.TorusGeometry(0.415, 0.032, 10, 32), M.steelDark);
         rib.position.set(x, -0.01, 0); rib.rotation.y = Math.PI / 2; rib.castShadow = true; chassis.add(rib);
@@ -652,25 +652,25 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       cable([[-0.95, 0.24, -0.14], [-0.4, 0.28, -0.19], [0.3, 0.28, -0.19], [0.92, 0.20, -0.12]], 0.020, M.carbon, chassis);
       cable([[-0.8, -0.10, 0.26], [-0.1, -0.16, 0.29], [0.7, -0.10, 0.26]], 0.014, M.steelDark, chassis);
       cable([[-0.8, -0.10, -0.26], [-0.1, -0.16, -0.29], [0.7, -0.10, -0.26]], 0.014, M.steelDark, chassis);
-      // side armour — two staggered layers per flank, angled in at the belly, with a real panel gap between them
+      // side armour - two staggered layers per flank, angled in at the belly, with a real panel gap between them
       var plateL = box(1.02, 0.46, 0.055, M.armor, 0.28, 0.04, 0.415, chassis); plateL.rotation.x = -0.06; reg(plateL, 'chassis', new THREE.Vector3(0, 0.05, 1), 0.60);
       var plateR = box(1.02, 0.46, 0.055, M.armor, 0.28, 0.04, -0.415, chassis); plateR.rotation.x = 0.06; reg(plateR, 'chassis', new THREE.Vector3(0, 0.05, -1), 0.60);
       var plateL2 = box(0.62, 0.40, 0.05, M.armorB, -0.58, 0.02, 0.425, chassis); plateL2.rotation.x = -0.05; reg(plateL2, 'chassis', new THREE.Vector3(-0.15, 0.05, 1), 0.66);
       var plateR2 = box(0.62, 0.40, 0.05, M.armorB, -0.58, 0.02, -0.425, chassis); plateR2.rotation.x = 0.05; reg(plateR2, 'chassis', new THREE.Vector3(-0.15, 0.05, -1), 0.66);
       addEdges(plateL, 0.38); addEdges(plateR, 0.38); addEdges(plateL2, 0.34); addEdges(plateR2, 0.34);
-      // thin accent rule — ONE orange line per flank, low and sharp, not a thick stripe
+      // thin accent rule - ONE orange line per flank, low and sharp, not a thick stripe
       var stripeL = box(0.86, 0.035, 0.014, M.accent, 0.28, -0.12, 0.452, chassis); reg(stripeL, 'chassis', new THREE.Vector3(0, 0, 1), 0.64);
       var stripeR = box(0.86, 0.035, 0.014, M.accent, 0.28, -0.12, -0.452, chassis); reg(stripeR, 'chassis', new THREE.Vector3(0, 0, -1), 0.64);
       // panel bolts on every side plate
       [-1, 1].forEach(function (s) {
         [[0.68, 0.20], [0.68, -0.10], [-0.10, 0.20], [-0.10, -0.10]].forEach(function (p) { bolt(p[0], p[1], 0.448 * s, chassis, 1); });
         [[-0.82, 0.15], [-0.36, 0.15], [-0.82, -0.11], [-0.36, -0.11]].forEach(function (p) { bolt(p[0], p[1], 0.455 * s, chassis, 0.9); });
-        // louvred intakes at the shoulder — 4 slats, angled
+        // louvred intakes at the shoulder - 4 slats, angled
         for (var vi = 0; vi < 4; vi++) { var vent = box(0.20, 0.028, 0.018, M.dark, 0.62, 0.16 - vi * 0.062, 0.452 * s, chassis); vent.rotation.z = -0.12; reg(vent, 'chassis', new THREE.Vector3(0, 0.1, s), 0.68); }
         // rear exhaust slots
         for (var ei = 0; ei < 3; ei++) { box(0.10, 0.024, 0.014, M.dark, -0.70, 0.10 - ei * 0.055, 0.458 * s, chassis); }
       });
-      // dorsal shell — segmented vertebra plates, shrinking toward the tail, each with a centre ridge
+      // dorsal shell - segmented vertebra plates, shrinking toward the tail, each with a centre ridge
       var plateTop = box(1.18, 0.06, 0.54, M.armorB, 0.02, 0.335, 0, chassis); reg(plateTop, 'chassis', new THREE.Vector3(0, 1, 0), 0.52);
       [-0.72, -0.36, 0, 0.36, 0.72].forEach(function (x, i) {
         var sc2 = 1 - Math.abs(i - 2) * 0.10;
@@ -681,7 +681,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
         reg(ridge, 'chassis', new THREE.Vector3(0, 1, 0), 0.78 + i * 0.045);
       });
       var spineStripe = box(0.70, 0.012, 0.055, M.accent, 0.02, 0.372, 0, chassis); reg(spineStripe, 'chassis', new THREE.Vector3(0, 1, 0), 0.60);
-      // chest — faceted wedge breastplate, pointed keel below it
+      // chest - faceted wedge breastplate, pointed keel below it
       var chest = box(0.44, 0.58, 0.64, M.armor, 0.84, -0.01, 0, chassis); chest.rotation.y = 0; reg(chest, 'chassis', new THREE.Vector3(1, 0, 0), 0.46); addEdges(chest, 0.38);
       var chestPlate = box(0.06, 0.38, 0.44, M.armorB, 1.08, -0.01, 0, chassis); chestPlate.rotation.z = -0.10; reg(chestPlate, 'chassis', new THREE.Vector3(1, 0, 0), 0.56);
       var keel = box(0.38, 0.045, 0.34, M.armorC, 0.88, -0.33, 0, chassis); keel.rotation.z = -0.42; reg(keel, 'chassis', new THREE.Vector3(0.7, -0.7, 0), 0.42);
@@ -730,7 +730,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       box(0.15, 0.10, 0.26, M.dark, 0.37, -0.145, 0, neck);
       var head = new THREE.Group(); head.position.set(0.46, 0.16, 0); neck.add(head);
       reg(head, 'head', new THREE.Vector3(1, 0.35, 0), 0.78);
-      /* Angular wedge head — flat planes and hard edges only, no spheres.
+      /* Angular wedge head - flat planes and hard edges only, no spheres.
          The cranium is an extruded side profile: brow, snout and jaw are
          straight facets, so the silhouette reads as folded armour plate. */
       function prism(profile, depth, mat) {
@@ -744,10 +744,10 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
         pm.castShadow = true; pm.receiveShadow = true;
         return pm;
       }
-      // Longer, lower skull — predator silhouette: flat crown, steep brow, extended snout, tucked chin. Still zero spheres.
+      // Longer, lower skull - predator silhouette: flat crown, steep brow, extended snout, tucked chin. Still zero spheres.
       var skull = prism([[-0.34, 0.04], [-0.30, 0.20], [-0.08, 0.26], [0.16, 0.24], [0.34, 0.10], [0.46, -0.02], [0.48, -0.11], [0.34, -0.18], [0.04, -0.25], [-0.26, -0.22]], 0.38, M.armor);
       head.add(skull); addEdges(skull, 0.30);
-      // underskull in gunmetal — the shell floats over a dark core, visible at every seam
+      // underskull in gunmetal - the shell floats over a dark core, visible at every seam
       var underskull = prism([[-0.30, 0.02], [-0.26, 0.17], [0.10, 0.21], [0.30, 0.07], [0.42, -0.04], [0.30, -0.15], [0.02, -0.21], [-0.24, -0.18]], 0.42, M.dark);
       underskull.position.y = -0.018; head.add(underskull);
       // crown plate + brow armour: two hard slabs angled over the visor
@@ -756,7 +756,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       // forehead sensor bar + twin micro-sensors
       var sensorBar = box(0.16, 0.028, 0.20, M.carbon, 0.12, 0.27, 0, head); reg(sensorBar, 'head', new THREE.Vector3(0.3, 1, 0), 0.44);
       [-0.05, 0.05].forEach(function (z) { var sens = new THREE.Mesh(new THREE.OctahedronGeometry(0.018, 0), M.accentGlow); sens.position.set(0.16, 0.275, z); head.add(sens); reg(sens, 'head', new THREE.Vector3(0.4, 1, 0), 0.48); });
-      // cheek guards: swept armour wrapping the jaw, with a vent cut and a hairline accent — not a thick stripe
+      // cheek guards: swept armour wrapping the jaw, with a vent cut and a hairline accent - not a thick stripe
       [-1, 1].forEach(function (s) {
         var cheek = box(0.34, 0.17, 0.032, M.armorB, 0.06, -0.105, 0.212 * s, head);
         cheek.rotation.y = -0.22 * s; cheek.rotation.z = -0.10;
@@ -768,7 +768,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
         // side sensor pod behind the cheek
         var pod = box(0.10, 0.09, 0.045, M.dark, -0.20, 0.02, 0.205 * s, head); reg(pod, 'head', new THREE.Vector3(-0.3, 0.1, s), 0.36);
       });
-      // visor: deep smoked band, recessed, with a centre bridge — eyes are thin angry slits inside it
+      // visor: deep smoked band, recessed, with a centre bridge - eyes are thin angry slits inside it
       var visor = box(0.075, 0.105, 0.40, M.carbon, 0.335, 0.028, 0, head); visor.rotation.z = -0.20; reg(visor, 'head', new THREE.Vector3(1, 0.2, 0), 0.30);
       var visorBridge = box(0.03, 0.10, 0.045, M.armorC, 0.345, 0.028, 0, head); visorBridge.rotation.z = -0.20; reg(visorBridge, 'head', new THREE.Vector3(1, 0.2, 0), 0.34);
       [-0.108, 0.108].forEach(function (z) {
@@ -856,7 +856,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
         var hipRing = cyl(0.135, 0.135, 0.05, M.steelDark, 0, 0, side * 0.055, root); hipRing.rotation.x = Math.PI / 2;
         var hipCap = cyl(0.068, 0.068, 0.20, M.accent, 0, 0, 0, root); hipCap.rotation.x = Math.PI / 2;
         var hipDot = cyl(0.028, 0.028, 0.215, M.dark, 0, 0, 0, root); hipDot.rotation.x = Math.PI / 2;
-        // shoulder / hip pauldron — layered: ceramic shell over a dark skirt, angled like a fender
+        // shoulder / hip pauldron - layered: ceramic shell over a dark skirt, angled like a fender
         var pauldron = box(0.42, 0.32, 0.085, M.armor, 0, 0.12, side * 0.15, root);
         pauldron.rotation.x = side * 0.30; pauldron.rotation.z = 0.07;
         regLocal(pauldron, def.key, new THREE.Vector3(0, 0.35, side), 0.38); addEdges(pauldron, 0.3);
@@ -871,7 +871,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
         regLocal(upper, def.key, new THREE.Vector3(0, 0, side), 0.30); addEdges(upper, 0.28);
         var thighStripe = box(0.02, SPEC.L1 * 0.42, 0.02, M.accent, 0.095, -SPEC.L1 * 0.32, 0, hipPivot);
         regLocal(thighStripe, def.key, new THREE.Vector3(0.7, 0, 0), 0.36);
-        // twin hydraulic pistons, front and back — polished rods in dark sleeves
+        // twin hydraulic pistons, front and back - polished rods in dark sleeves
         var piston = cyl(0.030, 0.030, SPEC.L1 * 0.82, M.steel, 0.105, -SPEC.L1 / 2, 0, hipPivot, 12);
         regLocal(piston, def.key, new THREE.Vector3(0.6, 0, 0), 0.34);
         var pistonSleeve = cyl(0.042, 0.042, SPEC.L1 * 0.38, M.dark, 0.105, -SPEC.L1 * 0.22, 0, hipPivot, 12);
@@ -944,7 +944,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
         $('btnXray').setAttribute('aria-pressed', on ? 'true' : 'false');
       }
 
-      /* ================= CAMERA — committed orbit, drag to look ================= */
+      /* ================= CAMERA - committed orbit, drag to look ================= */
       var camYaw = 0.68, camPitch = 0.34, camDist = 5.9;
       var CAM_HOME = { yaw: 0.68, pitch: 0.34, dist: 5.9 };
       function applyCamera() {
@@ -988,7 +988,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
           if (sub) {
             var puttingBack = (selected === sub);
             setSelected(puttingBack ? 'none' : sub);
-            toast(puttingBack ? 'Đã ráp lại ' + SUB_LABEL[sub] : 'Đã tách ' + SUB_LABEL[sub] + ' — chạm lại vào nó để ráp');
+            toast(puttingBack ? 'Đã ráp lại ' + SUB_LABEL[sub] : 'Đã tách ' + SUB_LABEL[sub] + ' - chạm lại vào nó để ráp');
           } else if (selected !== 'none' || explodeAll > 0.05) {
             // Tapping empty space puts the whole machine back together.
             setExplodeAll(0);
@@ -1080,7 +1080,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       }
       $('btnLoadTop').addEventListener('click', function () { stopTour(); $('fileLoad').click(); });
 
-      /* ================= MODEL SWITCHER — full machine configurations, same
+      /* ================= MODEL SWITCHER - full machine configurations, same
          {name, rpm, stress, explode, xray} shape as a loaded model file,
          each with its own paint scheme ================= */
       var MODEL_VARIANTS = {
@@ -1151,7 +1151,7 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       docsBackdrop.addEventListener('click', function () { setDocs(false); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setDocs(false); });
 
-      /* ================= TOUR — self-driving, yields to any touch ================= */
+      /* ================= TOUR - self-driving, yields to any touch ================= */
       var cursor = document.createElement('div'); // reuse styled node already in DOM
       cursor = $('cursor');
       var card = $('consoleCard');
@@ -1170,13 +1170,13 @@ PHONE: one screen, no scroll — stable svh sizing, no dvh reflow; on phones the
       }
       function subButton(sub) { return document.querySelector('#subbar button[data-sub="' + sub + '"]'); }
       var tourSteps = [
-        { caption: 'Tour · The crank spins up — one input (φ) drives all four legs through the IK solver.', target: function () { return $('inRpm'); }, act: function () { setRpm(55); } },
-        { caption: 'Tour · Energy core — press its button and the reactor, rings and lens covers detach while the cat keeps walking.', target: function () { return subButton('core'); }, act: function () { setSelected('core'); } },
-        { caption: 'Tour · Head — the angular wedge skull: visor eye-slits, cheek guards, hinged jaw, blade crest, ears and whiskers separate as one subsystem. No round forms anywhere.', target: function () { return subButton('head'); }, act: function () { setSelected('head'); } },
-        { caption: 'Tour · Front-left leg — hip motor, upper leg, knee, shin and paw split apart mid-stride.', target: function () { return subButton('legFL'); }, act: function () { setSelected('legFL'); } },
-        { caption: 'Tour · X-Ray — armour fades so the frame, ribs and core show through.', target: function () { return $('btnXray'); }, act: function () { setXray(true); } },
-        { caption: 'Tour · Stress test at 150 % — stride, torque and core temperature all climb past rating. Watch the charts.', target: function () { return $('inStress'); }, act: function () { setStress(150); } },
-        { caption: 'Tour · Back to rated load, X-Ray off, machine reassembled. The tour restarts in a moment — or touch anything to drive it yourself.', target: function () { return subButton('none'); }, act: function () { setStress(100); setXray(false); setSelected('none'); } }
+        { caption: 'Tour · The crank spins up - one input (φ) drives all four legs through the IK solver.', target: function () { return $('inRpm'); }, act: function () { setRpm(55); } },
+        { caption: 'Tour · Energy core - press its button and the reactor, rings and lens covers detach while the cat keeps walking.', target: function () { return subButton('core'); }, act: function () { setSelected('core'); } },
+        { caption: 'Tour · Head - the angular wedge skull: visor eye-slits, cheek guards, hinged jaw, blade crest, ears and whiskers separate as one subsystem. No round forms anywhere.', target: function () { return subButton('head'); }, act: function () { setSelected('head'); } },
+        { caption: 'Tour · Front-left leg - hip motor, upper leg, knee, shin and paw split apart mid-stride.', target: function () { return subButton('legFL'); }, act: function () { setSelected('legFL'); } },
+        { caption: 'Tour · X-Ray - armour fades so the frame, ribs and core show through.', target: function () { return $('btnXray'); }, act: function () { setXray(true); } },
+        { caption: 'Tour · Stress test at 150 % - stride, torque and core temperature all climb past rating. Watch the charts.', target: function () { return $('inStress'); }, act: function () { setStress(150); } },
+        { caption: 'Tour · Back to rated load, X-Ray off, machine reassembled. The tour restarts in a moment - or touch anything to drive it yourself.', target: function () { return subButton('none'); }, act: function () { setStress(100); setXray(false); setSelected('none'); } }
       ];
       function runStep() {
         if (!tour.active) return;
