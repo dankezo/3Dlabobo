@@ -23,7 +23,7 @@
       html,body{ margin:0; padding:0; height:100%; }
       body{ background:var(--bg); color:var(--ink); font-family:var(--sans); -webkit-font-smoothing:antialiased; overflow:hidden; }
       .wrap{ margin:0; padding:0; height:100vh; height:100dvh; display:flex; flex-direction:column; }
-      header.top{ display:flex; flex-wrap:nowrap; align-items:center; gap:10px 16px; margin:0; padding:10px 16px 8px; flex:none; }
+      header.top{ display:flex; flex-wrap:nowrap; align-items:center; gap:10px 16px; margin:0; padding:10px 16px 8px; flex:none; background:var(--panel); border-bottom:1px solid var(--line); }
       header.top h1{ font-size:clamp(20px,2.4vw,27px); line-height:1; margin:0; font-weight:850; letter-spacing:-.03em; white-space:nowrap; }
       header.top h1 .lab{ color:var(--accent); }
       .chips{ display:flex; gap:6px; flex-wrap:nowrap; margin-left:auto; align-items:center; overflow:hidden; }
@@ -32,35 +32,63 @@
       .docsbtn:hover{ border-color:var(--muted); background:var(--panel2); opacity:1; }
 
       /* ---------- model switcher - its own bar under the header, always visible ---------- */
-      .modelbar{ flex:none; display:flex; align-items:center; gap:10px; padding:7px 16px; background:var(--panel); border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none; }
+      .modelbar{ flex:none; display:flex; align-items:center; gap:10px; padding:7px 16px; background:var(--panel2); border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none; }
       .modelbar::-webkit-scrollbar{ display:none; }
       .modelbar .mlbl{ font-family:var(--mono); font-size:10px; letter-spacing:.14em; color:var(--muted); text-transform:uppercase; flex:none; display:flex; align-items:center; gap:7px; }
       .modelbar .mlbl::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); flex:none; }
       .seg{ display:flex; gap:2px; background:var(--panel2); border:1px solid var(--line); border-radius:8px; padding:2px; flex:none; }
-      .seg button{ border:1px solid transparent; background:transparent; box-shadow:none; border-radius:6px; padding:5px 13px; font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; }
+      .seg button{ border:1px solid transparent; background:transparent; box-shadow:none; border-radius:6px; padding:5px 13px; font-size:12px; font-weight:600; color:var(--muted); white-space:nowrap; transition:color .15s ease, background .15s ease, box-shadow .15s ease; }
       .seg button:hover{ color:var(--ink); border-color:transparent; background:transparent; box-shadow:none; }
       .seg button.on{ background:var(--panel); color:var(--ink); border-color:var(--line); box-shadow:0 1px 3px rgba(15,18,20,.12); }
       .modelbar .mname{ font-family:var(--mono); font-size:11px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .modelbar .mname b{ color:var(--ink); font-weight:700; }
       .modelbar .loadbtn{ margin-left:auto; flex:none; }
       @media (max-width:640px){ .modelbar{ padding:6px 10px; gap:8px; } .modelbar .mname{ display:none; } .seg button{ padding:5px 10px; font-size:11.5px; } }
+      /* ---------- machine switcher - LEAN: 3 big targets, one tap, no hunting ---------- */
+      .machinebar{ flex:none; display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; padding:10px 16px; background:var(--panel); border-bottom:1px solid var(--line); }
+      .machine-btn{ display:flex; align-items:center; gap:11px; text-align:left; min-height:58px; padding:9px 13px; border-radius:10px; background:var(--panel2); border:1.5px solid var(--line); box-shadow:0 1px 2px rgba(15,18,20,.05); cursor:pointer; transition:border-color .18s ease, box-shadow .18s ease, transform .18s ease, background .18s ease; }
+      .machine-btn:hover{ border-color:var(--muted); background:var(--panel); transform:translateY(-1px); box-shadow:0 4px 12px rgba(15,18,20,.10); }
+      .machine-btn:active{ transform:translateY(0); }
+      .machine-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+      .machine-btn .mic{ flex:none; width:34px; height:34px; border-radius:8px; background:var(--panel2); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; color:var(--muted); }
+      .machine-btn .mic svg{ width:22px; height:22px; display:block; }
+      .machine-btn .mtx{ min-width:0; line-height:1.15; }
+      .machine-btn .mtx b{ display:block; font-size:14px; font-weight:800; letter-spacing:-.01em; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .machine-btn .mtx span{ display:block; font-size:11px; color:var(--muted); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .machine-btn .mdot{ margin-left:auto; flex:none; width:8px; height:8px; border-radius:50%; background:var(--line); }
+      .machine-btn.on{ background:var(--ink); border-color:var(--ink); color:var(--panel); box-shadow:0 6px 16px rgba(15,18,20,.22), 0 0 0 1px var(--ink); }
+      .machine-btn.on:hover{ background:var(--ink); transform:none; box-shadow:0 6px 16px rgba(15,18,20,.22), 0 0 0 1px var(--ink); }
+      .machine-btn.on .mtx b{ color:var(--panel); }
+      .machine-btn.on .mtx span{ color:rgba(255,255,255,.72); }
+      .machine-btn.on .mic{ background:rgba(255,255,255,.12); border-color:rgba(255,255,255,.18); color:#fff; }
+      .machine-btn.on .mdot{ background:var(--accent); box-shadow:0 0 0 3px rgba(255,77,0,.25); }
+      @media (max-width:640px){
+        .machinebar{ padding:8px 10px; gap:6px; }
+        .machine-btn{ min-height:62px; padding:8px 8px; gap:7px; flex-direction:column; align-items:flex-start; justify-content:center; }
+        .machine-btn:hover{ transform:none; }
+        .machine-btn .mic{ width:28px; height:28px; border-radius:7px; }
+        .machine-btn .mic svg{ width:18px; height:18px; }
+        .machine-btn .mtx b{ font-size:12px; white-space:normal; }
+        .machine-btn .mtx span{ display:none; }
+        .machine-btn .mdot{ display:none; }
+      }
       @media (max-width:760px){ .chip.opt{ display:none; } }
       .chip b{ color:var(--ok); font-weight:700; }
       .chip.warn b{ color:var(--warn); }
 
       /* ---------- console ---------- */
       .console{ position:relative; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; background:var(--panel); overflow:hidden; }
-      .stagewrap{ position:relative; flex:1 1 auto; min-height:0; display:flex; flex-direction:column; }
       .stage{ position:relative; width:100%; flex:1 1 auto; min-height:0; background:radial-gradient(120% 90% at 50% 0%, #f7f8f9 0%, #e9edef 52%, #dde3e7 100%); }
+      .stage::after{ content:""; position:absolute; inset:0; z-index:1; pointer-events:none; background:radial-gradient(115% 100% at 50% 42%, rgba(0,0,0,0) 58%, rgba(19,25,31,.10) 100%), linear-gradient(180deg, rgba(255,255,255,.20) 0%, rgba(255,255,255,0) 18%); }
+      @media (prefers-color-scheme: dark){ .stage::after{ background:radial-gradient(115% 100% at 50% 42%, rgba(0,0,0,0) 55%, rgba(0,0,0,.28) 100%); } }
       .stage canvas{ display:block; width:100%; height:100%; touch-action:none; cursor:grab; }
       .stage canvas:active{ cursor:grabbing; }
-      .bignum{ position:absolute; top:12px; left:14px; pointer-events:none; color:#131619; z-index:5; }
+      .bignum{ position:absolute; top:12px; left:14px; pointer-events:none; color:#131619; z-index:5; text-shadow:0 1px 0 rgba(255,255,255,.55), 0 2px 14px rgba(255,255,255,.45); }
       .bignum .val{ font-family:var(--mono); font-size:clamp(38px,5vw,58px); font-weight:700; line-height:.95; letter-spacing:-.03em; font-variant-numeric:tabular-nums; }
       .bignum .unit{ font-family:var(--mono); font-size:13px; letter-spacing:.14em; color:#5b6670; margin-top:2px; }
       .bignum .phase{ font-family:var(--mono); font-size:12px; color:#8a95a0; font-variant-numeric:tabular-nums; }
       .stageflags{ position:absolute; left:14px; bottom:14px; display:flex; flex-direction:column; gap:6px; align-items:flex-start; pointer-events:none; z-index:6; }
-      .zoombar{ display:none; }
-      .flag{ font-family:var(--mono); font-size:11px; padding:4px 8px; border-radius:4px; background:rgba(255,255,255,.82); color:#131619; border:1px solid rgba(0,0,0,.08); }
+      .flag{ font-family:var(--mono); font-size:11px; padding:4px 8px; border-radius:4px; background:rgba(255,255,255,.82); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); color:#131619; border:1px solid rgba(0,0,0,.08); box-shadow:0 2px 8px rgba(15,18,20,.08); }
       .flag.hot{ background:var(--warn); color:#fff; border-color:transparent; display:none; }
       .flag.hot.on{ display:block; }
       #cursor{ position:absolute; width:22px; height:22px; margin:-3px 0 0 -3px; z-index:30; pointer-events:none; opacity:0; transition:left .9s cubic-bezier(.5,0,.2,1), top .9s cubic-bezier(.5,0,.2,1), opacity .3s; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
@@ -76,17 +104,29 @@
       .hudcol{ position:absolute; display:flex; flex-direction:column; gap:8px; width:192px; }
       .hudcol.left{ left:12px; top:118px; }
       .hudcol.right{ right:12px; top:12px; }
-      .chart{ background:rgba(255,255,255,.78); -webkit-backdrop-filter:blur(12px) saturate(1.25); backdrop-filter:blur(12px) saturate(1.25); border:1px solid rgba(19,22,25,.09); border-radius:12px; box-shadow:0 8px 22px rgba(15,18,20,.10), 0 1px 3px rgba(15,18,20,.06); padding:8px 11px 7px; }
+      .chart{ background:rgba(255,255,255,.80); -webkit-backdrop-filter:blur(14px) saturate(1.3); backdrop-filter:blur(14px) saturate(1.3); border:1px solid rgba(19,22,25,.09); border-radius:12px; box-shadow:0 10px 26px rgba(15,18,20,.11), 0 1px 3px rgba(15,18,20,.06); padding:8px 11px 7px; }
       .chart .chead{ display:flex; justify-content:space-between; align-items:baseline; gap:6px; }
       .chart .cname{ font-family:var(--mono); font-size:9.5px; letter-spacing:.09em; color:#5b6670; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
       .chart .cval{ font-family:var(--mono); font-size:16px; font-weight:700; font-variant-numeric:tabular-nums; color:#131619; white-space:nowrap; }
       .chart .cval small{ font-size:9.5px; color:#5b6670; font-weight:400; }
       .chart canvas{ width:100%; height:30px; display:block; margin-top:3px; }
       .chart .cmm{ display:flex; justify-content:space-between; font-family:var(--mono); font-size:9.5px; color:#7a8590; font-variant-numeric:tabular-nums; }
+      @media (max-width:640px){
+        .hudcol{ width:118px; gap:6px; }
+        .hudcol.left{ left:8px; top:96px; }
+        .hudcol.right{ right:8px; top:10px; }
+        .chart{ padding:6px 8px 5px; border-radius:10px; }
+        .chart .cname{ font-size:8px; letter-spacing:.05em; }
+        .chart .cval{ font-size:12.5px; }
+        .chart canvas{ height:20px; }
+        .chart .cmm{ display:none; }
+        .stageflags{ left:8px; bottom:10px; }
+        .flag{ font-size:9.5px; padding:3px 6px; }
+      }
 
       /* ---------- floating control rails - sliders & buttons live in the side
          columns over the stage, not crammed into a bottom bar ---------- */
-      .rail{ pointer-events:auto; background:rgba(255,255,255,.78); -webkit-backdrop-filter:blur(12px) saturate(1.25); backdrop-filter:blur(12px) saturate(1.25); border:1px solid rgba(19,22,25,.09); border-radius:12px; box-shadow:0 8px 22px rgba(15,18,20,.10), 0 1px 3px rgba(15,18,20,.06); padding:9px 11px 10px; display:flex; flex-direction:column; gap:6px; }
+      .rail{ pointer-events:auto; background:rgba(255,255,255,.80); -webkit-backdrop-filter:blur(14px) saturate(1.3); backdrop-filter:blur(14px) saturate(1.3); border:1px solid rgba(19,22,25,.09); border-radius:12px; box-shadow:0 10px 26px rgba(15,18,20,.11), 0 1px 3px rgba(15,18,20,.06); padding:9px 11px 10px; display:flex; flex-direction:column; gap:6px; }
       .rail .rhead{ font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; color:#5b6670; }
       .rail button{ width:100%; text-align:center; }
       .ctl{ display:flex; flex-direction:column; gap:2px; width:100%; }
@@ -100,6 +140,14 @@
       .ctl.explode{ border-top:1px solid var(--line); padding-top:7px; margin-top:2px; }
       .ctl.explode label{ color:var(--ink); }
       .ctl.explode label output{ color:var(--accent); }
+      @media (max-width:640px){
+        .rail{ padding:7px 8px 8px; border-radius:10px; gap:5px; }
+        .rail .rhead{ font-size:8px; letter-spacing:.08em; }
+        .rail button{ font-size:10.5px; padding:5px 6px; border-radius:7px; }
+        .ctl label{ font-size:8px; letter-spacing:.04em; }
+        .ctl input[type=range]{ height:16px; }
+        .ctl.explode{ padding-top:5px; }
+      }
       button{ font-family:var(--sans); font-size:12.5px; font-weight:600; letter-spacing:.01em; border:1px solid var(--line); background:var(--panel); color:var(--ink); border-radius:6px; padding:7px 12px; cursor:pointer; box-shadow:0 1px 2px rgba(15,18,20,.05); transition:border-color .15s ease, background .15s ease, box-shadow .15s ease; }
       button:hover{ border-color:#9aa7b1; background:var(--panel2); box-shadow:0 1px 3px rgba(15,18,20,.08); }
       button:active{ transform:translateY(1px); box-shadow:none; }
@@ -125,7 +173,7 @@
       .drawerhead{ position:sticky; top:-18px; margin:-18px -20px 4px; padding:14px 20px 10px; background:var(--bg); display:flex; align-items:center; justify-content:space-between; gap:12px; z-index:2; }
       .drawerhead .dtag{ font-family:var(--mono); font-size:11px; letter-spacing:.14em; color:var(--muted); }
       .drawerhead button{ border-radius:6px; padding:6px 12px; font-size:12px; }
-      @media (prefers-reduced-motion: reduce){ .docs, .drawer-backdrop{ transition:none; } }
+      @media (prefers-reduced-motion: reduce){ .docs, .drawer-backdrop{ transition:none; } .machine-btn, .machine-btn:hover{ transition:none; transform:none; } }
       .docs h2{ font-size:21px; margin:26px 0 6px; font-weight:800; letter-spacing:-.01em; }
       .docs h2:first-child{ margin-top:0; }
       .docs p.lede{ color:var(--muted); font-size:14.5px; max-width:760px; margin:0 0 14px; line-height:1.55; }
@@ -148,57 +196,9 @@
       .srcs{ font-size:13.5px; line-height:1.7; }
       .srcs a{ color:var(--accent); font-weight:600; }
       footer{ margin-top:30px; color:var(--muted); font-size:12.5px; font-family:var(--mono); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; }
-      #toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--panel); padding:10px 16px; border-radius:8px; font-size:13.5px; opacity:0; pointer-events:none; transition:.25s; z-index:60; max-width:88vw; text-align:center; }
+      #toast{ position:fixed; left:50%; bottom:78px; transform:translateX(-50%) translateY(20px); background:var(--ink); color:var(--panel); padding:10px 16px; border-radius:10px; font-size:13.5px; font-weight:600; opacity:0; pointer-events:none; transition:.25s; z-index:60; max-width:88vw; text-align:center; box-shadow:0 12px 30px rgba(15,18,20,.28); }
       #toast.on{ opacity:1; transform:translateX(-50%) translateY(0); }
       @media (prefers-reduced-motion: reduce){ #cursor{ transition:none; } }
-      /* ---------- phones: ONE screen, NO scroll. The page is exactly one
-         stable viewport tall (svh, not dvh - dvh changes every time the
-         browser chrome shows/hides, which reflowed the layout and made the
-         buttons keep resizing). The stage takes whatever height is left
-         after a compact fixed control panel. The model bar and the detach
-         bar are gone on phones: tap a part of the cat itself to take it
-         apart, tap it again to put it back. Desktop is untouched. ---------- */
-      @media (max-width:640px){
-        body{ overflow:hidden; }
-        .wrap{ height:100vh; height:100svh; }
-        header.top{ flex-wrap:nowrap; padding:8px 12px; gap:8px; }
-        header.top h1{ font-size:18px; }
-        .chips .chip{ display:none; }
-        .modelbar{ display:none; }
-        .subbar{ display:none; }
-        .console{ flex:1 1 auto; min-height:0; overflow:hidden; }
-        .stagewrap{ flex:1 1 auto; min-height:0; }
-        .stage{ flex:1 1 auto; height:auto; min-height:0; }
-        .bignum{ top:10px; left:12px; }
-        .bignum .val{ font-size:34px; }
-        .bignum .unit{ font-size:11px; }
-        .bignum .phase{ font-size:11px; }
-        .stageflags{ left:8px; bottom:10px; }
-        .flag{ font-size:9.5px; padding:3px 6px; }
-        .zoombar{ position:absolute; right:10px; top:50%; transform:translateY(-50%); z-index:7; display:flex; flex-direction:column; align-items:center; gap:8px; background:rgba(255,255,255,.78); -webkit-backdrop-filter:blur(12px) saturate(1.25); backdrop-filter:blur(12px) saturate(1.25); border:1px solid rgba(19,22,25,.09); border-radius:999px; padding:8px 6px; box-shadow:0 8px 22px rgba(15,18,20,.10), 0 1px 3px rgba(15,18,20,.06); }
-        .zoombar button{ width:32px; height:32px; min-height:0; padding:0; border-radius:50%; border-color:transparent; background:var(--panel); font-size:19px; line-height:1; display:flex; align-items:center; justify-content:center; box-shadow:0 1px 3px rgba(15,18,20,.12); }
-        .zoombar button:active{ transform:none; }
-        .zoomtrack{ width:3px; height:56px; border-radius:2px; background:var(--line); position:relative; overflow:hidden; }
-        .zoomfill{ position:absolute; left:0; right:0; bottom:0; height:50%; background:var(--accent); }
-        .hud{ position:static; flex:none; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; padding:10px 12px 12px; background:var(--panel2); border-top:1px solid var(--line); pointer-events:auto; }
-        .hudcol{ display:contents; }
-        .chart{ display:flex; flex-direction:column; padding:8px 10px; border-radius:10px; min-width:0; }
-        .chart .chead{ justify-content:center; }
-        .chart .cname{ display:none; }
-        .chart .cval{ font-size:13px; }
-        .chart canvas{ flex:1 1 auto; min-height:20px; height:0; }
-        .chart .cmm{ display:none; }
-        .rail{ grid-column:span 2; display:grid; grid-template-columns:1fr 1fr; gap:6px; padding:8px 10px; border-radius:10px; }
-        .rail .rhead{ grid-column:1 / -1; }
-        .rail button{ font-size:11px; padding:6px 4px; border-radius:8px; min-height:34px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-        .rail .ctl{ grid-column:1 / -1; }
-        .ctl label{ font-size:9.5px; letter-spacing:.04em; }
-        .ctl input[type=range]{ height:22px; }
-        .ctl input[type=range]::-webkit-slider-thumb{ width:18px; height:18px; margin-top:-7.5px; }
-        .ctl input[type=range]::-moz-range-thumb{ width:16px; height:16px; }
-        .ctl.explode{ padding-top:5px; margin-top:0; }
-        #toast{ top:56px; bottom:auto; }
-      }
     </style>
   </head>
   <body>
@@ -209,15 +209,30 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.4 · TAP RESET</b></span>
+          <span class="chip opt">REV <b>3.6 · PRO MAX</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
         </div>
       </header>
 
-      <div class="modelbar" aria-label="Model switcher">
-        <span class="mlbl">Model</span>
+      <div class="machinebar" role="group" aria-label="Chon may - Choose machine">
+        <button type="button" class="machine-btn on" data-machine="cat" aria-pressed="true">
+          <span class="mic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 20 L5 9 L3 4 L8 7 L16 7 L21 4 L19 9 L20 20 L15 16 L9 16 Z"/></svg></span>
+          <span class="mtx"><b>Mecha Cat</b><span>MK-IV - quadruped</span></span><span class="mdot" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="machine-btn" data-machine="worm" aria-pressed="false">
+          <span class="mic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 15 Q6 8 10 13 T18 11"/><circle cx="20" cy="10" r="2.2"/><path d="M5 18 L5 21 M10 18 L10 21 M15 17 L15 20"/></svg></span>
+          <span class="mtx"><b>Mecha Worm</b><span>WORM-09 - 8 segments</span></span><span class="mdot" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="machine-btn" data-machine="gun" aria-pressed="false">
+          <span class="mic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M2 13 H18 M18 10 H22 V16 H18 M7 13 L5 21 M13 13 L15 21 M9 10 V7 H14 V10"/></svg></span>
+          <span class="mtx"><b>Super Laser Gun</b><span>RAILGUN SL-01 - heavy</span></span><span class="mdot" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="modelbar" id="variantBar" aria-label="Model switcher">
+        <span class="mlbl">Variant</span>
         <div class="seg" role="group" aria-label="Choose model variant">
           <button type="button" data-model="ceramic" class="on" title="Standard configuration - 55 RPM, rated load, assembled">MK-IV · Ceramic</button>
           <button type="button" data-model="stealth" title="Recon configuration - 85 RPM, dark shell, X-Ray on">MK-IV · Stealth</button>
@@ -228,48 +243,41 @@
       </div>
 
       <section class="console" id="consoleCard" aria-label="Mecha cat teardown console">
-        <div class="stagewrap">
         <div class="stage" id="stage">
           <div class="bignum">
             <div class="val" id="bigRpm">0</div>
-            <div class="unit">CRANK RPM</div>
+            <div class="unit" id="bigUnit">CRANK RPM</div>
             <div class="phase" id="bigPhase">φ 000.0° · GAIT 0.00 Hz</div>
           </div>
           <div class="stageflags">
             <span class="flag" id="flagMode">ASSEMBLED</span>
             <span class="flag hot" id="flagHot">⚠ OVER-LIMIT - STRESS TEST</span>
           </div>
-          <div class="zoombar" aria-label="Zoom">
-            <button type="button" id="btnZoomIn" aria-label="Zoom in">+</button>
-            <span class="zoomtrack"><span class="zoomfill" id="zoomFill"></span></span>
-            <button type="button" id="btnZoomOut" aria-label="Zoom out">−</button>
-          </div>
-          <div id="errbox" role="alert"></div>
-        </div>
-        <div class="hud" aria-label="Live metrics">
+          <div class="hud" aria-label="Live metrics">
             <div class="hudcol left">
-              <div class="chart"><div class="chead"><span class="cname">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
-              <div class="chart"><div class="chead"><span class="cname">Foot lift · FL</span><span class="cval" id="vLift">0 <small>mm</small></span></div><canvas id="chLift" width="260" height="44"></canvas><div class="cmm"><span id="mmLiftMin">min 0</span><span id="mmLiftMax">max 0</span></div></div>
+              <div class="chart"><div class="chead"><span class="cname" id="nameTorque">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
+              <div class="chart"><div class="chead"><span class="cname" id="nameLift">Foot lift · FL</span><span class="cval" id="vLift">0 <small>mm</small></span></div><canvas id="chLift" width="260" height="44"></canvas><div class="cmm"><span id="mmLiftMin">min 0</span><span id="mmLiftMax">max 0</span></div></div>
               <div class="rail" aria-label="View and tour controls">
                 <span class="rhead">View · Tour</span>
                 <button id="btnPause" type="button">Pause gait</button>
                 <button id="btnXray" type="button" aria-pressed="false">X-Ray</button>
                 <button id="btnView" type="button">Reset view</button>
-                <button id="btnTour" type="button">↻ Replay</button>
+                <button id="btnTour" type="button">↻ Replay tour</button>
               </div>
             </div>
             <div class="hudcol right">
-              <div class="chart"><div class="chead"><span class="cname">Core temperature</span><span class="cval" id="vTemp">0 <small>°C</small></span></div><canvas id="chTemp" width="260" height="44"></canvas><div class="cmm"><span id="mmTempMin">min 0</span><span id="mmTempMax">max 0</span></div></div>
-              <div class="chart"><div class="chead"><span class="cname">Power draw</span><span class="cval" id="vPower">0 <small>W</small></span></div><canvas id="chPower" width="260" height="44"></canvas><div class="cmm"><span id="mmPowerMin">min 0</span><span id="mmPowerMax">max 0</span></div></div>
+              <div class="chart"><div class="chead"><span class="cname" id="nameTemp">Core temperature</span><span class="cval" id="vTemp">0 <small>°C</small></span></div><canvas id="chTemp" width="260" height="44"></canvas><div class="cmm"><span id="mmTempMin">min 0</span><span id="mmTempMax">max 0</span></div></div>
+              <div class="chart"><div class="chead"><span class="cname" id="namePower">Power draw</span><span class="cval" id="vPower">0 <small>W</small></span></div><canvas id="chPower" width="260" height="44"></canvas><div class="cmm"><span id="mmPowerMin">min 0</span><span id="mmPowerMax">max 0</span></div></div>
               <div class="rail" aria-label="Drive controls">
                 <span class="rhead">Drive</span>
-                <div class="ctl"><label>Crank speed <output id="oRpm">55 RPM</output></label><input type="range" id="inRpm" min="0" max="120" step="1" value="55" aria-label="Crank speed in RPM" /></div>
+                <div class="ctl"><label><span id="lblRpm">Crank speed</span> <output id="oRpm">55 RPM</output></label><input type="range" id="inRpm" min="0" max="120" step="1" value="55" aria-label="Crank speed in RPM" /></div>
                 <div class="ctl"><label>Stress test <output id="oStress">100%</output></label><input type="range" id="inStress" min="100" max="160" step="1" value="100" aria-label="Stress test, percent of rated load" /></div>
                 <div class="ctl explode"><label>Explode all <output id="oExplode">0%</output></label><input type="range" id="inExplode" min="0" max="100" step="1" value="0" aria-label="Explode all subsystems" /></div>
                 <input type="file" id="fileLoad" accept=".json,application/json" hidden />
               </div>
             </div>
           </div>
+          <div id="errbox" role="alert"></div>
         </div>
 
         <nav class="subbar" id="subbar" aria-label="Subsystems - press to detach">
@@ -302,11 +310,11 @@
             <ol>
               <li><b>Prep the tools</b> - Node 20+, ffmpeg, Python 3, Playwright + Chromium; read the teardown skill as reference, build with Three.js.</li>
               <li><b>Pick the machine + one reference</b> - a mecha cat. One motion input drives everything. Real numbers first, checked on paper before any code.</li>
-              <li><b>Build the model first</b> - a single solver is the source of truth; the clock and every readout read the same model. Each subsystem detaches from its button - or by tapping the part itself on the machine. Tapping empty space puts the whole machine back together.</li>
-              <li><b>Build the console</b> - big live primary number top-left, one live chart per quantity with min/max, subsystem controls always in reach, replay button.</li>
+              <li><b>Build the model first</b> - a single solver is the source of truth; the clock and every readout read the same model. Each subsystem is a button that detaches it.</li>
+              <li><b>Build the console</b> - big live primary number top-left, one live chart per quantity with min/max, subsystem button row always visible, replay button.</li>
               <li><b>The look</b> - clean research model on a light studio background, soft shadow, one strong accent colour, dark text.</li>
               <li><b>Critic pass (gate)</b> - stills at every tour beat, press every button and slider yourself, fix, re-render. Nothing ships before this.</li>
-              <li><b>Self-driving page</b> - the tour starts only from the Replay button, with a visible cursor; any touch stops the tour and hands over control. Camera stays committed, machine stays in frame.</li>
+              <li><b>Self-driving page</b> - the tour runs itself with a visible cursor; any touch stops the tour and hands over control. Camera stays committed, machine stays in frame.</li>
               <li><b>Video</b> - render(t) as a pure function of time, 60 fps, 1920×1080, 30 s cut, music laid in with ffmpeg on the same timeline. (Follow-on step, run from this page; no video file ships inside it.)</li>
               <li><b>Ship it</b> - page + library under 1 MB total, a “Load this machine” button, no sign-in, phone + integrated-GPU tested, alive in the first 3 seconds. Bonus: a stress slider that pushes the machine past its rated limit.</li>
             </ol>
@@ -363,35 +371,22 @@
             </ul>
           </div>
           <div class="card">
-            <h3>Rev 3.1 - phone UX (layout + buttons, solver untouched)</h3>
+            <h3>Rev 3.5 - two new machines (detailed builds)</h3>
             <ul>
-              <li><b>Phones:</b> the floating HUD columns covered the cat on a 390px screen, so on phones the stats and controls leave the canvas and become a plain strip under the stage, and the page scrolls - the cat gets the whole width. Desktop keeps the floating HUD.</li>
-              <li><b>Detach buttons toggle:</b> tapping the active subsystem button again puts it back to Assembled - you can always exit a detach mode from the same button. The Assembled button also stays pinned to the left of the bar, and Load stays pinned to the right of the model bar, while both bars scroll.</li>
-              <li><b>Trial models:</b> the separate Trial Models page (mechanical dragon, giant sand worm, Mega Laser Gun, Mega Poro) lives at <code>trials.html</code> in this repo - the model-bar link to it was removed again in Rev 3.2 until the page is finished.</li>
+              <li><b>Mecha Worm WORM-09:</b> 8 chained segments, fattest at the middle. Each segment has a dark frame core, bellows + polished joint ring, faceted top armour with centre ridge, dorsal glow strip, side plates with 4 hex bolts, 3 vent slats, a glowing side sensor, belly plate, top + side cable runs, and 2 paddle legs with claws. Middle segment (Seg 5) carries an exposed reactor: octahedron core, twin rings, wire cage and twin glass lenses. Head: drill nose (4-sided cone + 3 accent rings + stepped base), visor with twin eye slits, crown plate, hinged jaw with 4 grille slots, cheek guards and twin antennae. Tail: tapered shell, orange blade fin, 4-sided stinger and glow tip. Motion is a travelling undulation wave from the same drive phase - each segment lags the one in front, legs paddle in anti-phase.</li>
+              <li><b>Super Laser Gun SL-01:</b> heavy rail cannon on a tripod turntable. Base: measurement disc, orange datum ring, 3 splayed legs with hydraulic pistons, wide rubber feet, bolts and cable runs, plus a pedestal with yaw bearing. Turret: layered ceramic housing, side plates with hairline accent, louvred vents, 6 glowing power cells (3 per side) with steel caps and cables, rear stock with twin grips, control panel with 4 glow dots, and 5 recoil springs. Core: caged octahedron reactor with a spinning charge ring. Barrel: breech block, 3 stepped sleeves, 9 cooling rings, 4 electromagnetic glow coils with junction boxes, twin secondary barrels, slotted muzzle brake and a pulsing muzzle core that flashes on fire. Scope: twin mounts, tube, glass lens, 2 adjustment dials and rubber eyecup. Cooling fan spins on the turret roof. Cycle: charge climbs to 100%, the gun fires with recoil, muzzle flash and a turret shudder, then recharges.</li>
+              <li><b>Switching - lean by design:</b> the 3 machines sit in one row of large buttons at the top (icon + name + line of spec). One tap swaps the machine, its detach row, its chart labels and its big number - nothing else to hunt for. On phones the 3 buttons stay in one row, full height, no scrolling. The Cat variant row (Ceramic / Stealth / Hazard) only shows for the Cat, so the other machines carry no dead controls.</li>
+              <li><b>Teardown parity:</b> both new machines use the same Detach row, Explode-all slider, X-Ray, stress and drive controls as the Cat. Worm subsystems: Head drill, Reactor seg., Segments x8, Tail stinger. Gun subsystems: Barrel assembly, Core + coils, Turret, Base tripod, Scope.</li>
             </ul>
           </div>
           <div class="card">
-            <h3>Rev 3.2 - phone fit (one screen, tap-to-explode, solver untouched)</h3>
+            <h3>Rev 3.6 - Pro Max polish pass (stability + finish)</h3>
             <ul>
-              <li><b>Phones fit one screen, no scroll:</b> the page is exactly one viewport tall on stable <code>svh</code>, not <code>dvh</code> - dvh changes whenever the browser chrome shows or hides, which reflowed the layout and made the buttons keep resizing. The stage takes whatever height is left after a compact control panel.</li>
-              <li><b>Tap the cat itself:</b> the model bar and the detach bar are gone on phones - tap any part of the machine to explode that subsystem, tap the same part again to put it back. Desktop keeps both bars.</li>
-              <li><b>Cut:</b> the Trial models link is removed from the model bar until that page is finished - the page itself (<code>trials.html</code>) still exists, just unlinked. The tour no longer auto-starts on phones, so it can't fight your taps.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3>Rev 3.3 - zoom bar + filled stat cards (phones, solver untouched)</h3>
-            <ul>
-              <li><b>Zoom bar:</b> a slim vertical pill on the stage's right edge, phones only - + and − buttons with a level track between them. Tap to step the zoom, hold to keep zooming. Desktop keeps scroll-wheel zoom.</li>
-              <li><b>Stat cards:</b> the four telemetry cards used to stretch to the rails' row height with the sparkline stuck at the top and the rest empty. Each card is now a flex column and the sparkline fills the whole card, so they read as real telemetry tiles.</li>
-              <li><b>Clip fix:</b> the tour button read “↻ Replay tour” and was clipped to “↻ Replay t…” in the phone 2×2 button grid - it now reads “↻ Replay”.</li>
-            </ul>
-          </div>
-          <div class="card">
-            <h3>Rev 3.4 - tap outside to reassemble, calm taps (solver untouched)</h3>
-            <ul>
-              <li><b>Tap empty space, everything reassembles:</b> on desktop and phones, tapping the stage outside the machine puts the whole machine back together (explode slider back to 0). No more hunting for the Assembled button.</li>
-              <li><b>Only the tapped part moves:</b> selecting a subsystem used to shove every other part to 18% explode as well, so each tap reshuffled the whole machine - worst on the yellow Hazard model, which already sits at 35% explode. Now a tap moves only the part you tapped; the rest hold their level.</li>
-              <li><b>Tour never auto-starts:</b> it used to cycle detach states on load by itself, which read as the expand jumping around on its own. It now starts only from the ↻ Replay button, on desktop and phones alike.</li>
+              <li><b>Unified control deck:</b> header, machine switcher and variant row now read as one console - panel surfaces, hairline dividers, deeper selected-state shadow on the active machine, and a hover lift on the big switch buttons (off on touch screens and for reduced motion).</li>
+              <li><b>Studio finish:</b> a soft vignette and top light fall over the 3D stage, soft PCF key shadows, slightly lifted tone exposure, and stronger glass blur on the floating charts and rails. The big readout gets a light halo so it stays readable over the model.</li>
+              <li><b>Camera:</b> distance and target height now ease between machines instead of snapping - the Worm frames low, the Gun frames tall - and each machine settles in with a short scale-in when switched. Reduced-motion users get instant cuts.</li>
+              <li><b>Fixes:</b> the gun cooling fan was rebuilt (blades on a dedicated spinner with a hub, no dead parts); the worm dorsal strips now pulse in a travelling wave locked to the undulation phase instead of sitting static; FPS chip turns red under 30 fps; WebGL failure now shows a clear message instead of a blank stage.</li>
+              <li><b>Shortcuts:</b> keys 1 / 2 / 3 switch machines, X toggles X-Ray, R resets the view. Solver, gait, detach and tour behaviour are unchanged from Rev 3.5.</li>
             </ul>
           </div>
           <div class="card">
@@ -427,22 +422,21 @@ THE NUMBERS (check on paper before coding; the solver, the clock and every chart
 BUILD ORDER:
 1. Model first: a single solver object is the source of truth. Clock, charts and 3D pose all read it. One input (φ) poses the whole mechanism.
 2. Subsystems = buttons: Head, Energy core, Chassis, Tail, Leg FL/FR/BL/BR. Pressing one detaches that subsystem in an exploded move while the rest of the machine steps aside; pressing Assembled reverses it. An Explode-all slider drives every subsystem together. An X-Ray toggle fades the armour to reveal the frame and core.
-3. Console (1600×900 discipline): big live primary number (crank RPM) top-left with φ under it; one live chart per quantity - servo torque (N·m), core temperature (°C), foot lift (mm), power draw (W) - each with running min/max; subsystem controls always in reach (button row on desktop, tap-the-part on phones); a Replay button.
+3. Console (1600×900 discipline): big live primary number (crank RPM) top-left with φ under it; one live chart per quantity - servo torque (N·m), core temperature (°C), foot lift (mm), power draw (W) - each with running min/max; subsystem button row always visible at the bottom; a Replay button.
 4. Look: clean research model on a light studio background, soft contact shadow, ONE strong accent colour, white/translucent panels, dark text. Log every look defect as its own line and fix it.
 5. Critic gate (mandatory before showing anyone): render stills at every tour beat, press every button and slider yourself, fix what fails, re-render.
-6. Self-driving tour: the tour starts only from the Replay button and runs with a visible fake cursor that presses the real buttons. ANY user interaction stops the tour instantly and hands over control. Camera is committed - no free-fly during the tour - and the machine never leaves the frame.
+6. Self-driving tour: on load, a scripted tour runs with a visible fake cursor that presses the real buttons. ANY user interaction stops the tour instantly and hands over control. Camera is committed - no free-fly during the tour - and the machine never leaves the frame.
 7. Video: render(t) is a pure function of time; capture 60 fps at 1920×1080, cut 30 s, lay music in with ffmpeg on the same timeline.
 8. Ship: single HTML under 1 MB, works offline, no sign-in, a "Load this machine" button that loads a JSON config {name, rpm, stress, explode, xray}. Alive in the first 3 seconds on a phone and on integrated graphics, target 60 fps.
 
 REQUIRED TOOLS: Node 20+ · the teardown skill (npx skills add elvarofficial/teardown) as method reference · Three.js · ffmpeg · Python 3 · Playwright + Chromium for the critic pass.
 
-ACCEPTANCE: the page opens already moving; every subsystem detaches and returns; charts move with the model and their min/max are honest; the tour (started from the Replay button) completes untouched and yields to the first touch; the stress slider pushed to 160 % raises torque, temperature and warnings together. Do not declare done until you have pressed everything yourself.
-PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the model bar and detach bar are hidden and each part detaches by tapping it directly (tap again to reassemble, tap empty space to reassemble everything); the tour never auto-starts (start it from the Replay button); a slim vertical zoom bar sits on the stage's right edge on phones.</pre>
+ACCEPTANCE: the page opens already moving; every subsystem detaches and returns; charts move with the model and their min/max are honest; the tour completes untouched and yields to the first touch; the stress slider pushed to 160 % raises torque, temperature and warnings together. Do not declare done until you have pressed everything yourself.</pre>
         </div>
 
         <footer>
           <span>LAB 02 · MECHA CAT TEARDOWN · 3D LAB</span>
-          <span id="footState">solver: live · tour: stopped (manual control)</span>
+          <span id="footState">solver: live · tour: running</span>
         </footer>
       </aside>
     </div>
@@ -524,13 +518,19 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
 
       /* ================= THREE - procedural mecha cat ================= */
       var stage = $('stage');
-      var renderer = new THREE.WebGLRenderer({ antialias: true });
+      var renderer;
+      try {
+        renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+      } catch (e) {
+        var eb0 = $('errbox'); eb0.classList.add('on'); eb0.textContent = 'WebGL is not available on this device, so the 3D lab cannot start.';
+        throw e;
+      }
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.shadowMap.enabled = true;
       renderer.shadowMap.type = THREE.PCFSoftShadowMap;
       renderer.outputEncoding = THREE.sRGBEncoding;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.12;
+      renderer.toneMappingExposure = 1.15;
       stage.insertBefore(renderer.domElement, stage.firstChild);
 
       var scene = new THREE.Scene();
@@ -626,7 +626,6 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
       /* Explodables: base position + direction; level comes from subsystem state */
       var explodables = [];
       function reg(obj, sub, dir, dist) {
-        obj.userData.sub = sub; // tags the part so tap-to-explode can find its subsystem
         explodables.push({ obj: obj, sub: sub, base: obj.position.clone(), dir: dir, dist: dist });
       }
       function regLocal(obj, sub, dir, dist) { reg(obj, sub, dir, dist); }
@@ -636,7 +635,7 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
       var BODY_Y = SPEC.HIP_H + 0.34;
 
       /* ---- CHASSIS v3 - Elvar proportions: low, long, tapered. Dark frame underneath, ceramic shell on top, nothing is a plain box silhouette ---- */
-      var chassis = new THREE.Group(); body.add(chassis); chassis.userData.sub = 'chassis'; // unregistered frame parts tap as chassis
+      var chassis = new THREE.Group(); body.add(chassis);
       // inner frame - visible in the gaps between armour, so the machine reads as built, not moulded
       box(2.08, 0.22, 0.36, M.frame, 0, 0.10, 0, chassis);
       box(1.86, 0.12, 0.52, M.dark, -0.02, -0.18, 0, chassis);
@@ -909,17 +908,268 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
         legs[def.key] = { def: def, root: root, hipPivot: hipPivot, kneePivot: kneePivot, pawPivot: pawPivot };
       });
 
+      /* ================= WORM-09 - segmented mecha worm, very detailed =================
+         8 chained segments on X. Each pivot waves from the same phi, lagging by index.
+         Built only from boxes / cylinders / octahedra / cones - no spheres. */
+      var worm = new THREE.Group(); worm.position.set(0, 0.62, 0); scene.add(worm); worm.visible = false;
+      var wormPivots = [], wormLegsL = [], wormLegsR = [], wormGlows = [], wormStrips = [];
+      var wormHeadGrp, wormTailGrp, wormCoreBall, wormCoreRings = [];
+      var wormBuilt = false, gunBuilt = false;
+      function buildWorm(){ if (wormBuilt) return; wormBuilt = true;
+        var SEG_N = 8, SEG_DX = 0.42;
+        var parent = new THREE.Group(); worm.add(parent); wormPivots.push(parent);
+        // we build segments as sibling pivots along a spine group for clean wave control
+        var spine = new THREE.Group(); worm.add(spine);
+        for (var si = 0; si < SEG_N; si++) {
+          var segGrp = new THREE.Group();
+          segGrp.position.set(-1.47 + si * SEG_DX, 0, 0);
+          spine.add(segGrp);
+          wormPivots.push(segGrp);
+          var sc = 1 - Math.abs(si - 3.5) * 0.045; // fattest in the middle
+          var isCore = (si === 4);
+          // inner frame cylinder along X
+          var inner = cyl(0.20 * sc, 0.20 * sc, SEG_DX * 0.96, M.frame, 0, 0, 0, segGrp, 18); inner.rotation.z = Math.PI / 2;
+          // bellows ring at the joint
+          var bell = new THREE.Mesh(new THREE.TorusGeometry(0.205 * sc, 0.035, 8, 20), M.rubber);
+          bell.position.x = -SEG_DX / 2; bell.rotation.y = Math.PI / 2; bell.castShadow = true; segGrp.add(bell);
+          // polished joint ring
+          var jring = new THREE.Mesh(new THREE.TorusGeometry(0.225 * sc, 0.022, 10, 24), M.steel);
+          jring.position.x = -SEG_DX / 2 + 0.05; jring.rotation.y = Math.PI / 2; jring.castShadow = true; segGrp.add(jring);
+          reg(jring, 'segments', new THREE.Vector3(0, 0.6, 0), 0.30);
+          // top armour shell - faceted box with edges + centre ridge
+          var top = box(SEG_DX * 0.82, 0.13 * sc, 0.34 * sc, si % 2 ? M.armor : M.armorB, 0, 0.20 * sc, 0, segGrp); addEdges(top, 0.3);
+          reg(top, 'segments', new THREE.Vector3(0, 1, 0), 0.52 + (si % 3) * 0.06);
+          var ridge2 = box(SEG_DX * 0.55, 0.05, 0.09, M.armorC, 0, 0.285 * sc, 0, segGrp);
+          reg(ridge2, 'segments', new THREE.Vector3(0, 1, 0), 0.66);
+          // dorsal glow strip - one per segment, pulses in a travelling wave
+          var strip = box(SEG_DX * 0.42, 0.018, 0.045, M.accentGlow, 0, 0.315 * sc, 0, segGrp);
+          wormGlows.push(strip); wormStrips.push(strip);
+          // side armour plates L/R with bolts + vent slats
+          [-1, 1].forEach(function (s) {
+            var sideP = box(SEG_DX * 0.78, 0.22 * sc, 0.045, si % 2 ? M.armorB : M.armor, 0, 0.01, 0.215 * sc * s, segGrp); addEdges(sideP, 0.26);
+            reg(sideP, 'segments', new THREE.Vector3(0, 0.1, s), 0.55);
+            bolt(0.11, 0.07, 0.245 * sc * s, segGrp, 0.85); bolt(-0.11, 0.07, 0.245 * sc * s, segGrp, 0.85);
+            bolt(0.11, -0.06, 0.245 * sc * s, segGrp, 0.85); bolt(-0.11, -0.06, 0.245 * sc * s, segGrp, 0.85);
+            for (var vv = 0; vv < 3; vv++) box(0.13, 0.02, 0.012, M.dark, -0.02, -0.02 + vv * 0.0, 0.242 * sc * s, segGrp).position.y = 0.06 - vv * 0.05;
+            // side sensor eye - glowing octahedron
+            var eye2 = new THREE.Mesh(new THREE.OctahedronGeometry(0.028, 0), M.accentGlow);
+            eye2.position.set(0.13, 0.10, 0.235 * sc * s); eye2.castShadow = true; segGrp.add(eye2); wormGlows.push(eye2);
+          });
+          // belly plate
+          var belly = box(SEG_DX * 0.70, 0.06, 0.28 * sc, M.armorC, 0, -0.20 * sc, 0, segGrp);
+          reg(belly, 'segments', new THREE.Vector3(0, -1, 0), 0.42);
+          // spine cables top + bottom runs
+          cable([[-SEG_DX/2, 0.26 * sc, 0.10], [0, 0.30 * sc, 0.13], [SEG_DX/2, 0.26 * sc, 0.10]], 0.012, M.carbon, segGrp);
+          cable([[-SEG_DX/2, -0.14 * sc, 0.16], [0, -0.18 * sc, 0.18], [SEG_DX/2, -0.14 * sc, 0.16]], 0.010, M.steelDark, segGrp);
+          // 2 paddle legs per segment (L/R) - upper, lower, foot - animated in the loop
+          [-1, 1].forEach(function (s) {
+            var legGrp = new THREE.Group(); legGrp.position.set(0.02, -0.16 * sc, 0.18 * sc * s); segGrp.add(legGrp);
+            var lup = box(0.07, 0.20, 0.06, M.frame, 0, -0.09, 0.03 * s, legGrp); lup.rotation.x = 0.5 * s;
+            var lfoot = box(0.16, 0.035, 0.09, M.rubber, 0.03, -0.20, 0.09 * s, legGrp);
+            var lclaw = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.07, 4), M.steel);
+            lclaw.rotation.z = -Math.PI / 2; lclaw.position.set(0.13, -0.20, 0.09 * s); legGrp.add(lclaw);
+            reg(legGrp, 'segments', new THREE.Vector3(0, -0.3, s), 0.30);
+            if (s > 0) wormLegsR.push(legGrp); else wormLegsL.push(legGrp);
+          });
+          // exposed reactor on the core segment only
+          if (isCore) {
+            var cg = new THREE.Group(); cg.position.set(0, 0.02, 0); segGrp.add(cg);
+            var cb = new THREE.Mesh(new THREE.OctahedronGeometry(0.13, 0), M.accentGlow); cb.castShadow = true; cg.add(cb); wormCoreBall = cb;
+            reg(cb, 'core', new THREE.Vector3(0, 0, 0), 0.55);
+            [-0.11, 0.11].forEach(function (zz, ri) {
+              var rr = new THREE.Mesh(new THREE.TorusGeometry(0.17, 0.024, 10, 28), ri ? M.steel : M.accent);
+              rr.position.z = zz; rr.castShadow = true; cg.add(rr); wormCoreRings.push(rr);
+              reg(rr, 'core', new THREE.Vector3(0, 0, Math.sign(zz)), 0.45);
+            });
+            var cage2 = new THREE.Mesh(new THREE.OctahedronGeometry(0.19, 0), M.steelDark); cg.add(cage2);
+            cage2.add(new THREE.LineSegments(new THREE.EdgesGeometry(cage2.geometry), new THREE.LineBasicMaterial({ color: 0x11161a, transparent: true, opacity: 0.45 })));
+            reg(cg, 'core', new THREE.Vector3(0, -1, 0), 0.55);
+            [-1, 1].forEach(function (s) {
+              var gl = new THREE.Mesh(new THREE.CylinderGeometry(0.20, 0.20, 0.025, 24), M.glass);
+              gl.position.set(0, 0.02, 0.26 * s); gl.rotation.x = Math.PI / 2; gl.renderOrder = 5; segGrp.add(gl);
+              reg(gl, 'core', new THREE.Vector3(0, 0, s), 0.80);
+            });
+          }
+        }
+        // HEAD - drill nose, visor, antennae, jaw grille (front, +X)
+        wormHeadGrp = new THREE.Group(); wormHeadGrp.position.set(1.92, 0, 0); worm.add(wormHeadGrp);
+        reg(wormHeadGrp, 'head', new THREE.Vector3(1, 0.3, 0), 0.80);
+        var hframe = cyl(0.23, 0.25, 0.30, M.frame, -0.08, 0, 0, wormHeadGrp, 18); hframe.rotation.z = Math.PI / 2;
+        var hshell = box(0.30, 0.36, 0.40, M.armor, -0.02, 0.06, 0, wormHeadGrp); addEdges(hshell, 0.32);
+        var hcrown = box(0.24, 0.06, 0.34, M.armorB, -0.04, 0.27, 0, wormHeadGrp); reg(hcrown, 'head', new THREE.Vector3(0, 1, 0), 0.42);
+        var hvisor = box(0.06, 0.10, 0.36, M.carbon, 0.14, 0.08, 0, wormHeadGrp); reg(hvisor, 'head', new THREE.Vector3(1, 0.2, 0), 0.35);
+        [-0.10, 0.10].forEach(function (zz) { var he = box(0.02, 0.022, 0.11, M.eye, 0.175, 0.085, zz, wormHeadGrp); he.rotation.x = zz > 0 ? -0.4 : 0.4; reg(he, 'head', new THREE.Vector3(1, 0.3, Math.sign(zz)), 0.44); });
+        // drill: 4-sided cone + stepped rings + steel tip
+        var drillBase = cyl(0.16, 0.20, 0.14, M.steelDark, 0.16, -0.02, 0, wormHeadGrp, 16); drillBase.rotation.z = Math.PI / 2;
+        var drill = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.34, 4), M.steel); drill.rotation.z = -Math.PI / 2; drill.rotation.y = Math.PI / 4; drill.position.set(0.38, -0.02, 0); drill.castShadow = true; wormHeadGrp.add(drill);
+        reg(drill, 'head', new THREE.Vector3(1, 0, 0), 0.55);
+        for (var dr = 0; dr < 3; dr++) { var dring = new THREE.Mesh(new THREE.TorusGeometry(0.155 - dr * 0.025, 0.016, 8, 20), M.accent); dring.position.set(0.26 + dr * 0.09, -0.02, 0); dring.rotation.y = Math.PI / 2; wormHeadGrp.add(dring); }
+        var hjaw = box(0.24, 0.06, 0.26, M.armorB, 0.06, -0.20, 0, wormHeadGrp); reg(hjaw, 'head', new THREE.Vector3(0.5, -1, 0), 0.38);
+        for (var hg = 0; hg < 4; hg++) box(0.018, 0.06, 0.026, M.dark, 0.16, -0.14, -0.06 + hg * 0.04, wormHeadGrp);
+        [-1, 1].forEach(function (s) {
+          var cheek2 = box(0.22, 0.14, 0.03, M.armorB, -0.02, -0.06, 0.215 * s, wormHeadGrp); reg(cheek2, 'head', new THREE.Vector3(0, 0, s), 0.36);
+          var ant = cyl(0.007, 0.007, 0.28, M.dark, -0.16, 0.32, 0.12 * s, wormHeadGrp, 8); ant.rotation.z = 0.4; ant.rotation.x = -0.3 * s; reg(ant, 'head', new THREE.Vector3(-0.3, 1, 0.3 * s), 0.5);
+          var atip = new THREE.Mesh(new THREE.OctahedronGeometry(0.024, 0), M.accentGlow); atip.position.set(-0.21, 0.45, 0.16 * s); wormHeadGrp.add(atip); wormGlows.push(atip);
+          // head side legs - bigger front paddles
+          var hleg = box(0.08, 0.24, 0.06, M.frame, -0.05, -0.24, 0.16 * s, wormHeadGrp); hleg.rotation.x = 0.4 * s;
+        });
+        cable([[ -0.18, 0.18, 0.14], [0.02, 0.24, 0.18], [0.14, 0.14, 0.12]], 0.012, M.carbon, wormHeadGrp);
+        // TAIL - tapered end cap, blade fin, stinger (rear, -X)
+        wormTailGrp = new THREE.Group(); wormTailGrp.position.set(-1.92, 0, 0); worm.add(wormTailGrp);
+        reg(wormTailGrp, 'tail', new THREE.Vector3(-1, 0.3, 0), 0.80);
+        var tframe = cyl(0.19, 0.13, 0.30, M.frame, 0.06, 0, 0, wormTailGrp, 16); tframe.rotation.z = Math.PI / 2;
+        var tshell = box(0.26, 0.28, 0.30, M.armorB, 0.04, 0.04, 0, wormTailGrp); addEdges(tshell, 0.3);
+        var tfin = box(0.20, 0.16, 0.02, M.accent, -0.06, 0.22, 0, wormTailGrp); tfin.rotation.z = -0.35; reg(tfin, 'tail', new THREE.Vector3(-0.3, 1, 0), 0.45);
+        var sting = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.26, 4), M.steel); sting.rotation.z = Math.PI / 2; sting.rotation.y = Math.PI / 4; sting.position.set(-0.26, 0, 0); sting.castShadow = true; wormTailGrp.add(sting);
+        reg(sting, 'tail', new THREE.Vector3(-1, 0, 0), 0.5);
+        var ttip = new THREE.Mesh(new THREE.OctahedronGeometry(0.03, 0), M.accentGlow); ttip.position.set(-0.12, 0, 0); wormTailGrp.add(ttip); wormGlows.push(ttip);
+        for (var te = 0; te < 3; te++) box(0.09, 0.02, 0.014, M.dark, 0.10, 0.08 - te * 0.055, 0.165, wormTailGrp);
+      }
+
+      /* ================= SUPER LASER GUN SL-01 - heavy rail cannon, very detailed ================= */
+      var gun = new THREE.Group(); gun.position.set(0, 0, 0); scene.add(gun); gun.visible = false;
+      var gunYaw, gunPitch, gunBarrelGrp, gunCoils = [], gunMuzzle, gunFan, gunFanSpin, gunChargeRing;
+      function buildGun(){ if (gunBuilt) return; gunBuilt = true;
+        // BASE - turntable disc + tripod with hydraulics and wide feet
+        var baseGrp = new THREE.Group(); gun.add(baseGrp);
+        var bdisc = cyl(0.78, 0.88, 0.14, M.frame, 0, 0.10, 0, baseGrp, 36);
+        var bring = new THREE.Mesh(new THREE.TorusGeometry(0.80, 0.028, 10, 48), M.accent); bring.rotation.x = Math.PI / 2; bring.position.y = 0.18; baseGrp.add(bring);
+        reg(baseGrp, 'base', new THREE.Vector3(0, -0.4, 0), 0.35);
+        for (var li = 0; li < 3; li++) {
+          var la = li / 3 * Math.PI * 2 + 0.5;
+          var legG = new THREE.Group(); legG.position.set(Math.cos(la) * 0.45, 0.12, Math.sin(la) * 0.45); legG.rotation.y = -la; gun.add(legG);
+          var lleg = box(0.95, 0.11, 0.14, M.armorB, 0.42, -0.02, 0, legG); lleg.rotation.z = -0.18; addEdges(lleg, 0.28);
+          reg(lleg, 'base', new THREE.Vector3(Math.cos(la), -0.2, Math.sin(la)), 0.55);
+          var lpist = cyl(0.032, 0.032, 0.62, M.steel, 0.38, 0.06, 0, legG, 12); lpist.rotation.z = 1.25;
+          var lfoot2 = box(0.34, 0.06, 0.26, M.rubber, 0.82, -0.10, 0, legG);
+          reg(lfoot2, 'base', new THREE.Vector3(Math.cos(la), -0.3, Math.sin(la)), 0.65);
+          bolt(0.70, 0.04, 0.085, legG, 1); bolt(0.20, 0.06, 0.085, legG, 1);
+          cable([[0.05, 0.08, 0.05], [0.40, 0.02, 0.07], [0.75, -0.05, 0.05]], 0.012, M.carbon, legG);
+        }
+        // pedestal column + yaw bearing
+        var ped = cyl(0.34, 0.42, 0.46, M.dark, 0, 0.38, 0, gun, 24);
+        var pedRing = cyl(0.44, 0.44, 0.09, M.steelDark, 0, 0.60, 0, gun, 24);
+        reg(ped, 'base', new THREE.Vector3(0, -0.5, 0), 0.4);
+        // YAW group (turret)
+        gunYaw = new THREE.Group(); gunYaw.position.set(0, 0.66, 0); gun.add(gunYaw);
+        var yawHousing = cyl(0.46, 0.46, 0.16, M.armorC, 0, 0.02, 0, gunYaw, 24);
+        reg(yawHousing, 'turret', new THREE.Vector3(0, 1, 0), 0.35);
+        // turret body - main housing with layered armour
+        var tbody = box(1.15, 0.52, 0.72, M.armor, -0.10, 0.36, 0, gunYaw); addEdges(tbody, 0.34);
+        reg(tbody, 'turret', new THREE.Vector3(0, 1, 0), 0.60);
+        var ttop = box(0.80, 0.10, 0.56, M.armorB, -0.16, 0.66, 0, gunYaw); reg(ttop, 'turret', new THREE.Vector3(0, 1, 0), 0.75); addEdges(ttop, 0.3);
+        [-1, 1].forEach(function (s) {
+          var tside = box(0.90, 0.38, 0.05, M.armorB, -0.10, 0.34, 0.385 * s, gunYaw); addEdges(tside, 0.28);
+          reg(tside, 'turret', new THREE.Vector3(0, 0.1, s), 0.62);
+          var tst = box(0.70, 0.03, 0.014, M.accent, -0.10, 0.20, 0.415 * s, gunYaw); reg(tst, 'turret', new THREE.Vector3(0, 0, s), 0.66);
+          for (var tv = 0; tv < 4; tv++) { var tvv = box(0.18, 0.026, 0.016, M.dark, 0.18, 0.48 - tv * 0.06, 0.415 * s, gunYaw); tvv.rotation.z = -0.1; }
+          bolt(0.28, 0.48, 0.415 * s, gunYaw, 1); bolt(-0.48, 0.48, 0.415 * s, gunYaw, 1); bolt(0.28, 0.22, 0.415 * s, gunYaw, 1); bolt(-0.48, 0.22, 0.415 * s, gunYaw, 1);
+          // power cells - 3 glowing canisters per side + caps + cables
+          for (var pc = 0; pc < 3; pc++) {
+            var cell = cyl(0.055, 0.055, 0.30, M.accentGlow, -0.42 + pc * 0.20, 0.30, 0.46 * s, gunYaw, 14);
+            reg(cell, 'core', new THREE.Vector3(0, 0, s), 0.55 + pc * 0.05);
+            cyl(0.062, 0.062, 0.04, M.steelDark, -0.42 + pc * 0.20, 0.47, 0.46 * s, gunYaw, 14);
+            cyl(0.062, 0.062, 0.04, M.steelDark, -0.42 + pc * 0.20, 0.13, 0.46 * s, gunYaw, 14);
+          }
+          cable([[-0.42, 0.14, 0.44 * s], [-0.05, 0.08, 0.40 * s], [0.28, 0.18, 0.30 * s]], 0.016, M.carbon, gunYaw);
+        });
+        // rear stock / operator area: grips, control panel with glow dots, recoil springs
+        var stock = box(0.34, 0.30, 0.44, M.dark, -0.78, 0.30, 0, gunYaw); reg(stock, 'turret', new THREE.Vector3(-1, 0, 0), 0.55);
+        [-1, 1].forEach(function (s) { var grip = cyl(0.028, 0.028, 0.26, M.rubber, -0.92, 0.18, 0.14 * s, gunYaw, 10); grip.rotation.x = 0.5 * s; });
+        var panel = box(0.05, 0.20, 0.30, M.carbon, -0.62, 0.52, 0.20, gunYaw); panel.rotation.z = 0.35;
+        for (var pd = 0; pd < 4; pd++) { var dot = new THREE.Mesh(new THREE.OctahedronGeometry(0.014, 0), M.accentGlow); dot.position.set(-0.645, 0.56 - (pd % 2) * 0.07, 0.14 + Math.floor(pd / 2) * 0.09); gunYaw.add(dot); gunCoils.push(dot); }
+        for (var rs = 0; rs < 5; rs++) { var spr = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.014, 8, 18), M.steel); spr.position.set(-0.52 + rs * 0.045, 0.36, 0); spr.rotation.y = Math.PI / 2; gunYaw.add(spr); }
+        // CORE inside turret front - visible reactor + charge ring
+        var coreG = new THREE.Group(); coreG.position.set(0.34, 0.36, 0); gunYaw.add(coreG);
+        var gball = new THREE.Mesh(new THREE.OctahedronGeometry(0.15, 0), M.accentGlow); gball.castShadow = true; coreG.add(gball);
+        reg(gball, 'core', new THREE.Vector3(0.4, 0.4, 0), 0.6);
+        gunChargeRing = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.028, 10, 32), M.accent); coreG.add(gunChargeRing);
+        reg(gunChargeRing, 'core', new THREE.Vector3(0, 1, 0), 0.55);
+        var gcage = new THREE.Mesh(new THREE.OctahedronGeometry(0.21, 0), M.steelDark); coreG.add(gcage);
+        gcage.add(new THREE.LineSegments(new THREE.EdgesGeometry(gcage.geometry), new THREE.LineBasicMaterial({ color: 0x11161a, transparent: true, opacity: 0.45 })));
+        reg(coreG, 'core', new THREE.Vector3(0.3, -1, 0), 0.6);
+        // cooling fan on turret rear-top: tilted housing, blades on their own spinner
+        gunFan = new THREE.Group(); gunFan.position.set(-0.42, 0.74, 0); gunFan.rotation.x = Math.PI / 2; gunYaw.add(gunFan);
+        var fanRing = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.02, 8, 24), M.steelDark); fanRing.castShadow = true; gunFan.add(fanRing);
+        gunFanSpin = new THREE.Group(); gunFan.add(gunFanSpin);
+        for (var fb = 0; fb < 5; fb++) {
+          var holder = new THREE.Group(); holder.rotation.z = fb / 5 * Math.PI * 2; gunFanSpin.add(holder);
+          box(0.028, 0.088, 0.010, M.steelDark, 0, 0.052, 0, holder);
+        }
+        var fanHub = cyl(0.030, 0.030, 0.024, M.accent, 0, 0, 0, gunFanSpin, 12); fanHub.rotation.x = Math.PI / 2;
+        // PITCH group + BARREL assembly (points +X)
+        gunPitch = new THREE.Group(); gunPitch.position.set(0.30, 0.40, 0); gunYaw.add(gunPitch);
+        gunBarrelGrp = new THREE.Group(); gunPitch.add(gunBarrelGrp);
+        var breech = box(0.42, 0.36, 0.36, M.dark, 0.05, 0, 0, gunBarrelGrp); addEdges(breech, 0.3);
+        reg(breech, 'barrel', new THREE.Vector3(0, 0.6, 0), 0.45);
+        // stepped barrel sleeves (3 diameters) - the super-long cannon
+        var b1 = cyl(0.115, 0.125, 0.70, M.armorC, 0.55, 0, 0, gunBarrelGrp, 20); b1.rotation.z = Math.PI / 2; reg(b1, 'barrel', new THREE.Vector3(1, 0, 0), 0.55);
+        var b2 = cyl(0.090, 0.100, 0.80, M.steelDark, 1.25, 0, 0, gunBarrelGrp, 20); b2.rotation.z = Math.PI / 2; reg(b2, 'barrel', new THREE.Vector3(1, 0, 0), 0.75);
+        var b3 = cyl(0.068, 0.075, 0.85, M.steel, 2.00, 0, 0, gunBarrelGrp, 20); b3.rotation.z = Math.PI / 2; reg(b3, 'barrel', new THREE.Vector3(1, 0, 0), 0.95);
+        var innerB = cyl(0.042, 0.042, 0.90, M.carbon, 2.05, 0, 0, gunBarrelGrp, 16); innerB.rotation.z = Math.PI / 2;
+        // cooling fins - rings + radial plates along b2/b3
+        for (var cf = 0; cf < 9; cf++) {
+          var fring = new THREE.Mesh(new THREE.TorusGeometry(0.115 - cf * 0.004, 0.014, 8, 24), cf % 3 === 0 ? M.accent : M.steelDark);
+          fring.position.set(0.95 + cf * 0.16, 0, 0); fring.rotation.y = Math.PI / 2; fring.castShadow = true; gunBarrelGrp.add(fring);
+          reg(fring, 'barrel', new THREE.Vector3(1, 0.4, 0), 0.70 + cf * 0.03);
+        }
+        // electromagnetic coils - 4 glowing coil blocks around the barrel mid
+        for (var co = 0; co < 4; co++) {
+          var coil = new THREE.Mesh(new THREE.TorusGeometry(0.145, 0.038, 10, 24), M.accentGlow);
+          coil.position.set(0.62 + co * 0.22, 0, 0); coil.rotation.y = Math.PI / 2; coil.castShadow = true; gunBarrelGrp.add(coil);
+          gunCoils.push(coil);
+          reg(coil, 'core', new THREE.Vector3(1, 0.7, 0), 0.60 + co * 0.05);
+          var coilBox = box(0.10, 0.08, 0.08, M.dark, 0.62 + co * 0.22, 0.17, 0, gunBarrelGrp); reg(coilBox, 'core', new THREE.Vector3(1, 1, 0), 0.65);
+        }
+        // muzzle brake - slotted fat tip + glow core
+        var muz = cyl(0.105, 0.095, 0.30, M.dark, 2.52, 0, 0, gunBarrelGrp, 20); muz.rotation.z = Math.PI / 2; reg(muz, 'barrel', new THREE.Vector3(1, 0, 0), 1.10);
+        for (var ms = 0; ms < 6; ms++) { var mslot = box(0.03, 0.05, 0.02, M.accent, 2.52, Math.cos(ms / 6 * Math.PI * 2) * 0.10, Math.sin(ms / 6 * Math.PI * 2) * 0.10, gunBarrelGrp); }
+        gunMuzzle = new THREE.Mesh(new THREE.OctahedronGeometry(0.052, 0), M.accentGlow); gunMuzzle.position.set(2.70, 0, 0); gunBarrelGrp.add(gunMuzzle);
+        reg(gunMuzzle, 'barrel', new THREE.Vector3(1, 0, 0), 1.22);
+        // twin secondary barrels under the main barrel
+        [-1, 1].forEach(function (s) {
+          var sb = cyl(0.032, 0.036, 1.15, M.steelDark, 1.05, -0.13, 0.11 * s, gunBarrelGrp, 12); sb.rotation.z = Math.PI / 2;
+          reg(sb, 'barrel', new THREE.Vector3(1, -0.3, s * 0.4), 0.70);
+          var sbm = cyl(0.045, 0.04, 0.12, M.dark, 1.66, -0.13, 0.11 * s, gunBarrelGrp, 12); sbm.rotation.z = Math.PI / 2;
+        });
+        // cables barrel -> core -> base
+        cable([[0.15, -0.16, 0.10], [0.80, -0.22, 0.16], [1.55, -0.10, 0.10]], 0.014, M.carbon, gunBarrelGrp);
+        cable([[0.15, -0.16, -0.10], [0.80, -0.22, -0.16], [1.55, -0.10, -0.10]], 0.014, M.carbon, gunBarrelGrp);
+        // SCOPE on top - tube, mounts, lens, dials
+        var scopeGrp = new THREE.Group(); scopeGrp.position.set(0.55, 0.28, 0); gunBarrelGrp.add(scopeGrp);
+        reg(scopeGrp, 'scope', new THREE.Vector3(0.3, 1, 0), 0.70);
+        box(0.07, 0.12, 0.07, M.dark, -0.12, -0.08, 0, scopeGrp); box(0.07, 0.12, 0.07, M.dark, 0.22, -0.08, 0, scopeGrp);
+        var stube = cyl(0.045, 0.045, 0.62, M.carbon, 0.05, 0.03, 0, scopeGrp, 16); stube.rotation.z = Math.PI / 2;
+        var slens = new THREE.Mesh(new THREE.CylinderGeometry(0.038, 0.038, 0.02, 16), M.glass); slens.rotation.z = Math.PI / 2; slens.position.set(0.37, 0.03, 0); slens.renderOrder = 5; scopeGrp.add(slens);
+        var sdial = cyl(0.032, 0.032, 0.04, M.steelDark, 0.02, 0.09, 0, scopeGrp, 12);
+        var sdial2 = cyl(0.026, 0.026, 0.04, M.steelDark, 0.02, 0.03, 0.06, scopeGrp, 12); sdial2.rotation.x = Math.PI / 2;
+        var seye = cyl(0.05, 0.055, 0.09, M.rubber, -0.30, 0.03, 0, scopeGrp, 14); seye.rotation.z = Math.PI / 2;
+      }
+      var extraModel = { wormPhase: 0, gunTime: 0, gunCharge: 0, gunRecoil: 0, gunFired: 0 };
+
       /* ================= STATE / EXPLODE / XRAY ================= */
-      var SUBS = ['head', 'core', 'chassis', 'tail', 'legFL', 'legFR', 'legBL', 'legBR'];
+      var SUBS = ['head', 'core', 'chassis', 'tail', 'legFL', 'legFR', 'legBL', 'legBR', 'segments', 'barrel', 'turret', 'base', 'scope'];
+      var currentMachine = 'cat';
+      var MACHINE_SUBS = {
+        cat: [['none', 'Assembled'], ['head', 'Head'], ['core', 'Energy core'], ['chassis', 'Chassis'], ['tail', 'Tail'], ['legFL', 'Leg · front-left'], ['legFR', 'Leg · front-right'], ['legBL', 'Leg · back-left'], ['legBR', 'Leg · back-right']],
+        worm: [['none', 'Assembled'], ['head', 'Head · drill'], ['core', 'Reactor seg.'], ['segments', 'Segments x8'], ['tail', 'Tail · stinger']],
+        gun: [['none', 'Assembled'], ['barrel', 'Barrel assembly'], ['core', 'Core + coils'], ['turret', 'Turret'], ['base', 'Base · tripod'], ['scope', 'Scope']]
+      };
+      function renderSubbar() {
+        var bar = $('subbar'); if (!bar) return;
+        var list = MACHINE_SUBS[currentMachine] || MACHINE_SUBS.cat;
+        var html = '<span class="lbl">Detach →</span>';
+        list.forEach(function (it) { html += '<button type="button" data-sub="' + it[0] + '"' + (it[0] === selected ? ' class="sel"' : '') + '>' + it[1] + '</button>'; });
+        bar.innerHTML = html;
+        var btns = bar.querySelectorAll('button');
+        for (var i = 0; i < btns.length; i++) btns[i].addEventListener('click', function () { stopTour(); setSelected(this.getAttribute('data-sub')); });
+      }
       var subLevel = {}, subTarget = {};
       SUBS.forEach(function (s) { subLevel[s] = 0; subTarget[s] = 0; });
       var selected = 'none', explodeAll = 0, xray = false;
       function setSelected(sub) {
         selected = sub;
-        // Only the tapped subsystem moves: the rest hold the baseline explode
-        // level instead of being shoved to 18%, so a tap never reshuffles
-        // the whole machine.
-        SUBS.forEach(function (s) { subTarget[s] = (s === sub) ? 1 : explodeAll; });
+        SUBS.forEach(function (s) { subTarget[s] = (sub === 'none') ? explodeAll : (s === sub ? 1 : 0.18); });
         var btns = document.querySelectorAll('#subbar button');
         for (var i = 0; i < btns.length; i++) btns[i].classList.toggle('sel', btns[i].getAttribute('data-sub') === sub);
         $('flagMode').textContent = sub === 'none' ? (explodeAll > 0.05 ? 'EXPLODED · ALL' : 'ASSEMBLED') : 'DETACHED · ' + sub.toUpperCase();
@@ -946,66 +1196,34 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
 
       /* ================= CAMERA - committed orbit, drag to look ================= */
       var camYaw = 0.68, camPitch = 0.34, camDist = 5.9;
+      var camDistCur = 5.9, camTargetY = 1.12, camTargetYGoal = 1.12, introT = 1;
       var CAM_HOME = { yaw: 0.68, pitch: 0.34, dist: 5.9 };
       function applyCamera() {
-        var t = new THREE.Vector3(0, 1.12, 0);
+        var t = new THREE.Vector3(0, camTargetY, 0);
         camera.position.set(
-          t.x + camDist * Math.cos(camPitch) * Math.sin(camYaw),
-          t.y + camDist * Math.sin(camPitch),
-          t.z + camDist * Math.cos(camPitch) * Math.cos(camYaw));
+          t.x + camDistCur * Math.cos(camPitch) * Math.sin(camYaw),
+          t.y + camDistCur * Math.sin(camPitch),
+          t.z + camDistCur * Math.cos(camPitch) * Math.cos(camYaw));
         camera.lookAt(t);
       }
-      var dragging = false, lastPX = 0, lastPY = 0, downX = 0, downY = 0, downT = 0;
+      var dragging = false, lastPX = 0, lastPY = 0;
       var cvs = renderer.domElement;
-      var tapRay = new THREE.Raycaster();
-      var SUB_LABEL = { head: 'Head', core: 'Energy core', chassis: 'Chassis', tail: 'Tail', legFL: 'Leg · front-left', legFR: 'Leg · front-right', legBL: 'Leg · back-left', legBR: 'Leg · back-right' };
-      function tapPart(e) {
-        // A tap (not a drag) on a part explodes that subsystem; tapping the
-        // same part again puts it back. Works on phone and desktop.
-        var r = cvs.getBoundingClientRect();
-        var nx = ((e.clientX - r.left) / r.width) * 2 - 1;
-        var ny = -((e.clientY - r.top) / r.height) * 2 + 1;
-        tapRay.setFromCamera({ x: nx, y: ny }, camera);
-        var hits = tapRay.intersectObject(cat, true).filter(function (h) { return h.object.isMesh; });
-        for (var i = 0; i < hits.length; i++) {
-          var o = hits[i].object;
-          while (o) { if (o.userData && o.userData.sub) return o.userData.sub; o = o.parent; }
-        }
-        return null;
-      }
-      cvs.addEventListener('pointerdown', function (e) { dragging = true; lastPX = e.clientX; lastPY = e.clientY; downX = e.clientX; downY = e.clientY; downT = performance.now(); cvs.setPointerCapture(e.pointerId); stopTour(); });
+      cvs.addEventListener('pointerdown', function (e) { dragging = true; lastPX = e.clientX; lastPY = e.clientY; cvs.setPointerCapture(e.pointerId); stopTour(); });
       cvs.addEventListener('pointermove', function (e) {
         if (!dragging) return;
         camYaw -= (e.clientX - lastPX) * 0.005;
         camPitch = clamp(camPitch + (e.clientY - lastPY) * 0.004, 0.08, 1.25);
         lastPX = e.clientX; lastPY = e.clientY;
       });
-      cvs.addEventListener('pointerup', function (e) {
-        dragging = false;
-        var moved = Math.hypot(e.clientX - downX, e.clientY - downY);
-        if (moved < 10 && performance.now() - downT < 400) {
-          var sub = tapPart(e);
-          if (sub) {
-            var puttingBack = (selected === sub);
-            setSelected(puttingBack ? 'none' : sub);
-            toast(puttingBack ? 'Đã ráp lại ' + SUB_LABEL[sub] : 'Đã tách ' + SUB_LABEL[sub] + ' - chạm lại vào nó để ráp');
-          } else if (selected !== 'none' || explodeAll > 0.05) {
-            // Tapping empty space puts the whole machine back together.
-            setExplodeAll(0);
-            $('inExplode').value = 0;
-            toast('Đã ráp lại toàn bộ');
-          }
-        }
-      });
-      cvs.addEventListener('pointercancel', function () { dragging = false; });
-      cvs.addEventListener('wheel', function (e) { e.preventDefault(); camDist = clamp(camDist + e.deltaY * 0.006, 3.6, 10); updateZoomFill(); }, { passive: false });
+      cvs.addEventListener('pointerup', function () { dragging = false; });
+      cvs.addEventListener('wheel', function (e) { e.preventDefault(); camDist = clamp(camDist + e.deltaY * 0.006, 3.6, 10); }, { passive: false });
 
       /* ================= CHARTS ================= */
       var chartDefs = [
-        { id: 'chTorque', v: 'vTorque', mn: 'mmTorqueMin', mx: 'mmTorqueMax', unit: 'N·m', hist: [], get: function () { return model.torquePeak; }, fmt: function (v) { return v.toFixed(1); }, color: '#ff4d00' },
-        { id: 'chTemp', v: 'vTemp', mn: 'mmTempMin', mx: 'mmTempMax', unit: '°C', hist: [], get: function () { return model.temp; }, fmt: function (v) { return v.toFixed(0); }, color: '#d92c00' },
-        { id: 'chLift', v: 'vLift', mn: 'mmLiftMin', mx: 'mmLiftMax', unit: 'mm', hist: [], get: function () { return (model.legs.legFL ? model.legs.legFL.lift : 0) * 1000; }, fmt: function (v) { return v.toFixed(0); }, color: '#0e7a8a' },
-        { id: 'chPower', v: 'vPower', mn: 'mmPowerMin', mx: 'mmPowerMax', unit: 'W', hist: [], get: function () { return model.power; }, fmt: function (v) { return v.toFixed(0); }, color: '#2e7d32' }
+        { id: 'chTorque', v: 'vTorque', mn: 'mmTorqueMin', mx: 'mmTorqueMax', unit: 'N·m', hist: [], get: function () { if (currentMachine === 'worm') return 9 + 5 * Math.abs(Math.sin(extraModel.wormPhase)) * model.stress; if (currentMachine === 'gun') return extraModel.gunCharge * 0.42; return model.torquePeak; }, fmt: function (v) { return v.toFixed(1); }, color: '#ff4d00' },
+        { id: 'chTemp', v: 'vTemp', mn: 'mmTempMin', mx: 'mmTempMax', unit: '°C', hist: [], get: function () { if (currentMachine === 'gun') return 36 + extraModel.gunCharge * 0.55 + Math.max(0, model.stress - 1.3) * 40; if (currentMachine === 'worm') return 33 + model.rpm * 0.22 * model.stress; return model.temp; }, fmt: function (v) { return v.toFixed(0); }, color: '#d92c00' },
+        { id: 'chLift', v: 'vLift', mn: 'mmLiftMin', mx: 'mmLiftMax', unit: 'mm', hist: [], get: function () { if (currentMachine === 'worm') return 60 + 55 * Math.abs(Math.sin(extraModel.wormPhase * 0.9)); if (currentMachine === 'gun') return extraModel.gunCharge; return (model.legs.legFL ? model.legs.legFL.lift : 0) * 1000; }, fmt: function (v) { return v.toFixed(0); }, color: '#0e7a8a' },
+        { id: 'chPower', v: 'vPower', mn: 'mmPowerMin', mx: 'mmPowerMax', unit: 'W', hist: [], get: function () { if (currentMachine === 'worm') return 140 + model.rpm * 2.4 * model.stress + 30 * Math.sin(extraModel.wormPhase); if (currentMachine === 'gun') return 200 + extraModel.gunCharge * 14; return model.power; }, fmt: function (v) { return v.toFixed(0); }, color: '#2e7d32' }
       ];
       var darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
       function drawChart(cd) {
@@ -1056,27 +1274,11 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
         this.classList.toggle('toggled', !model.running);
       });
       $('btnXray').addEventListener('click', function () { stopTour(); setXray(!xray); });
-      $('btnView').addEventListener('click', function () { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = CAM_HOME.dist; updateZoomFill(); });
-      function setZoom(d) { camDist = clamp(d, 3.6, 10); updateZoomFill(); }
-      function updateZoomFill() { var f = $('zoomFill'); if (f) f.style.height = Math.round((10 - camDist) / (10 - 3.6) * 100) + '%'; }
-      function bindZoom(btn, dir) {
-        // Tap steps once; holding keeps zooming until release.
-        var timer = null;
-        function step() { stopTour(); setZoom(camDist + dir * 0.7); }
-        btn.addEventListener('pointerdown', function (e) { e.preventDefault(); step(); timer = setInterval(step, 120); });
-        function stop() { if (timer) { clearInterval(timer); timer = null; } }
-        btn.addEventListener('pointerup', stop);
-        btn.addEventListener('pointercancel', stop);
-        btn.addEventListener('pointerleave', stop);
-      }
-      bindZoom($('btnZoomIn'), -1);
-      bindZoom($('btnZoomOut'), 1);
+      $('btnView').addEventListener('click', function () { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = CAM_HOME.dist; });
       $('btnTour').addEventListener('click', function () { startTour(); });
       var subBtns = document.querySelectorAll('#subbar button');
       for (var bi = 0; bi < subBtns.length; bi++) {
-        // Tapping the active subsystem again puts it back: the button toggles,
-        // so you can always get out of a detach mode without hunting for Assembled.
-        subBtns[bi].addEventListener('click', function () { stopTour(); var sub = this.getAttribute('data-sub'); setSelected(selected === sub ? 'none' : sub); });
+        subBtns[bi].addEventListener('click', function () { stopTour(); setSelected(this.getAttribute('data-sub')); });
       }
       $('btnLoadTop').addEventListener('click', function () { stopTour(); $('fileLoad').click(); });
 
@@ -1109,6 +1311,51 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
           stopTour();
           applyModel(this.getAttribute('data-model'));
           toast('Model: ' + MODEL_VARIANTS[this.getAttribute('data-model')].name);
+        });
+      }
+      /* ================= MACHINE SWITCHER - one tap, lean ================= */
+      var MACHINE_INFO = {
+        cat: { name: 'MECHA CAT MK-IV', bigUnit: 'CRANK RPM', lblRpm: 'Crank speed', rpm: 55, camDist: 5.9, targetY: 1.12, torque: 'Servo torque · peak', torqueUnit: 'N·m', lift: 'Foot lift · FL', liftUnit: 'mm', temp: 'Core temperature', power: 'Power draw' },
+        worm: { name: 'MECHA WORM WORM-09', bigUnit: 'CRAWL · SEG/MIN', lblRpm: 'Crawl speed', rpm: 42, camDist: 6.4, targetY: 0.72, torque: 'Undulation torque', torqueUnit: 'N·m', lift: 'Segment wave · mm', liftUnit: 'mm', temp: 'Reactor temp', power: 'Power draw' },
+        gun: { name: 'SUPER LASER GUN SL-01', bigUnit: 'CHARGE %', lblRpm: 'Charge rate', rpm: 55, camDist: 6.6, targetY: 1.02, torque: 'Coil field · %', torqueUnit: '%', lift: 'Charge level', liftUnit: '%', temp: 'Barrel temperature', power: 'Power draw · W' }
+      };
+      function switchMachine(key) {
+        if (!MACHINE_INFO[key]) return;
+        if (key === 'worm') buildWorm();
+        if (key === 'gun') buildGun();
+        currentMachine = key;
+        cat.visible = key === 'cat';
+        worm.visible = key === 'worm';
+        gun.visible = key === 'gun';
+        var info = MACHINE_INFO[key];
+        $('chipMachine').textContent = info.name;
+        $('modelName').textContent = info.name;
+        $('bigUnit').textContent = info.bigUnit;
+        $('lblRpm').textContent = info.lblRpm;
+        $('nameTorque').textContent = info.torque;
+        $('nameLift').textContent = info.lift;
+        $('nameTemp').textContent = info.temp;
+        $('namePower').textContent = info.power;
+        chartDefs[0].unit = info.torqueUnit; chartDefs[2].unit = info.liftUnit;
+        chartDefs.forEach(function (cd) { cd.hist = []; });
+        var vb = $('variantBar'); if (vb) vb.style.display = key === 'cat' ? '' : 'none';
+        camDist = info.camDist;
+        camTargetYGoal = info.targetY;
+        introT = reduceMotion ? 1 : 0;
+        setRpm(info.rpm);
+        setStress(100);
+        $('inExplode').value = 0;
+        selected = 'none'; renderSubbar(); setExplodeAll(0); setSelected('none');
+        var mbtns = document.querySelectorAll('.machine-btn[data-machine]');
+        for (var i = 0; i < mbtns.length; i++) { var on = mbtns[i].getAttribute('data-machine') === key; mbtns[i].classList.toggle('on', on); mbtns[i].setAttribute('aria-pressed', on ? 'true' : 'false'); }
+      }
+      var machineBtns = document.querySelectorAll('.machine-btn[data-machine]');
+      for (var mci = 0; mci < machineBtns.length; mci++) {
+        machineBtns[mci].addEventListener('click', function () {
+          stopTour();
+          var k = this.getAttribute('data-machine');
+          switchMachine(k);
+          toast('Machine: ' + MACHINE_INFO[k].name);
         });
       }
       $('fileLoad').addEventListener('change', function () {
@@ -1150,6 +1397,19 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
       $('btnDocsClose').addEventListener('click', function () { setDocs(false); });
       docsBackdrop.addEventListener('click', function () { setDocs(false); });
       document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setDocs(false); });
+
+      /* ================= KEYBOARD SHORTCUTS - 1/2/3 machines, X x-ray, R view ================= */
+      document.addEventListener('keydown', function (e) {
+        var tag = (e.target && e.target.tagName) || '';
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return;
+        var k = (e.key || '').toLowerCase();
+        if (k === '1' || k === '2' || k === '3') {
+          stopTour();
+          var mk = k === '1' ? 'cat' : (k === '2' ? 'worm' : 'gun');
+          if (mk !== currentMachine) { switchMachine(mk); toast('Machine: ' + MACHINE_INFO[mk].name); }
+        } else if (k === 'x') { stopTour(); setXray(!xray); }
+        else if (k === 'r') { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = CAM_HOME.dist; camTargetYGoal = MACHINE_INFO[currentMachine].targetY; }
+      });
 
       /* ================= TOUR - self-driving, yields to any touch ================= */
       var cursor = document.createElement('div'); // reuse styled node already in DOM
@@ -1244,11 +1504,61 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
           M.eye.emissiveIntensity = model.stress > 1.35 ? 2.2 + Math.sin(now * 0.008) * 1.2 : 2.2;
           // over-limit shudder
           cat.position.x = model.stress > 1.35 && model.running ? Math.sin(now * 0.09) * 0.006 * (model.stress - 1.35) * 4 : 0;
+          // WORM animation - travelling undulation wave, head leads, legs paddle
+          if (worm.visible) {
+            if (model.running) extraModel.wormPhase += dt * (0.6 + model.rpm / 28) * model.stress;
+            var wp = extraModel.wormPhase;
+            for (var wi2 = 1; wi2 < wormPivots.length; wi2++) {
+              var segP = wormPivots[wi2], idx = wi2 - 1;
+              segP.position.y = 0.14 * Math.sin(wp - idx * 0.62);
+              segP.rotation.z = 0.10 * Math.cos(wp - idx * 0.62);
+              segP.rotation.y = 0.06 * Math.sin(wp - idx * 0.62);
+            }
+            worm.position.y = 0.62 + 0.03 * Math.sin(wp * 2);
+            if (wormHeadGrp) { wormHeadGrp.position.y = 0.14 * Math.sin(wp + 0.6); wormHeadGrp.rotation.z = 0.08 * Math.sin(wp + 0.6); }
+            if (wormTailGrp) { wormTailGrp.position.y = 0.14 * Math.sin(wp - 5.2); wormTailGrp.rotation.z = 0.12 * Math.sin(wp - 5.2); }
+            wormLegsL.forEach(function (lg, li2) { lg.rotation.x = 0.45 * Math.sin(wp - li2 * 0.62); });
+            wormLegsR.forEach(function (lg, li2) { lg.rotation.x = 0.45 * Math.sin(wp - li2 * 0.62 + Math.PI); });
+            if (wormCoreBall) { wormCoreBall.rotation.y += dt * 2.2; wormCoreBall.rotation.x += dt * 1.1; }
+            wormCoreRings.forEach(function (rr, ri2) { rr.rotation.x += dt * (ri2 ? -1.8 : 1.8); });
+            // travelling glow pulse along the dorsal strips, locked to the wave phase
+            for (var gs = 0; gs < wormStrips.length; gs++) wormStrips[gs].scale.y = 1 + 0.9 * Math.max(0, Math.sin(wp - gs * 0.62));
+          }
+          // GUN animation - slow scan, charge cycle, recoil pulse, coil + muzzle glow
+          if (gun.visible) {
+            extraModel.gunTime += dt;
+            var gt = extraModel.gunTime;
+            if (model.running) extraModel.gunCharge += dt * (model.rpm / 55) * 22 * model.stress; else extraModel.gunCharge = Math.max(0, extraModel.gunCharge - dt * 10);
+            if (extraModel.gunCharge >= 100) { extraModel.gunCharge = 0; extraModel.gunRecoil = 1; extraModel.gunFired = now; }
+            extraModel.gunRecoil = Math.max(0, extraModel.gunRecoil - dt * 3.2);
+            var rec = extraModel.gunRecoil * extraModel.gunRecoil * 0.22;
+            if (gunYaw) gunYaw.rotation.y = 0.42 * Math.sin(gt * 0.35) * (model.running ? 1 : 0.25);
+            if (gunPitch) gunPitch.rotation.z = 0.07 * Math.sin(gt * 0.55) - 0.02;
+            if (gunBarrelGrp) gunBarrelGrp.position.x = -rec;
+            if (gunMuzzle) { var ms2 = 0.7 + extraModel.gunCharge / 100 * 0.9 + extraModel.gunRecoil * 2.2; gunMuzzle.scale.set(ms2, ms2, ms2); gunMuzzle.rotation.y += dt * 3; }
+            if (gunChargeRing) { gunChargeRing.rotation.x += dt * 2.4; gunChargeRing.rotation.y += dt * 1.3; gunChargeRing.scale.setScalar(0.85 + extraModel.gunCharge / 100 * 0.3); }
+            if (gunFanSpin) gunFanSpin.rotation.z += dt * (2 + model.rpm * 0.08);
+            gunCoils.forEach(function (co, coi) { if (co.material === M.accentGlow) co.scale.setScalar(1 + 0.04 * Math.sin(gt * 6 - coi * 0.7) + extraModel.gunRecoil * 0.12); });
+            gun.position.y = extraModel.gunRecoil > 0.6 ? Math.sin(now * 0.12) * 0.008 : 0;
+          }
           // explode easing toward targets
           SUBS.forEach(function (s) { subLevel[s] += (subTarget[s] - subLevel[s]) * Math.min(1, dt * 5); });
           for (var e = 0; e < explodables.length; e++) {
             var ex = explodables[e], lv = subLevel[ex.sub];
             ex.obj.position.set(ex.base.x + ex.dir.x * ex.dist * lv, ex.base.y + ex.dir.y * ex.dist * lv, ex.base.z + ex.dir.z * ex.dist * lv);
+          }
+          // smooth camera: distance + target height ease toward their goals, so
+          // machine switches glide instead of snapping
+          var camEase = Math.min(1, dt * 4.5);
+          camDistCur += (camDist - camDistCur) * camEase;
+          camTargetY += (camTargetYGoal - camTargetY) * camEase;
+          // machine intro: a short settle-in scale when a machine is switched in
+          if (introT < 1) {
+            introT = Math.min(1, introT + dt * 1.9);
+            var ie = 1 - Math.pow(1 - introT, 3), isc = 0.965 + 0.035 * ie;
+            cat.scale.setScalar(currentMachine === 'cat' ? isc : 1);
+            worm.scale.setScalar(currentMachine === 'worm' ? isc : 1);
+            gun.scale.setScalar(currentMachine === 'gun' ? isc : 1);
           }
           applyCamera();
           renderer.render(scene, camera);
@@ -1256,8 +1566,9 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
           uiAcc += dt; fpsAcc += dt; fpsN++;
           if (uiAcc > 0.05) {
             uiAcc = 0;
-            $('bigRpm').textContent = model.running ? model.rpm : 0;
-            $('bigPhase').textContent = 'φ ' + model.phi.toFixed(1).padStart(5, '0') + '° · GAIT ' + (model.rpm / 60).toFixed(2) + ' Hz' + (model.running ? '' : ' · PAUSED');
+            if (currentMachine === 'gun') { $('bigRpm').textContent = Math.round(extraModel.gunCharge); $('bigPhase').textContent = 'CHARGE ' + Math.round(extraModel.gunCharge) + '% · COILS LIVE' + (extraModel.gunRecoil > 0.3 ? ' · FIRED' : '') + (model.running ? '' : ' · PAUSED'); }
+            else if (currentMachine === 'worm') { $('bigRpm').textContent = model.running ? model.rpm : 0; $('bigPhase').textContent = 'WAVE φ ' + ((extraModel.wormPhase * R2D) % 360).toFixed(1) + '° · 8 SEGMENTS' + (model.running ? '' : ' · PAUSED'); }
+            else { $('bigRpm').textContent = model.running ? model.rpm : 0; $('bigPhase').textContent = 'φ ' + model.phi.toFixed(1).padStart(5, '0') + '° · GAIT ' + (model.rpm / 60).toFixed(2) + ' Hz' + (model.running ? '' : ' · PAUSED'); }
             for (var ci = 0; ci < chartDefs.length; ci++) {
               var cd = chartDefs[ci], val = cd.get();
               cd.hist.push(val); if (cd.hist.length > 240) cd.hist.shift();
@@ -1268,16 +1579,14 @@ PHONE: one screen, no scroll - stable svh sizing, no dvh reflow; on phones the m
               drawChart(cd);
             }
           }
-          if (fpsAcc > 0.5) { fpsShown = Math.round(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0; $('chipFps').innerHTML = 'FPS <b>' + fpsShown + '</b>'; }
+          if (fpsAcc > 0.5) { fpsShown = Math.round(fpsN / fpsAcc); fpsAcc = 0; fpsN = 0; var fc = $('chipFps'); fc.innerHTML = 'FPS <b>' + fpsShown + '</b>'; fc.classList.toggle('warn', fpsShown > 0 && fpsShown < 30); }
         } catch (err) {
           var b = $('errbox'); b.classList.add('on'); b.textContent = 'Render error: ' + err.message;
         }
       }
       requestAnimationFrame(frame);
-      setStress(100); setRpm(55); setSelected('none'); updateZoomFill();
-      // The tour never auto-starts: it used to cycle detach states on load
-      // and fight the user's own taps. Start it from the Replay button.
-      $('footState').textContent = 'solver: live · tour: stopped (manual control)';
+      setStress(100); setRpm(55); setSelected('none');
+      if (!reduceMotion) setTimeout(startTour, 700);
     })();
     </script>
   </body>
