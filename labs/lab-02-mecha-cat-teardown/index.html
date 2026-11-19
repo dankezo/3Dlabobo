@@ -213,8 +213,16 @@
         /* HUD: both columns fully on-stage; left column starts under the
            readout, and compact rails keep both columns clear of the flags */
         .hudcol{ width:132px; max-width:calc(50vw - 14px); gap:5px; }
-        .hudcol.left{ left:8px; top:82px; }
         .hudcol.right{ right:8px; top:8px; }
+        /* Left column drops to a bottom band so the machine is clear: the
+           two charts sit side by side as one-line readouts, the View/Tour
+           buttons share one row underneath. */
+        .hudcol.left{ left:8px; right:8px; top:auto; bottom:8px; width:auto; max-width:none; flex-direction:row; flex-wrap:wrap; }
+        .hudcol.left .chart{ flex:1 1 0; min-width:0; }
+        .hudcol.left .chart canvas{ display:none; }
+        .hudcol.left .rail{ flex:1 1 100%; flex-direction:row; align-items:center; }
+        .hudcol.left .rail .rhead{ display:none; }
+        .hudcol.left .rail button{ flex:1 1 0; width:auto; min-width:0; white-space:nowrap; }
         .chart{ min-width:0; padding:5px 7px 4px; }
         .chart .cname{ min-width:0; flex:1 1 auto; }
         .chart .cval{ flex:0 0 auto; font-size:12px; }
@@ -222,7 +230,8 @@
         .rail{ padding:6px 7px 7px; gap:4px; }
         .rail button{ font-size:10px; padding:4px 5px; }
         .ctl input[type=range]{ height:14px; }
-        .stageflags{ left:8px; bottom:8px; }
+        .stageflags{ left:8px; bottom:76px; }
+        #errbox{ bottom:84px; }
         /* detach frame: wraps onto extra lines inside its margins, every
            subsystem stays visible, nothing past either edge */
         .subbar{ flex-wrap:wrap; overflow-x:hidden; overflow-y:visible; margin:6px 8px 8px; padding:6px 7px; gap:5px; }
@@ -232,7 +241,6 @@
       /* short phone screens: drop the sparklines so the left column still
          clears the bottom-left status flag */
       @media (max-width:640px) and (max-height:640px){
-        .hudcol.left{ top:76px; }
         .chart canvas{ display:none; }
         .rail button{ padding:3px 5px; }
       }
@@ -426,6 +434,13 @@
               <li><b>One row for every model:</b> the big three-button machine block is gone. Machines (Cat / Worm / Gun), the Cat variants (Ceramic / Stealth / Hazard) and the machine name now share the single Model row with the Load button - the row's track scrolls sideways on narrow screens while Load stays pinned at the end. Variant pills only appear for the Cat.</li>
               <li><b>Detach works the obvious way:</b> tap a subsystem button - or tap that part on the 3D model itself - and it detaches. Tap the same part again and it goes back; tap a different part and the detachment switches; tap empty space on the stage and the whole machine reassembles (explode slider returns to 0, toast confirms). Dragging still orbits the camera - only a short, still tap (&lt;10px, &lt;400ms) counts.</li>
               <li><b>Lean detach frame:</b> the subsystem row is now one slim framed strip under the stage with a one-line hint, wrapping inside its margins on phones instead of sliding off-screen.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.8 - phone HUD clears the machine + portrait framing</h3>
+            <ul>
+              <li><b>Left column moves to the bottom on phones:</b> the Servo torque and Foot lift charts sit side by side as one-line readouts (sparklines hidden) and the View/Tour buttons share one row underneath, so no card sits on the machine any more. The ASSEMBLED flag rides just above the band.</li>
+              <li><b>Portrait camera pulls back:</b> the home distance scales with the stage aspect (about 1.25x at a 390px phone, capped at 1.35x), so the whole machine fits with margins. Desktop framing is unchanged, Reset view and R use the same responsive distance, and a manual wheel zoom is never overridden by a resize.</li>
             </ul>
           </div>
           <div class="card">
@@ -1254,6 +1269,17 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       var camYaw = 0.68, camPitch = 0.34, camDist = 5.9;
       var camDistCur = 5.9, camTargetY = 1.12, camTargetYGoal = 1.12, introT = 1;
       var CAM_HOME = { yaw: 0.68, pitch: 0.34, dist: 5.9 };
+      /* Portrait phones frame the machine too tight at the desktop distance,
+         so the HUD columns sit on top of it. Pull the home distance back as
+         the stage narrows: a 390px phone (aspect ~0.73) gets ~1.25x the
+         distance, capped at 1.35x. Desktop (aspect >= 1) is unchanged. */
+      var lastHomeDist = 5.9;
+      function homeDist() {
+        var info = MACHINE_INFO[currentMachine] || MACHINE_INFO.cat;
+        var a = stage.clientWidth / Math.max(1, stage.clientHeight);
+        var f = a >= 1 ? 1 : Math.min(1.35, 1 + (1 - a) * 0.9);
+        return info.camDist * f;
+      }
       function applyCamera() {
         var t = new THREE.Vector3(0, camTargetY, 0);
         camera.position.set(
@@ -1359,7 +1385,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         this.classList.toggle('toggled', !model.running);
       });
       $('btnXray').addEventListener('click', function () { stopTour(); setXray(!xray); });
-      $('btnView').addEventListener('click', function () { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = CAM_HOME.dist; });
+      $('btnView').addEventListener('click', function () { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = homeDist(); lastHomeDist = camDist; });
       $('btnTour').addEventListener('click', function () { startTour(); });
       var subBtns = document.querySelectorAll('#subbar button');
       for (var bi = 0; bi < subBtns.length; bi++) {
@@ -1425,7 +1451,8 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         chartDefs.forEach(function (cd) { cd.hist = []; });
         var vs = $('variantSeg'); if (vs) vs.style.display = key === 'cat' ? '' : 'none';
         var vd = $('variantDiv'); if (vd) vd.style.display = key === 'cat' ? '' : 'none';
-        camDist = info.camDist;
+        camDist = homeDist();
+        lastHomeDist = camDist;
         camTargetYGoal = info.targetY;
         introT = reduceMotion ? 1 : 0;
         setRpm(info.rpm);
@@ -1494,7 +1521,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
           var mk = k === '1' ? 'cat' : (k === '2' ? 'worm' : 'gun');
           if (mk !== currentMachine) { switchMachine(mk); toast('Machine: ' + MACHINE_INFO[mk].name); }
         } else if (k === 'x') { stopTour(); setXray(!xray); }
-        else if (k === 'r') { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = CAM_HOME.dist; camTargetYGoal = MACHINE_INFO[currentMachine].targetY; }
+        else if (k === 'r') { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = homeDist(); lastHomeDist = camDist; camTargetYGoal = MACHINE_INFO[currentMachine].targetY; }
       });
 
       /* ================= TOUR - self-driving, yields to any touch ================= */
@@ -1556,6 +1583,11 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         if (w === 0 || h === 0) return;
         renderer.setSize(w, h, false);
         camera.aspect = w / h; camera.updateProjectionMatrix();
+        /* Re-fit the home distance when the aspect changes (e.g. rotating
+           the phone), but never override a manual wheel zoom. */
+        var hd = homeDist();
+        if (Math.abs(camDist - lastHomeDist) < 0.01) camDist = hd;
+        lastHomeDist = hd;
       }
       window.addEventListener('resize', resize);
       resize();
