@@ -217,7 +217,7 @@
            .console on phones). Stats share one line, drive sliders share
            one row, view/tour buttons share one row - nothing floats over
            the machine any more. */
-        .hud{ position:static; flex:none; display:flex; flex-direction:row; flex-wrap:wrap; gap:6px; padding:8px 8px 0; pointer-events:auto; }
+        .hud{ position:static; flex:none; display:flex; flex-direction:row; flex-wrap:wrap; gap:6px; padding:8px 8px 8px; pointer-events:auto; }
         .hudcol{ display:contents; }
         .hud .chart{ flex:1 1 0; min-width:0; order:1; }
         .hud .chart canvas{ display:none; }
@@ -226,6 +226,10 @@
         .hudcol.right .rail{ order:2; }
         .hudcol.left .rail{ order:3; }
         .hud .rail .ctl{ flex:1 1 0; min-width:0; }
+        /* Rev 3.9.2: the Explode slider's desktop separator (top border +
+           padding) pushed it ~10px lower than the other two sliders in the
+           row. Neutralise it on phones so all three sliders line up. */
+        .hud .rail .ctl.explode{ border-top:0; padding-top:0; margin-top:0; }
         .hudcol.left .rail button{ flex:1 1 0; width:auto; min-width:0; white-space:nowrap; }
         .chart{ min-width:0; padding:5px 7px 4px; }
         .chart .cname{ min-width:0; flex:1 1 auto; }
@@ -236,11 +240,9 @@
         .ctl input[type=range]{ height:14px; }
         .stageflags{ left:8px; bottom:8px; }
         #toast{ top:10px; bottom:auto; }
-        /* detach frame: wraps onto extra lines inside its margins, every
-           subsystem stays visible, nothing past either edge */
-        .subbar{ flex-wrap:wrap; overflow-x:hidden; overflow-y:visible; margin:6px 8px 8px; padding:6px 7px; gap:5px; }
-        .subbar .lbl{ margin-right:0; }
-        .subbar button{ font-size:11px; padding:5px 9px; }
+        /* Rev 3.9.2: no detach bar on phones - parts detach by tapping them
+           directly on the model, and tapping empty stage reassembles. */
+        .subbar{ display:none; }
       }
       /* short phone screens: drop the sparklines so the left column still
          clears the bottom-left status flag */
@@ -258,7 +260,7 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.9.1</b></span>
+          <span class="chip opt">REV <b>3.9.2</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
@@ -461,6 +463,13 @@
               <li><b>Root cause:</b> the deck move in 3.9 inserted #hud into the wrong parent - it called <span class="mono">consoleCard.parentNode.insertBefore(hud, subbar)</span>, but #subbar is a direct child of #consoleCard, not of .wrap. That threw NotFoundError at load, the script died before the first frame, and the phone showed a blank stage, 0 RPM, no FPS, and the deck rows overlapping the detach bar (the HUD never moved, so it overflowed the stage on top of it).</li>
               <li><b>Fix:</b> insert into #consoleCard itself - <span class="mono">consoleCard.insertBefore(hud, subbar)</span>. One line. The deck now lands as a proper flex item between the stage and the detach bar, and the tour-stop backstop on #consoleCard covers deck taps too.</li>
               <li><b>Lesson:</b> a node move must be checked against the real DOM parentage before pushing - the projection math was right, but the move itself was never verified against the HTML.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.9.2 - sliders aligned, detach bar off phones</h3>
+            <ul>
+              <li><b>Sliders aligned:</b> the Explode slider carried a desktop separator (top border + 7px padding + 2px margin) that pushed it about 10px lower than the other two sliders in the phone row. The separator is neutralised on phones, so all three sliders line up.</li>
+              <li><b>Detach bar removed on phones:</b> the Detach bar is gone from the phone layout - parts detach by tapping them directly on the model, and tapping empty stage reassembles. The ASSEMBLED / EXPLODED flag on the stage still shows the state, and the tour skips its cursor move for hidden targets instead of pointing at nothing. Desktop keeps the bar.</li>
             </ul>
           </div>
           <div class="card">
@@ -1555,6 +1564,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       function moveCursorTo(el, cb) {
         if (!el) { if (cb) cb(); return; }
         var cr = card.getBoundingClientRect(), r = el.getBoundingClientRect();
+        if (r.width === 0) { if (cb) cb(); return; } /* target hidden on this screen (detach bar on phones) - act without the cursor */
         cursor.style.left = (r.left - cr.left + r.width / 2) + 'px';
         cursor.style.top = (r.top - cr.top + r.height / 2) + 'px';
         cursor.classList.add('on');
