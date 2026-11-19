@@ -51,6 +51,21 @@ Contrast (computed 2026-11-19): lime #9FE035 on #080A0D = 12.45:1, muted #A3ABA4
 - No tilt, no sparks, no canvas, no JavaScript on the hub at all (static redirect page).
 - `prefers-reduced-motion`: all animation and transitions off, hover lift off.
 
+## Hero video
+
+- Files: `assets/hero-workshop-press.mp4` (1280x720, 10s, h264, no audio track, 4.4 MB) + poster `assets/hero-workshop-press-poster.jpg` (frame at 1s, 78 KB).
+- Generated 2026-11-19: hydraulic press flattening a translucent jelly cat in a dark 3D workshop, lime rim light, blurred background. Chosen by the user for the hero; the mecha variant ships on the Lab 02 tile (see Tile videos).
+- Behaviour: autoplay, muted, loop, playsinline, no sound. Video loads only on desktop (`<source media="(min-width: 861px)">`); phone shows the blurred poster still. CSS blur 3px + scale 1.06 + flat dark veil rgba(8,10,13,.62) so hero text stays readable. prefers-reduced-motion hides the video entirely.
+- Loop is a forward replay: press flattens the cat, the video ends with the cat re-inflated, so the loop cut is small. The dark veil + blur soften it further; it reads as a workshop replay.
+- Binary files: push-files rejects binaries, so the mp4 + poster go up through the browser web-UI upload, index.html through push-files. Never include the unused mecha video in a push.
+
+## Tile videos
+
+- Lab 01 tile: same `assets/hero-workshop-press.mp4` + poster (reused, one download serves hero + tile). Lab 02 tile: `assets/hero-workshop-mecha.mp4` (1280x720, 10s, h264, no audio, 3.7 MB) + poster `assets/hero-workshop-mecha-poster.jpg`.
+- Mecha video generated 2026-11-19: angular mecha cat with wedge-prism head on a workbench in a dark 3D workshop, lime circuit lines, slow camera drift, blurred background. Red eyes are the cat's own accent.
+- Behaviour: same as hero video (autoplay, muted, loop, playsinline, desktop-only via `<source media="(min-width: 861px)">`, poster still on phone, hidden under prefers-reduced-motion). No blur on tile videos - they are the illustration, sharp; flat dark veil rgba(8,10,13,.45) keeps the big value + spec line readable. Typographic value + LIVE pill + LAB code stay on top of the video.
+- Real gameplay GIFs still replace these AI videos when the user's 3-5s clips arrive (LosslessCut trim + Real-ESRGAN upscale).
+
 ## Rules (house)
 
 - Short hyphens only (-), never long dashes. One accent (lime), one grey family, one icon treatment (text arrows `->`, no icon set needed).

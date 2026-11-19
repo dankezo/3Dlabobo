@@ -80,7 +80,13 @@
   .wrap{max-width:1440px;margin:0 auto;padding:0 24px 48px}
 
   /* ---------- Hero ---------- */
-  .hero{padding:72px 0 40px;animation:heroIn .2s var(--ease)}
+  .hero{position:relative;overflow:hidden;background:var(--bg);padding:72px 0 40px;animation:heroIn .2s var(--ease)}
+  .hero-video{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    filter:blur(3px);transform:scale(1.06);pointer-events:none;
+  }
+  .hero-veil{position:absolute;inset:0;background:rgba(8,10,13,.62);pointer-events:none}
+  .hero-in{position:relative;z-index:1}
   @keyframes heroIn{from{opacity:0}to{opacity:1}}
   .kicker{
     font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;
@@ -128,6 +134,8 @@
     aspect-ratio:16/8.4;overflow:hidden;padding:20px 22px;
     display:flex;flex-direction:column;justify-content:flex-end;
   }
+  .tile-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none}
+  .tile-veil{position:absolute;inset:0;background:rgba(8,10,13,.45);z-index:1;pointer-events:none}
   .tile-live{
     position:absolute;top:12px;left:12px;z-index:2;display:inline-flex;align-items:center;gap:7px;
     font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.1em;
@@ -204,6 +212,8 @@
   }
   @media (prefers-reduced-motion: reduce){
     .hero{animation:none}
+    .hero-video{display:none}
+    .tile-video{display:none}
     .tile{transition:none}
     nav a{transition:none}
     .tile:hover{transform:none}
@@ -228,6 +238,11 @@
 
   <!-- ======= HERO ======= -->
   <section class="hero">
+    <video class="hero-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-workshop-press-poster.jpg" aria-hidden="true" tabindex="-1">
+      <source src="assets/hero-workshop-press.mp4" type="video/mp4" media="(min-width: 861px)" />
+    </video>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="hero-in">
     <p class="kicker">Section 01 // Interactive 3D Lab</p>
     <h1>3D Lab<span>On Deck</span></h1>
     <p>Hai lab 3D chạy thật trên trình duyệt. Không cài đặt, mở là chơi.</p>
@@ -235,6 +250,7 @@
       <div class="stat"><b>02</b><span>Lab đang mở - Open labs</span></div>
       <div class="stat"><b>400</b><span>Bar - Áp ép tối đa - Max press</span></div>
       <div class="stat"><b>3.7</b><span>Rev - Bản mecha mới nhất - Latest mecha</span></div>
+    </div>
     </div>
   </section>
 
@@ -246,9 +262,13 @@
 
   <main class="tiles" id="labs">
 
-    <!-- GIF SLOT: replace .tile-art content with a real gameplay GIF when the 3-5s clips arrive (LosslessCut trim + Real-ESRGAN upscale). Keep LIVE pill + LAB / 01. -->
+    <!-- VIDEO SLOT: AI workshop video in place (press). Swap for a real gameplay GIF when the 3-5s clips arrive (LosslessCut trim + Real-ESRGAN upscale). Keep LIVE pill + LAB / 01. -->
     <a class="tile" href="https://3dlabobo.dannyphan.me/labs/lab-01-cat-jelly-press/press.html" target="_blank" rel="noopener noreferrer" aria-label="Mở Cat Jelly Press - Open Cat Jelly Press">
       <div class="tile-art" aria-hidden="true">
+        <video class="tile-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-workshop-press-poster.jpg" aria-hidden="true" tabindex="-1">
+          <source src="assets/hero-workshop-press.mp4" type="video/mp4" media="(min-width: 861px)" />
+        </video>
+        <div class="tile-veil" aria-hidden="true"></div>
         <span class="tile-live"><i></i>LIVE</span>
         <span class="tile-num">LAB / 01</span>
         <span class="tile-giant">01</span>
@@ -267,9 +287,13 @@
       </div>
     </a>
 
-    <!-- GIF SLOT: replace .tile-art content with a real gameplay GIF when the 3-5s clips arrive (LosslessCut trim + Real-ESRGAN upscale). Keep LIVE pill + LAB / 02. -->
+    <!-- VIDEO SLOT: AI workshop video in place (mecha). Swap for a real gameplay GIF when the 3-5s clips arrive (LosslessCut trim + Real-ESRGAN upscale). Keep LIVE pill + LAB / 02. -->
     <a class="tile" href="https://3dlabobo.dannyphan.me/labs/lab-02-mecha-cat-teardown/" target="_blank" rel="noopener noreferrer" aria-label="Mở Mecha Cat Teardown - Open Mecha Cat Teardown">
       <div class="tile-art" aria-hidden="true">
+        <video class="tile-video" autoplay muted loop playsinline preload="metadata" poster="assets/hero-workshop-mecha-poster.jpg" aria-hidden="true" tabindex="-1">
+          <source src="assets/hero-workshop-mecha.mp4" type="video/mp4" media="(min-width: 861px)" />
+        </video>
+        <div class="tile-veil" aria-hidden="true"></div>
         <span class="tile-live"><i></i>LIVE</span>
         <span class="tile-num">LAB / 02</span>
         <span class="tile-giant">02</span>
