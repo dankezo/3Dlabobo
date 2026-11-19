@@ -1,17 +1,17 @@
 # 🔬 3D Lab
 
-> Phòng lab mô phỏng máy 3D tương tác, tháo rời được từng bộ phận. Vật lý thật, tháo máy thật, không cần build.
+> Thư viện mã nguồn mở thử nghiệm 3D và motion của Danny.
 
 [English](README.md) | **Tiếng Việt** | [中文](README.zh-CN.md) | [Español](README.es.md) | [Русский](README.ru.md)
 
-[![Live](https://img.shields.io/badge/Live-3D_Lab-brightgreen?style=flat-square)](https://dankezo.github.io/3Dlabobo/)
+[![Live](https://img.shields.io/badge/Live-3D_Lab-brightgreen?style=flat-square)](https://3dlabobo.dannyphan.me/)
 [![Three.js](https://img.shields.io/badge/Three.js-r128-black?style=flat-square&logo=threedotjs)](https://threejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/dankezo/3Dlabobo?style=flat-square)](https://github.com/dankezo/3Dlabobo/stargazers)
 
 ## 🌐 Xem trực tiếp
 
-**https://dankezo.github.io/3Dlabobo/**
+**https://3dlabobo.dannyphan.me/**
 
 Mở lên và chọn một lab. Không cần cài đặt, không cần build, không cần tài khoản. Chạy tốt trên cả máy tính và điện thoại.
 
@@ -19,8 +19,8 @@ Mở lên và chọn một lab. Không cần cài đặt, không cần build, kh
 
 | Lab | Nội dung | Chơi thử |
 | --- | --- | --- |
-| **Lab 01 - Máy ép mèo thạch** | Máy ép thủy lực ép mèo thạch. Giữ để ép tới 400 bar, mèo bẹp dần, nứt rồi vỡ thành mảnh vụn riêng theo từng vật liệu. 7 vật liệu, vật phẩm hiếm khi Gen (phân, dưa hấu, Chii, máy ép mini, bom), va chạm và xếp chồng thật. | [Mở Lab 01](https://dankezo.github.io/3Dlabobo/labs/lab-01-cat-jelly-press/press.html) |
-| **Lab 02 - Tháo rời mèo mecha** | Mèo mecha 3D dựng bằng Three.js, chạy bằng một solver duy nhất (pha trục khuỷu, dáng đi trot, chân IK 2 khớp). Tháo rời từng hệ thống - đầu, lõi năng lượng, khung gầm, đuôi, bốn chân - kèm biểu đồ trực tiếp, chế độ X-Ray, xem tách rời và tour tự chạy. 3 cấu hình máy: Ceramic, Stealth, Hazard. | [Mở Lab 02](https://dankezo.github.io/3Dlabobo/labs/lab-02-mecha-cat-teardown/) |
+| **Lab 01 - Máy ép mèo thạch** | Máy ép thủy lực ép mèo thạch. Giữ để ép tới 400 bar, mèo bẹp dần, nứt rồi vỡ thành mảnh vụn riêng theo từng vật liệu. 7 vật liệu, vật phẩm hiếm khi Gen (phân, dưa hấu, Chii, máy ép mini, bom), va chạm và xếp chồng thật. | [Mở Lab 01](https://3dlabobo.dannyphan.me/labs/lab-01-cat-jelly-press/press.html) |
+| **Lab 02 - Tháo rời mèo mecha** | Mèo mecha 3D dựng bằng Three.js, chạy bằng một solver duy nhất (pha trục khuỷu, dáng đi trot, chân IK 2 khớp). Tháo rời từng hệ thống - đầu, lõi năng lượng, khung gầm, đuôi, bốn chân - kèm biểu đồ trực tiếp, chế độ X-Ray, xem tách rời và tour tự chạy. 3 cấu hình máy: Ceramic, Stealth, Hazard. | [Mở Lab 02](https://3dlabobo.dannyphan.me/labs/lab-02-mecha-cat-teardown/) |
 
 Mã nguồn Lab 01: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Mã nguồn Lab 02: repo này.
 
@@ -53,9 +53,11 @@ Mỗi lab đều có tài liệu đầy đủ, master prompt và danh sách côn
 3Dlabobo/
 ├── index.html                       # Hub - 2 ô redirect, Lab 01 + Lab 02
 ├── labs/
-│   ├── lab-01-cat-jelly-press/      # Máy ép mèo thạch (index.html + press.html)
-│   └── lab-02-mecha-cat-teardown/   # Tháo rời mèo mecha
+│   ├── lab-01-cat-jelly-press/      # Máy ép mèo thạch (press.html + README.md)
+│   └── lab-02-mecha-cat-teardown/   # Tháo rời mèo mecha (index.html + README.md + docs/)
+├── WORKFLOW-lab2-mecha-cat-teardown.md  # Quy trình 9 bước dựng Lab 02
 ├── trials.html                      # Model thử nghiệm (Rồng, Sâu cát, Súng laser, Mega Poro)
+├── DESIGN.md                        # Hệ thống thiết kế của hub
 ├── LICENSE
 └── README.md
 ```
