@@ -212,16 +212,20 @@
         .bignum .phase{ font-size:10px; }
         /* HUD: both columns fully on-stage; left column starts under the
            readout, and compact rails keep both columns clear of the flags */
-        .hudcol{ width:132px; max-width:calc(50vw - 14px); gap:5px; }
         .hudcol.right{ right:8px; top:8px; }
-        /* Left column drops to a bottom band so the machine is clear: the
-           two charts sit side by side as one-line readouts, the View/Tour
-           buttons share one row underneath. */
-        .hudcol.left{ left:8px; right:8px; top:auto; bottom:8px; width:auto; max-width:none; flex-direction:row; flex-wrap:wrap; }
-        .hudcol.left .chart{ flex:1 1 0; min-width:0; }
-        .hudcol.left .chart canvas{ display:none; }
-        .hudcol.left .rail{ flex:1 1 100%; flex-direction:row; align-items:center; }
-        .hudcol.left .rail .rhead{ display:none; }
+        /* Rev 3.9: the HUD is a deck below the stage (JS moves #hud under
+           .console on phones). Stats share one line, drive sliders share
+           one row, view/tour buttons share one row - nothing floats over
+           the machine any more. */
+        .hud{ position:static; display:flex; flex-direction:row; flex-wrap:wrap; gap:6px; padding:8px 8px 0; pointer-events:auto; }
+        .hudcol{ display:contents; }
+        .hud .chart{ flex:1 1 0; min-width:0; order:1; }
+        .hud .chart canvas{ display:none; }
+        .hud .rail{ flex:1 1 100%; flex-direction:row; align-items:center; }
+        .hud .rail .rhead{ display:none; }
+        .hudcol.right .rail{ order:2; }
+        .hudcol.left .rail{ order:3; }
+        .hud .rail .ctl{ flex:1 1 0; min-width:0; }
         .hudcol.left .rail button{ flex:1 1 0; width:auto; min-width:0; white-space:nowrap; }
         .chart{ min-width:0; padding:5px 7px 4px; }
         .chart .cname{ min-width:0; flex:1 1 auto; }
@@ -230,8 +234,8 @@
         .rail{ padding:6px 7px 7px; gap:4px; }
         .rail button{ font-size:10px; padding:4px 5px; }
         .ctl input[type=range]{ height:14px; }
-        .stageflags{ left:8px; bottom:76px; }
-        #errbox{ bottom:84px; }
+        .stageflags{ left:8px; bottom:8px; }
+        #toast{ top:10px; bottom:auto; }
         /* detach frame: wraps onto extra lines inside its margins, every
            subsystem stays visible, nothing past either edge */
         .subbar{ flex-wrap:wrap; overflow-x:hidden; overflow-y:visible; margin:6px 8px 8px; padding:6px 7px; gap:5px; }
@@ -254,7 +258,7 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.7 · LEAN</b></span>
+          <span class="chip opt">REV <b>3.9</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
@@ -291,7 +295,7 @@
             <span class="flag" id="flagMode">ASSEMBLED</span>
             <span class="flag hot" id="flagHot">⚠ OVER-LIMIT - STRESS TEST</span>
           </div>
-          <div class="hud" aria-label="Live metrics">
+          <div class="hud" id="hud" aria-label="Live metrics">
             <div class="hudcol left">
               <div class="chart"><div class="chead"><span class="cname" id="nameTorque">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
               <div class="chart"><div class="chead"><span class="cname" id="nameLift">Foot lift · FL</span><span class="cval" id="vLift">0 <small>mm</small></span></div><canvas id="chLift" width="260" height="44"></canvas><div class="cmm"><span id="mmLiftMin">min 0</span><span id="mmLiftMax">max 0</span></div></div>
@@ -441,6 +445,14 @@
             <ul>
               <li><b>Left column moves to the bottom on phones:</b> the Servo torque and Foot lift charts sit side by side as one-line readouts (sparklines hidden) and the View/Tour buttons share one row underneath, so no card sits on the machine any more. The ASSEMBLED flag rides just above the band.</li>
               <li><b>Portrait camera pulls back:</b> the home distance scales with the stage aspect (about 1.25x at a 390px phone, capped at 1.35x), so the whole machine fits with margins. Desktop framing is unchanged, Reset view and R use the same responsive distance, and a manual wheel zoom is never overridden by a resize.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.9 - clean phone deck, nothing over the machine</h3>
+            <ul>
+              <li><b>HUD below the stage on phones:</b> the whole floating HUD (all four charts, both control rails) moves under the stage as a tidy deck - stats share one line, drive sliders share one row, view/tour buttons share one row. The stage shows only the machine and the big RPM readout. Desktop is unchanged.</li>
+              <li><b>Camera fits the machine:</b> the portrait home distance is now a real fit - the farthest point (the cat's nose, about 2.13 from the look target) clears the frame with a margin, scaled per machine. Reset view and R use the same fit, and a manual wheel zoom is never overridden by a resize.</li>
+              <li><b>Toast moves to the top:</b> the feedback toast no longer sits over the machine's legs on phones.</li>
             </ul>
           </div>
           <div class="card">
@@ -1270,15 +1282,17 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       var camDistCur = 5.9, camTargetY = 1.12, camTargetYGoal = 1.12, introT = 1;
       var CAM_HOME = { yaw: 0.68, pitch: 0.34, dist: 5.9 };
       /* Portrait phones frame the machine too tight at the desktop distance,
-         so the HUD columns sit on top of it. Pull the home distance back as
-         the stage narrows: a 390px phone (aspect ~0.73) gets ~1.25x the
-         distance, capped at 1.35x. Desktop (aspect >= 1) is unchanged. */
+         so the HUD used to sit on top of it. Fit the whole machine inside
+         a narrow stage: the farthest point (the cat's nose, about 2.13 from
+         the look target) must clear the frame with a margin, scaled by each
+         machine's own base distance. On a wide desktop stage the fit is
+         smaller than the base distance, so desktop framing is unchanged. */
       var lastHomeDist = 5.9;
       function homeDist() {
         var info = MACHINE_INFO[currentMachine] || MACHINE_INFO.cat;
         var a = stage.clientWidth / Math.max(1, stage.clientHeight);
-        var f = a >= 1 ? 1 : Math.min(1.35, 1 + (1 - a) * 0.9);
-        return info.camDist * f;
+        var fit = (2.13 / (Math.tan(19 * Math.PI / 180) * a)) * 1.15 * (info.camDist / 5.9);
+        return Math.max(info.camDist, fit);
       }
       function applyCamera() {
         var t = new THREE.Vector3(0, camTargetY, 0);
@@ -1577,8 +1591,21 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       // Any interaction anywhere on the console stops the tour (canvas + buttons handled above too)
       card.addEventListener('pointerdown', function (e) { if (tour.active && e.target !== cvs) stopTour(); }, true);
 
+      /* Rev 3.9: on phones the HUD is a deck below the stage, not an overlay.
+         Move the #hud node under .console (before the detach bar) when the
+         stage is narrow, and back inside #stage on desktop. Moving the node
+         keeps every listener and canvas state - nothing is re-created. */
+      var hudEl = $('hud'), subbarEl = $('subbar');
+      var hudDocked = true;
+      function placeHud() {
+        var phone = stage.clientWidth <= 640;
+        if (phone && hudDocked) { $('consoleCard').parentNode.insertBefore(hudEl, subbarEl); hudDocked = false; }
+        else if (!phone && !hudDocked) { stage.appendChild(hudEl); hudDocked = true; }
+      }
+
       /* ================= MAIN LOOP ================= */
       function resize() {
+        placeHud();
         var w = stage.clientWidth, h = stage.clientHeight;
         if (w === 0 || h === 0) return;
         renderer.setSize(w, h, false);
