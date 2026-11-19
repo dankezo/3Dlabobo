@@ -217,7 +217,7 @@
            .console on phones). Stats share one line, drive sliders share
            one row, view/tour buttons share one row - nothing floats over
            the machine any more. */
-        .hud{ position:static; display:flex; flex-direction:row; flex-wrap:wrap; gap:6px; padding:8px 8px 0; pointer-events:auto; }
+        .hud{ position:static; flex:none; display:flex; flex-direction:row; flex-wrap:wrap; gap:6px; padding:8px 8px 0; pointer-events:auto; }
         .hudcol{ display:contents; }
         .hud .chart{ flex:1 1 0; min-width:0; order:1; }
         .hud .chart canvas{ display:none; }
@@ -258,7 +258,7 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.9</b></span>
+          <span class="chip opt">REV <b>3.9.1</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
@@ -453,6 +453,14 @@
               <li><b>HUD below the stage on phones:</b> the whole floating HUD (all four charts, both control rails) moves under the stage as a tidy deck - stats share one line, drive sliders share one row, view/tour buttons share one row. The stage shows only the machine and the big RPM readout. Desktop is unchanged.</li>
               <li><b>Camera fits the machine:</b> the portrait home distance is now a real fit - the farthest point (the cat's nose, about 2.13 from the look target) clears the frame with a margin, scaled per machine. Reset view and R use the same fit, and a manual wheel zoom is never overridden by a resize.</li>
               <li><b>Toast moves to the top:</b> the feedback toast no longer sits over the machine's legs on phones.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.9.1 - one-line fix, 3.9 crashed on phones</h3>
+            <ul>
+              <li><b>Root cause:</b> the deck move in 3.9 inserted #hud into the wrong parent - it called <span class="mono">consoleCard.parentNode.insertBefore(hud, subbar)</span>, but #subbar is a direct child of #consoleCard, not of .wrap. That threw NotFoundError at load, the script died before the first frame, and the phone showed a blank stage, 0 RPM, no FPS, and the deck rows overlapping the detach bar (the HUD never moved, so it overflowed the stage on top of it).</li>
+              <li><b>Fix:</b> insert into #consoleCard itself - <span class="mono">consoleCard.insertBefore(hud, subbar)</span>. One line. The deck now lands as a proper flex item between the stage and the detach bar, and the tour-stop backstop on #consoleCard covers deck taps too.</li>
+              <li><b>Lesson:</b> a node move must be checked against the real DOM parentage before pushing - the projection math was right, but the move itself was never verified against the HTML.</li>
             </ul>
           </div>
           <div class="card">
@@ -1594,12 +1602,15 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       /* Rev 3.9: on phones the HUD is a deck below the stage, not an overlay.
          Move the #hud node under .console (before the detach bar) when the
          stage is narrow, and back inside #stage on desktop. Moving the node
-         keeps every listener and canvas state - nothing is re-created. */
+         keeps every listener and canvas state - nothing is re-created.
+         Rev 3.9.1 fix: #subbar is a direct child of #consoleCard, so insert
+         into #consoleCard itself - inserting into its parent (.wrap) threw
+         NotFoundError at load and killed the whole page on phones. */
       var hudEl = $('hud'), subbarEl = $('subbar');
       var hudDocked = true;
       function placeHud() {
         var phone = stage.clientWidth <= 640;
-        if (phone && hudDocked) { $('consoleCard').parentNode.insertBefore(hudEl, subbarEl); hudDocked = false; }
+        if (phone && hudDocked) { $('consoleCard').insertBefore(hudEl, subbarEl); hudDocked = false; }
         else if (!phone && !hudDocked) { stage.appendChild(hudEl); hudDocked = true; }
       }
 
