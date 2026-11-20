@@ -24,8 +24,9 @@ Open it and pick a lab. No install, no build, no account. Works on desktop and p
 | **Lab 03 - Lightwater World** | Procedural WebGPU underwater world, forked from Noniv/abyssal-garden (MIT). Swim third-person as a gold fish with a glowing stripe, meet glowing jellyfish, an 8-segment mecha worm and new fish schools in bright aqua water. No engine, no model files. | [Open Lab 03](https://dankezo.github.io/lightwaterworld/) |
 | **Lab 04 - Rental Cat POV** | 20-second cat-eye short film in C++ and Metal, raw fork of rockeymen/rental-cat-pov, unmodified: a cat bats a yarn ball, stalks a goldfish, then naps on the sofa. Mac-only. | [Open Lab 04](https://github.com/dankezo/rental-cat-pov) |
 | **Lab 05 - Papertrails** | Endless papercraft pop-up world by Shikhar (@xikhar): flat paper tiles fold up ahead of you as you walk and fold flat behind. Built with Fable 5.2 and Opus 5.5, runs in the browser with three.js. MIT, reference only - not our repo. | [Open Lab 05](https://xikhar.github.io/papertrails/) |
+| **Lab 06 - Hanoi 3D** | Pop-up paper Hanoi, fork of xikhar/papertrails (MIT). Walk a fixed 40x40 paper map with 10 landmarks - Hoan Kiem Lake, Ngoc Son Temple, West Lake, Old Quarter, Mausoleum, Temple of Literature, One Pillar Pagoda, St. Joseph's Cathedral, Opera House, Long Bien Bridge - with a discovery checklist, toast and minimap. Open with `?map=hanoi`. | [Open Lab 06](https://dankezo.github.io/hanoi-3d/?map=hanoi) |
 
-Lab 01 source: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Lab 02 source: this repo. Lab 03 source: [dankezo/lightwaterworld](https://github.com/dankezo/lightwaterworld). Lab 04 source: [dankezo/rental-cat-pov](https://github.com/dankezo/rental-cat-pov) (raw fork). Lab 05 source: [xikhar/papertrails](https://github.com/xikhar/papertrails) (reference, MIT).
+Lab 01 source: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Lab 02 source: this repo. Lab 03 source: [dankezo/lightwaterworld](https://github.com/dankezo/lightwaterworld). Lab 04 source: [dankezo/rental-cat-pov](https://github.com/dankezo/rental-cat-pov) (raw fork). Lab 05 source: [xikhar/papertrails](https://github.com/xikhar/papertrails) (reference, MIT). Lab 06 source: [dankezo/hanoi-3d](https://github.com/dankezo/hanoi-3d) (fork of Papertrails, MIT).
 
 ## ✨ Why it is fun
 
@@ -54,7 +55,7 @@ Every lab ships with full documentation, a master prompt, and a required tools /
 
 ```
 3Dlabobo/
-├── index.html                       # Hub - 5 redirect tiles, Lab 01 + Lab 02 + Lab 03 + Lab 04 + Lab 05
+├── index.html                       # Hub - 6 redirect tiles, Lab 01 + Lab 02 + Lab 03 + Lab 04 + Lab 05 + Lab 06
 ├── labs/
 │   ├── lab-01-cat-jelly-press/      # Cat Jelly Press (press.html + README.md)
 │   └── lab-02-mecha-cat-teardown/   # Mecha Cat Teardown (index.html + README.md + docs/)
