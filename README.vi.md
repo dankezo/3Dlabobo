@@ -21,8 +21,9 @@ Mở lên và chọn một lab. Không cần cài đặt, không cần build, kh
 | --- | --- | --- |
 | **Lab 01 - Máy ép mèo thạch** | Máy ép thủy lực ép mèo thạch. Giữ để ép tới 400 bar, mèo bẹp dần, nứt rồi vỡ thành mảnh vụn riêng theo từng vật liệu. 7 vật liệu, vật phẩm hiếm khi Gen (phân, dưa hấu, Chii, máy ép mini, bom), va chạm và xếp chồng thật. | [Mở Lab 01](https://3dlabobo.dannyphan.me/labs/lab-01-cat-jelly-press/press.html) |
 | **Lab 02 - Tháo rời mèo mecha** | Mèo mecha 3D dựng bằng Three.js, chạy bằng một solver duy nhất (pha trục khuỷu, dáng đi trot, chân IK 2 khớp). Tháo rời từng hệ thống - đầu, lõi năng lượng, khung gầm, đuôi, bốn chân - kèm biểu đồ trực tiếp, chế độ X-Ray, xem tách rời và tour tự chạy. 3 cấu hình máy: Ceramic, Stealth, Hazard. | [Mở Lab 02](https://3dlabobo.dannyphan.me/labs/lab-02-mecha-cat-teardown/) |
+| **Lab 03 - Lightwater World** | Thế giới dưới nước WebGPU dựng bằng code, fork từ Noniv/abyssal-garden (MIT). Bơi third-person trong vai cá vàng có sọc sáng, gặp sứa phát sáng, worm mecha 8 đốt và đàn cá mới trong nước xanh ngọc sáng. Không engine, không file model. | [Mở Lab 03](https://dankezo.github.io/lightwaterworld/) |
 
-Mã nguồn Lab 01: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Mã nguồn Lab 02: repo này.
+Mã nguồn Lab 01: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Mã nguồn Lab 02: repo này. Mã nguồn Lab 03: [dankezo/lightwaterworld](https://github.com/dankezo/lightwaterworld).
 
 ## ✨ Điểm hay
 
@@ -51,7 +52,7 @@ Mỗi lab đều có tài liệu đầy đủ, master prompt và danh sách côn
 
 ```
 3Dlabobo/
-├── index.html                       # Hub - 2 ô redirect, Lab 01 + Lab 02
+├── index.html                       # Hub - 3 ô redirect, Lab 01 + Lab 02 + Lab 03
 ├── labs/
 │   ├── lab-01-cat-jelly-press/      # Máy ép mèo thạch (press.html + README.md)
 │   └── lab-02-mecha-cat-teardown/   # Tháo rời mèo mecha (index.html + README.md + docs/)

@@ -21,8 +21,9 @@ Open it and pick a lab. No install, no build, no account. Works on desktop and p
 | --- | --- | --- |
 | **Lab 01 - Cat Jelly Press** | Hydraulic press for jelly cats. Hold to press up to 400 bar, cats flatten, crack and burst into material-specific debris. 7 materials, rare Gen objects (poop, watermelon, Chii, mini press, bomb), real collision and stacking. | [Open Lab 01](https://3dlabobo.dannyphan.me/labs/lab-01-cat-jelly-press/press.html) |
 | **Lab 02 - Mecha Cat Teardown** | Procedural Three.js mecha cat driven by one solver (crank phase, trot gait, 2-bone IK legs). Take it apart subsystem by subsystem - head, energy core, chassis, tail, four legs - with live charts, X-Ray and exploded views, and a self-driving tour. 3 machine configs: Ceramic, Stealth, Hazard. | [Open Lab 02](https://3dlabobo.dannyphan.me/labs/lab-02-mecha-cat-teardown/) |
+| **Lab 03 - Lightwater World** | Procedural WebGPU underwater world, forked from Noniv/abyssal-garden (MIT). Swim third-person as a gold fish with a glowing stripe, meet glowing jellyfish, an 8-segment mecha worm and new fish schools in bright aqua water. No engine, no model files. | [Open Lab 03](https://dankezo.github.io/lightwaterworld/) |
 
-Lab 01 source: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Lab 02 source: this repo.
+Lab 01 source: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Lab 02 source: this repo. Lab 03 source: [dankezo/lightwaterworld](https://github.com/dankezo/lightwaterworld).
 
 ## ✨ Why it is fun
 
@@ -51,7 +52,7 @@ Every lab ships with full documentation, a master prompt, and a required tools /
 
 ```
 3Dlabobo/
-├── index.html                       # Hub - 2 redirect tiles, Lab 01 + Lab 02
+├── index.html                       # Hub - 3 redirect tiles, Lab 01 + Lab 02 + Lab 03
 ├── labs/
 │   ├── lab-01-cat-jelly-press/      # Cat Jelly Press (press.html + README.md)
 │   └── lab-02-mecha-cat-teardown/   # Mecha Cat Teardown (index.html + README.md + docs/)
