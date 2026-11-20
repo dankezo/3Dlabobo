@@ -5,7 +5,7 @@
 **English** | [Tiếng Việt](#tiếng-việt)
 
 [![Live](https://img.shields.io/badge/Live-Cat_Jelly_Press-brightgreen?style=flat-square)](https://3dlabobo.dannyphan.me/labs/lab-01-cat-jelly-press/press.html)
-[![Three.js](https://img.shields.io/badge/Three.js-r128-black?style=flat-square&logo=threedotjs)](https://threejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-r160-black?style=flat-square&logo=threedotjs)](https://threejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](../../LICENSE)
 
 ## Live demo
@@ -59,7 +59,7 @@ Open `press.html` in a browser (WebGL). Or serve the folder with any static serv
 
 ### Tech
 
-Three.js (r128, CDN) - vanilla JavaScript - single-file HTML - GitHub Pages.
+Three.js r160 (inlined, no CDN) - vanilla JavaScript - single-file HTML - WebGL + Canvas 2D - WebAudio - GitHub Pages.
 
 ### Source
 
@@ -114,7 +114,7 @@ Mở `press.html` bằng trình duyệt (WebGL). Hoặc chạy thư mục này b
 
 ### Công nghệ
 
-Three.js (r128, CDN) - JavaScript thuần - một file HTML - GitHub Pages.
+Three.js r160 (nhúng sẵn, không CDN) - JavaScript thuần - một file HTML - WebGL + Canvas 2D - WebAudio - GitHub Pages.
 
 ### Mã nguồn
 

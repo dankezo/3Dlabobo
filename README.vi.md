@@ -5,7 +5,7 @@
 [English](README.md) | **Tiếng Việt** | [中文](README.zh-CN.md) | [Español](README.es.md) | [Русский](README.ru.md)
 
 [![Live](https://img.shields.io/badge/Live-3D_Lab-brightgreen?style=flat-square)](https://3dlabobo.dannyphan.me/)
-[![Three.js](https://img.shields.io/badge/Three.js-r128-black?style=flat-square&logo=threedotjs)](https://threejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-black?style=flat-square&logo=threedotjs)](https://threejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 [![Stars](https://img.shields.io/github/stars/dankezo/3Dlabobo?style=flat-square)](https://github.com/dankezo/3Dlabobo/stargazers)
 
@@ -64,7 +64,7 @@ Mỗi lab đều có tài liệu đầy đủ, master prompt và danh sách côn
 
 ## 🛠 Công nghệ
 
-Three.js (r128, CDN) - JavaScript thuần - file HTML đơn - GitHub Pages.
+Three.js (nhúng sẵn, không CDN) - JavaScript thuần - file HTML đơn - GitHub Pages.
 
 ## 📄 Giấy phép
 

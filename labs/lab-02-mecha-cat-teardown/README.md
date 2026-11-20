@@ -5,7 +5,7 @@
 **English** | [Tiếng Việt](#tiếng-việt)
 
 [![Live](https://img.shields.io/badge/Live-Mecha_Cat_Teardown-brightgreen?style=flat-square)](https://3dlabobo.dannyphan.me/labs/lab-02-mecha-cat-teardown/)
-[![Three.js](https://img.shields.io/badge/Three.js-r128-black?style=flat-square&logo=threedotjs)](https://threejs.org/)
+[![Three.js](https://img.shields.io/badge/Three.js-r186-black?style=flat-square&logo=threedotjs)](https://threejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](../../LICENSE)
 
 ## Live demo
@@ -60,7 +60,7 @@ Open `index.html` in a browser (WebGL). Or serve the folder with any static serv
 
 ### Tech
 
-Three.js (r128, CDN) - vanilla JavaScript - single-file HTML - GitHub Pages.
+Three.js r186 (inlined, no CDN) - vanilla JavaScript - single-file HTML - WebGL + Canvas 2D charts - GitHub Pages.
 
 ### Reproduce it
 
@@ -118,7 +118,7 @@ Mở `index.html` bằng trình duyệt (WebGL). Hoặc chạy thư mục này b
 
 ### Công nghệ
 
-Three.js (r128, CDN) - JavaScript thuần - một file HTML - GitHub Pages.
+Three.js r186 (nhúng sẵn, không CDN) - JavaScript thuần - một file HTML - WebGL + biểu đồ Canvas 2D - GitHub Pages.
 
 ### Tái hiện lại
 
