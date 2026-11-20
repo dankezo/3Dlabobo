@@ -253,7 +253,7 @@
         .subbar{ display:none; }
         /* Rev 3.9.5: the GitHub button shows on phones too, big - it sits
            at the bottom-right of the stage, opposite the ASSEMBLED flag. */
-        .ghbtn{ font-size:14px; font-weight:700; padding:12px 18px; border-radius:10px; background:var(--ink); color:var(--panel); border-color:var(--ink); box-shadow:0 6px 18px rgba(15,18,20,.28); }
+        .ghbtn{ font-size:12.5px; font-weight:700; padding:9px 14px; border-radius:8px; background:var(--ink); color:var(--panel); border-color:var(--ink); box-shadow:0 6px 18px rgba(15,18,20,.28); }
         .ghbtn:hover{ background:var(--ink); opacity:.88; }
       }
       /* short phone screens: drop the sparklines so the left column still
@@ -272,7 +272,7 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.9.5</b></span>
+          <span class="chip opt">REV <b>3.9.6</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
@@ -504,6 +504,12 @@
             <ul>
               <li><b>Sound removed:</b> the whole machine sound is gone - the Web Audio engine, the Sound button, the footfall and fire sounds and the detach clunks. The lab is silent by design again.</li>
               <li><b>GitHub button on phones:</b> the To GitHub button now shows on phones too, big - dark, 14px, at the bottom-right of the stage, opposite the ASSEMBLED flag, opening the lab folder on GitHub in a new tab. Desktop keeps the small chip.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.9.6 - GitHub button a touch smaller on phones</h3>
+            <ul>
+              <li><b>GitHub button:</b> the phone button was too big - now 12.5px type with 9px 14px padding, still dark and prominent at the bottom-right of the stage. Desktop chip unchanged.</li>
             </ul>
           </div>
           <div class="card">
