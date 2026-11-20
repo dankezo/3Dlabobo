@@ -239,7 +239,11 @@
         .rail button{ font-size:10px; padding:4px 5px; }
         .ctl input[type=range]{ height:14px; }
         .stageflags{ left:8px; bottom:8px; }
-        #toast{ top:10px; bottom:auto; }
+        /* Rev 3.9.3: toast at the top-right of the stage, compact, so it
+           never covers the header, the big number or the machine. Its top
+           is set from the stage position in placeHud(). */
+        #toast{ bottom:auto; left:auto; right:10px; transform:translateY(20px); padding:7px 11px; font-size:12px; border-radius:8px; max-width:72vw; }
+        #toast.on{ transform:translateY(0); }
         /* Rev 3.9.2: no detach bar on phones - parts detach by tapping them
            directly on the model, and tapping empty stage reassembles. */
         .subbar{ display:none; }
@@ -260,7 +264,7 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.9.2</b></span>
+          <span class="chip opt">REV <b>3.9.3</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
@@ -307,6 +311,7 @@
                 <button id="btnXray" type="button" aria-pressed="false">X-Ray</button>
                 <button id="btnView" type="button">Reset view</button>
                 <button id="btnTour" type="button">↻ Replay tour</button>
+                <button id="btnSound" type="button">Sound on</button>
               </div>
             </div>
             <div class="hudcol right">
@@ -392,7 +397,7 @@
               <li><b>3D</b> - Three.js (classic build, global <code>THREE</code>), procedural modelling, no external model files</li>
               <li><b>Video / audio</b> - ffmpeg (<code>ffmpeg -version</code>), Python 3 for capture helpers</li>
               <li><b>QA</b> - Playwright + Chromium for stills at every tour beat and the critic pass</li>
-              <li><b>Browser APIs</b> - WebGL, Canvas 2D (charts), Web Audio-free build: this lab is silent by design</li>
+              <li><b>Browser APIs</b> - WebGL, Canvas 2D (charts), Web Audio synthesis for sound (no audio files)</li>
               <li><b>Config</b> - “Load this machine” accepts a JSON config: <code>{"name","rpm","stress","explode","xray"}</code></li>
             </ul>
           </div>
@@ -470,6 +475,13 @@
             <ul>
               <li><b>Sliders aligned:</b> the Explode slider carried a desktop separator (top border + 7px padding + 2px margin) that pushed it about 10px lower than the other two sliders in the phone row. The separator is neutralised on phones, so all three sliders line up.</li>
               <li><b>Detach bar removed on phones:</b> the Detach bar is gone from the phone layout - parts detach by tapping them directly on the model, and tapping empty stage reassembles. The ASSEMBLED / EXPLODED flag on the stage still shows the state, and the tour skips its cursor move for hidden targets instead of pointing at nothing. Desktop keeps the bar.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Rev 3.9.3 - toast to the top-right, light machine sound</h3>
+            <ul>
+              <li><b>Toast:</b> on phones the message box now sits at the top-right of the stage, compact (smaller padding and type), so it never covers the header, the big number or the machine. Its top is measured from the stage in placeHud, so it follows the layout even if the header wraps. Desktop keeps the bottom-centre toast.</li>
+              <li><b>Sound:</b> Web Audio synthesis, no audio files - a light metallic tick per footfall, driven by the same phase that drives the legs, so it can never drift from the picture. Cat: a crisp tick per touchdown (trot = two beats per crank turn, the two beats slightly apart in pitch). Worm: a softer, higher, quicker tick per wave half-cycle. Gun: a low thump + clunk on fire. Detach and reassemble: a short clunk. Sound starts after the first tap (browsers block audio before a gesture); the Sound button in the View/Tour row mutes it, and the choice is remembered.</li>
             </ul>
           </div>
           <div class="card">
@@ -559,6 +571,84 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         legs: {},             // solved per-leg state
         torquePeak: 0, power: 0, bobY: 0, pitch: 0, roll: 0, tailPhase: []
       };
+      /* ================= SOUND - Rev 3.9.3: light machine sound, made with
+         Web Audio (no audio files, the page stays one file). Footfalls are
+         driven by the same phase that drives the legs, so the sound can
+         never drift from the picture. Cat: a metallic tick per touchdown
+         (trot = two beats per crank turn). Worm: a softer, higher tick per
+         wave half-cycle. Gun: a low thump + clunk on fire. Detach and
+         reassemble: a short clunk. Sound starts after the first tap
+         (browsers block audio before a gesture) and the Sound button mutes
+         it; the choice is remembered. */
+      var soundOn = true;
+      try { soundOn = localStorage.getItem('mecha-sound') !== 'off'; } catch (e) { /* private mode - default on */ }
+      var actx = null, masterGain = null;
+      function audio() {
+        if (!actx) {
+          var AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return null;
+          actx = new AC();
+          masterGain = actx.createGain(); masterGain.gain.value = 0.14; masterGain.connect(actx.destination);
+        }
+        if (actx.state === 'suspended') actx.resume();
+        return actx;
+      }
+      document.addEventListener('pointerdown', function () { if (soundOn) audio(); });
+      function metalPing(freq, dur, vol) {
+        if (!soundOn || !actx || actx.state !== 'running' || !masterGain) return;
+        var t = actx.currentTime;
+        var parts = [[1, 1], [2.76, 0.5], [5.40, 0.28], [8.93, 0.12]];
+        for (var i = 0; i < parts.length; i++) {
+          var o = actx.createOscillator(), g = actx.createGain();
+          o.type = 'sine';
+          o.frequency.value = freq * parts[i][0] * (1 + (Math.random() - 0.5) * 0.04);
+          g.gain.setValueAtTime(Math.max(0.0001, vol * parts[i][1]), t);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+          o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + dur + 0.02);
+        }
+        var len = Math.max(1, Math.floor(actx.sampleRate * 0.012));
+        var buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0);
+        for (var j = 0; j < len; j++) d[j] = (Math.random() * 2 - 1) * (1 - j / len);
+        var src = actx.createBufferSource(); src.buffer = buf;
+        var hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2500;
+        var ng = actx.createGain(); ng.gain.value = vol * 0.5;
+        src.connect(hp); hp.connect(ng); ng.connect(masterGain); src.start(t);
+      }
+      function gunThump() {
+        if (!soundOn || !actx || actx.state !== 'running' || !masterGain) return;
+        var t = actx.currentTime;
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = 'sine'; o.frequency.setValueAtTime(160, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.18);
+        g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
+        o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + 0.22);
+        metalPing(700, 0.12, 0.7);
+      }
+      var soundPrevPhi = 0, soundPrevWormPi = 0, soundPrevFired = 0;
+      function soundStep() {
+        if (!soundOn || !model.running || model.rpm <= 0) {
+          soundPrevPhi = model.phi;
+          soundPrevWormPi = Math.floor(extraModel.wormPhase / Math.PI);
+          soundPrevFired = extraModel.gunFired;
+          return;
+        }
+        if (currentMachine === 'cat') {
+          var prev = soundPrevPhi; soundPrevPhi = model.phi;
+          if (prev < 180 && model.phi >= 180) metalPing(1900, 0.09, 0.5);
+          if (prev > model.phi) metalPing(2150, 0.09, 0.45); /* wrapped past 360/0 */
+        } else if (currentMachine === 'worm') {
+          var wpi = Math.floor(extraModel.wormPhase / Math.PI);
+          if (wpi !== soundPrevWormPi) { soundPrevWormPi = wpi; metalPing(2900, 0.05, 0.3); }
+        } else if (currentMachine === 'gun') {
+          if (extraModel.gunFired !== soundPrevFired) { soundPrevFired = extraModel.gunFired; gunThump(); }
+        }
+      }
+      function setSound(on) {
+        soundOn = on;
+        try { localStorage.setItem('mecha-sound', on ? 'on' : 'off'); } catch (e) { /* private mode */ }
+        var b = $('btnSound');
+        if (b) { b.textContent = on ? 'Sound on' : 'Sound off'; b.classList.toggle('toggled', on); }
+        if (on) audio();
+      }
       function solveLeg(def, stress) {
         var th = (model.phi + def.off) * D2R;
         var stride = SPEC.STRIDE * (0.72 + 0.28 * stress);
@@ -1267,12 +1357,14 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       function fullReassemble(announce) {
         if (explodeAll > 0) { $('inExplode').value = 0; setExplodeAll(0); }
         setSelected('none');
+        metalPing(900, 0.08, 0.4); /* reassemble clunk */
         if (announce) toast('Reassembled');
       }
       function pickSub(sub) {
         if (!sub || sub === 'none' || sub === selected) { fullReassemble(sub !== 'none'); return; }
         if (explodeAll > 0) { $('inExplode').value = 0; explodeAll = 0; $('oExplode').textContent = '0%'; }
         setSelected(sub);
+        metalPing(900, 0.08, 0.4); /* detach clunk */
       }
       function setExplodeAll(v) {
         explodeAll = v;
@@ -1418,6 +1510,9 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       $('btnXray').addEventListener('click', function () { stopTour(); setXray(!xray); });
       $('btnView').addEventListener('click', function () { stopTour(); camYaw = CAM_HOME.yaw; camPitch = CAM_HOME.pitch; camDist = homeDist(); lastHomeDist = camDist; });
       $('btnTour').addEventListener('click', function () { startTour(); });
+      $('btnSound').addEventListener('click', function () { setSound(!soundOn); });
+      $('btnSound').textContent = soundOn ? 'Sound on' : 'Sound off';
+      $('btnSound').classList.toggle('toggled', soundOn);
       var subBtns = document.querySelectorAll('#subbar button');
       for (var bi = 0; bi < subBtns.length; bi++) {
         subBtns[bi].addEventListener('click', function () { stopTour(); pickSub(this.getAttribute('data-sub')); });
@@ -1620,6 +1715,12 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       var hudDocked = true;
       function placeHud() {
         var phone = stage.clientWidth <= 640;
+        /* Rev 3.9.3: the toast is pinned to the top-right of the stage on
+           phones (measured from the stage, so it follows the header even
+           if the header wraps); on desktop it keeps its bottom-centre spot. */
+        var toastEl = $('toast');
+        if (phone) { toastEl.style.top = (stage.getBoundingClientRect().top + 8) + 'px'; }
+        else { toastEl.style.top = ''; }
         if (phone && hudDocked) { $('consoleCard').insertBefore(hudEl, subbarEl); hudDocked = false; }
         else if (!phone && !hudDocked) { stage.appendChild(hudEl); hudDocked = true; }
       }
@@ -1728,6 +1829,7 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
           }
           applyCamera();
           renderer.render(scene, camera);
+          soundStep();
           // readouts + charts at ~20 Hz
           uiAcc += dt; fpsAcc += dt; fpsN++;
           if (uiAcc > 0.05) {
