@@ -46,8 +46,9 @@ immediately after approval.
   on 2026-11-03 as too laggy and stays reversed. Cat Jelly Press stays
   press-only; the mecha cat lives only as its own lab.
 - The step-8 video (render(t), 60 fps, 1920×1080, 30 s cut, ffmpeg score) is a
-  follow-on run from this page, not shipped inside it. This lab is silent by
-  design (no Web Audio).
+  follow-on run from this page, not shipped inside it. Sound is Web Audio
+  synthesis, no audio files (old-metal clank for the cat, domino clacks for
+  the worm).
 
 ## Machine numbers (checked on paper before coding)
 

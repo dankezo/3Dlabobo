@@ -35,13 +35,13 @@ Contrast (computed 2026-11-19): lime #9FE035 on #080A0D = 12.45:1, muted #A3ABA4
 
 - Fixed header 64px, blurred dark, brand left ("● 3DLABOBO // LAB"), nav center (LABS / GITHUB / DANNYPHAN.ME), status right ("HÀ NỘI, VN - ĐANG MỞ", hidden under 860px).
 - Content max-width 1440px, left-aligned, padding 24px (16px on phone).
-- Hero: kicker mono, huge 2-line title, one sentence, 3-stat row (02 labs / 400 bar max press / Rev 3.8 latest). All numbers real.
+- Hero: kicker mono, huge 2-line title, one sentence, 3-stat row (02 labs / 400 bar max press / Rev 3.9.4 latest). All numbers real.
 - Tiles: 2-column grid (1 column under 860px), 2 redirect tiles only, no embedded tests, links open in a new tab.
 - Footer: hairline top, redirect-only note + "3DLABOBO // 2 LABS // VI / EN".
 
 ## Tile art (typographic until GIFs arrive)
 
-- No drawn SVG previews, no fake imagery. Tile art is a flat panel with: LIVE pill, LAB / 01 code, one big display value (400 BAR / REV 3.8), one mono spec line, one giant faint number (01 / 02 at 5% ink).
+- No drawn SVG previews, no fake imagery. Tile art is a flat panel with: LIVE pill, LAB / 01 code, one big display value (400 BAR / REV 3.9.4), one mono spec line, one giant faint number (01 / 02 at 5% ink).
 - GIF slot: when the user's two 3-5s gameplay clips arrive, process them (LosslessCut trim without re-encode + Real-ESRGAN upscale) into GIFs and replace the `.tile-art` content. Keep the LIVE pill and LAB code. Do not ship a drawn preview in the meantime.
 - Favicon: favicon.png wired in `<head>` (was `data:,` before this rework). Social preview: social-preview.jpg via og:image.
 

@@ -66,6 +66,10 @@
       .flag{ font-family:var(--mono); font-size:11px; padding:4px 8px; border-radius:4px; background:rgba(255,255,255,.82); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); color:#131619; border:1px solid rgba(0,0,0,.08); box-shadow:0 2px 8px rgba(15,18,20,.08); }
       .flag.hot{ background:var(--warn); color:#fff; border-color:transparent; display:none; }
       .flag.hot.on{ display:block; }
+      /* Rev 3.9.4: To GitHub link - mirrors the ASSEMBLED flag at the
+         bottom-right of the stage, desktop only. */
+      .ghbtn{ position:absolute; right:14px; bottom:14px; z-index:6; font-family:var(--mono); font-size:11px; padding:4px 8px; border-radius:4px; background:rgba(255,255,255,.82); -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px); color:#131619; border:1px solid rgba(0,0,0,.08); box-shadow:0 2px 8px rgba(15,18,20,.08); text-decoration:none; }
+      .ghbtn:hover{ background:#fff; }
       #cursor{ position:absolute; width:22px; height:22px; margin:-3px 0 0 -3px; z-index:30; pointer-events:none; opacity:0; transition:left .9s cubic-bezier(.5,0,.2,1), top .9s cubic-bezier(.5,0,.2,1), opacity .3s; filter:drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
       #cursor.on{ opacity:1; }
       #cursor .ring{ position:absolute; inset:0; border-radius:50%; border:2px solid var(--accent); opacity:0; }
@@ -247,6 +251,8 @@
         /* Rev 3.9.2: no detach bar on phones - parts detach by tapping them
            directly on the model, and tapping empty stage reassembles. */
         .subbar{ display:none; }
+        /* Rev 3.9.4: no GitHub button on phones - the stage is one viewport. */
+        .ghbtn{ display:none; }
       }
       /* short phone screens: drop the sparklines so the left column still
          clears the bottom-left status flag */
@@ -264,7 +270,7 @@
         </div>
         <div class="chips">
           <span class="chip opt">MACHINE <b id="chipMachine">MECHA CAT MK-IV</b></span>
-          <span class="chip opt">REV <b>3.9.3</b></span>
+          <span class="chip opt">REV <b>3.9.4</b></span>
           <span class="chip opt">SOLVER <b>LIVE</b></span>
           <span class="chip" id="chipFps">FPS <b>-</b></span>
           <button class="docsbtn" id="btnDocs" type="button">Lab docs</button>
@@ -301,6 +307,7 @@
             <span class="flag" id="flagMode">ASSEMBLED</span>
             <span class="flag hot" id="flagHot">⚠ OVER-LIMIT - STRESS TEST</span>
           </div>
+          <a class="ghbtn" href="https://github.com/dankezo/3Dlabobo/tree/main/labs/lab-02-mecha-cat-teardown" target="_blank" rel="noopener noreferrer">To GitHub ↗</a>
           <div class="hud" id="hud" aria-label="Live metrics">
             <div class="hudcol left">
               <div class="chart"><div class="chead"><span class="cname" id="nameTorque">Servo torque · peak</span><span class="cval" id="vTorque">0 <small>N·m</small></span></div><canvas id="chTorque" width="260" height="44"></canvas><div class="cmm"><span id="mmTorqueMin">min 0</span><span id="mmTorqueMax">max 0</span></div></div>
@@ -485,6 +492,13 @@
             </ul>
           </div>
           <div class="card">
+            <h3>Rev 3.9.4 - To GitHub button + old-metal sound</h3>
+            <ul>
+              <li><b>To GitHub:</b> a link chip sits at the bottom-right of the stage, opposite the ASSEMBLED flag, opening the lab folder on GitHub in a new tab. Desktop only - hidden on phones so the stage stays one clean viewport.</li>
+              <li><b>Sound:</b> the clean tick is gone. The cat now moves with a low worn-metal clank per touchdown - heavy thud, rough detuned partials and a short scrape (trot = two beats per crank turn). The worm now sounds like a domino run: 8 metal clacks, one per segment, pitch stepping down, 40 ms apart, every wave half-cycle. Gun and detach keep a heavier clunk. Still Web Audio synthesis, no audio files.</li>
+            </ul>
+          </div>
+          <div class="card">
             <h3>Sources</h3>
             <p class="srcs">
               Original post: <a href="https://x.com/elvar_official/status/2116174609355571402" target="_blank" rel="noopener">Elvar - “How I Turn Any Machine Into a 3D Simulator You Can Take Apart”</a><br />
@@ -571,12 +585,14 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         legs: {},             // solved per-leg state
         torquePeak: 0, power: 0, bobY: 0, pitch: 0, roll: 0, tailPhase: []
       };
-      /* ================= SOUND - Rev 3.9.3: light machine sound, made with
+      /* ================= SOUND - Rev 3.9.4: old-metal sound, made with
          Web Audio (no audio files, the page stays one file). Footfalls are
          driven by the same phase that drives the legs, so the sound can
-         never drift from the picture. Cat: a metallic tick per touchdown
-         (trot = two beats per crank turn). Worm: a softer, higher tick per
-         wave half-cycle. Gun: a low thump + clunk on fire. Detach and
+         never drift from the picture. Cat: a low, worn-metal clank per
+         touchdown - heavy thud + rough partials + a short scrape (trot =
+         two beats per crank turn). Worm: a domino run of 8 metal clacks,
+         one per segment, pitch stepping down, 40 ms apart, per wave
+         half-cycle. Gun: a low thump + clunk on fire. Detach and
          reassemble: a short clunk. Sound starts after the first tap
          (browsers block audio before a gesture) and the Sound button mutes
          it; the choice is remembered. */
@@ -594,34 +610,42 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         return actx;
       }
       document.addEventListener('pointerdown', function () { if (soundOn) audio(); });
-      function metalPing(freq, dur, vol) {
+      /* Old worn metal: low inharmonic partials with a rough detune, a low
+         thud under the hit and a short bandpassed scrape, so it sounds like
+         a heavy plate shifting, not a clean ping. `delay` queues the hit
+         later (the worm domino run schedules 8 of these in a row). */
+      function metalClank(freq, dur, vol, delay) {
         if (!soundOn || !actx || actx.state !== 'running' || !masterGain) return;
-        var t = actx.currentTime;
-        var parts = [[1, 1], [2.76, 0.5], [5.40, 0.28], [8.93, 0.12]];
+        var t = actx.currentTime + (delay || 0);
+        var parts = [[1, 1], [2.02, 0.55], [2.94, 0.32], [4.31, 0.15]];
         for (var i = 0; i < parts.length; i++) {
           var o = actx.createOscillator(), g = actx.createGain();
           o.type = 'sine';
-          o.frequency.value = freq * parts[i][0] * (1 + (Math.random() - 0.5) * 0.04);
+          o.frequency.value = freq * parts[i][0] * (1 + (Math.random() - 0.5) * 0.03);
           g.gain.setValueAtTime(Math.max(0.0001, vol * parts[i][1]), t);
           g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
           o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + dur + 0.02);
         }
-        var len = Math.max(1, Math.floor(actx.sampleRate * 0.012));
+        var th = actx.createOscillator(), tg = actx.createGain();
+        th.type = 'sine'; th.frequency.setValueAtTime(110, t); th.frequency.exponentialRampToValueAtTime(52, t + 0.12);
+        tg.gain.setValueAtTime(Math.max(0.0001, vol * 0.7), t); tg.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
+        th.connect(tg); tg.connect(masterGain); th.start(t); th.stop(t + 0.15);
+        var len = Math.max(1, Math.floor(actx.sampleRate * 0.07));
         var buf = actx.createBuffer(1, len, actx.sampleRate), d = buf.getChannelData(0);
         for (var j = 0; j < len; j++) d[j] = (Math.random() * 2 - 1) * (1 - j / len);
         var src = actx.createBufferSource(); src.buffer = buf;
-        var hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2500;
-        var ng = actx.createGain(); ng.gain.value = vol * 0.5;
-        src.connect(hp); hp.connect(ng); ng.connect(masterGain); src.start(t);
+        var bp = actx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 700 + Math.random() * 400; bp.Q.value = 1.5;
+        var ng = actx.createGain(); ng.gain.value = vol * 0.22;
+        src.connect(bp); bp.connect(ng); ng.connect(masterGain); src.start(t); src.stop(t + 0.07);
       }
       function gunThump() {
         if (!soundOn || !actx || actx.state !== 'running' || !masterGain) return;
         var t = actx.currentTime;
         var o = actx.createOscillator(), g = actx.createGain();
-        o.type = 'sine'; o.frequency.setValueAtTime(160, t); o.frequency.exponentialRampToValueAtTime(48, t + 0.18);
-        g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.2);
-        o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + 0.22);
-        metalPing(700, 0.12, 0.7);
+        o.type = 'sine'; o.frequency.setValueAtTime(140, t); o.frequency.exponentialRampToValueAtTime(42, t + 0.22);
+        g.gain.setValueAtTime(0.9, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+        o.connect(g); g.connect(masterGain); o.start(t); o.stop(t + 0.27);
+        metalClank(420, 0.2, 0.6);
       }
       var soundPrevPhi = 0, soundPrevWormPi = 0, soundPrevFired = 0;
       function soundStep() {
@@ -633,11 +657,15 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
         }
         if (currentMachine === 'cat') {
           var prev = soundPrevPhi; soundPrevPhi = model.phi;
-          if (prev < 180 && model.phi >= 180) metalPing(1900, 0.09, 0.5);
-          if (prev > model.phi) metalPing(2150, 0.09, 0.45); /* wrapped past 360/0 */
+          if (prev < 180 && model.phi >= 180) metalClank(300, 0.24, 0.55);
+          if (prev > model.phi) metalClank(265, 0.24, 0.5); /* wrapped past 360/0 */
         } else if (currentMachine === 'worm') {
           var wpi = Math.floor(extraModel.wormPhase / Math.PI);
-          if (wpi !== soundPrevWormPi) { soundPrevWormPi = wpi; metalPing(2900, 0.05, 0.3); }
+          if (wpi !== soundPrevWormPi) {
+            soundPrevWormPi = wpi;
+            /* domino run: one clack per segment, pitch stepping down, 40 ms apart */
+            for (var i = 0; i < 8; i++) metalClank(560 - i * 32, 0.15, 0.45, i * 0.04);
+          }
         } else if (currentMachine === 'gun') {
           if (extraModel.gunFired !== soundPrevFired) { soundPrevFired = extraModel.gunFired; gunThump(); }
         }
@@ -1357,14 +1385,14 @@ ACCEPTANCE: the page opens already moving; every subsystem detaches and returns;
       function fullReassemble(announce) {
         if (explodeAll > 0) { $('inExplode').value = 0; setExplodeAll(0); }
         setSelected('none');
-        metalPing(900, 0.08, 0.4); /* reassemble clunk */
+        metalClank(340, 0.2, 0.5); /* reassemble clunk */
         if (announce) toast('Reassembled');
       }
       function pickSub(sub) {
         if (!sub || sub === 'none' || sub === selected) { fullReassemble(sub !== 'none'); return; }
         if (explodeAll > 0) { $('inExplode').value = 0; explodeAll = 0; $('oExplode').textContent = '0%'; }
         setSelected(sub);
-        metalPing(900, 0.08, 0.4); /* detach clunk */
+        metalClank(340, 0.2, 0.5); /* detach clunk */
       }
       function setExplodeAll(v) {
         explodeAll = v;

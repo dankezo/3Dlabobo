@@ -1,6 +1,6 @@
 # Lab 02 - Mecha Cat Teardown
 
-> Take apart a procedural 3D mecha cat, subsystem by subsystem. One solver drives everything: crank phase, trot gait, 2-bone IK legs. Rev 3.8.
+> Take apart a procedural 3D mecha cat, subsystem by subsystem. One solver drives everything: crank phase, trot gait, 2-bone IK legs. Rev 3.9.4.
 
 **English** | [Tiếng Việt](#tiếng-việt)
 
@@ -46,8 +46,8 @@ Mecha Cat Teardown is a 3D teardown simulator for a procedural mecha cat. Tap an
 
 | Item | Value |
 | --- | --- |
-| Revision | Rev 3.8 |
-| File | One self-contained HTML file, 1,292,612 bytes (ship limit 2 MB) |
+| Revision | Rev 3.9.4 |
+| File | One self-contained HTML file, 1,306,274 bytes (ship limit 2 MB) |
 | Head | Angular wedge prism, zero SphereGeometry |
 | Solver | 1 crank / servo phase, 0-120 RPM, trot gait, 2-bone IK legs |
 | Charts | Live servo torque, foot lift, core temperature, power draw |
@@ -60,11 +60,11 @@ Open `index.html` in a browser (WebGL). Or serve the folder with any static serv
 
 ### Tech
 
-Three.js r186 (inlined, no CDN) - vanilla JavaScript - single-file HTML - WebGL + Canvas 2D charts - GitHub Pages.
+Three.js r186 (inlined, no CDN) - vanilla JavaScript - single-file HTML - WebGL + Canvas 2D charts - WebAudio (synthesized sound) - GitHub Pages.
 
 ### Reproduce it
 
-- `docs/` holds the original build record (Nov 2026, Rev 2-3 era): README, MASTER_PROMPT, TOOLS, tour script. It describes the build as it was then; current Rev 3.8 behaviour is described above.
+- `docs/` holds the original build record (Nov 2026, Rev 2-3 era): README, MASTER_PROMPT, TOOLS, tour script. It describes the build as it was then; current Rev 3.9.4 behaviour is described above.
 - `../../WORKFLOW-lab2-mecha-cat-teardown.md` is the 9-step workflow that built this lab from Elvar's teardown post ([How I Turn Any Machine Into a 3D Simulator You Can Take Apart](https://x.com/elvar_official/status/2116174609355571402)).
 - Method reference: [teardown skill](https://github.com/elvarofficial/teardown) (free, MIT) - read as the method reference only, do not copy its shipped machines.
 
@@ -104,7 +104,7 @@ Mecha Cat Teardown là máy mô phỏng tháo rời mèo mecha 3D. Bấm vào t�
 
 | Hạng mục | Giá trị |
 | --- | --- |
-| Bản hiện tại | Rev 3.8 |
+| Bản hiện tại | Rev 3.9.4 |
 | File | Một file HTML duy nhất, 1.292.612 byte (giới hạn 2 MB) |
 | Đầu | Lăng kính nêm góc cạnh, không dùng SphereGeometry |
 | Bộ giải | 1 trục / pha servo, 0-120 RPM, dáng đi trot, chân IK 2 khớp |
@@ -118,11 +118,11 @@ Mở `index.html` bằng trình duyệt (WebGL). Hoặc chạy thư mục này b
 
 ### Công nghệ
 
-Three.js r186 (nhúng sẵn, không CDN) - JavaScript thuần - một file HTML - WebGL + biểu đồ Canvas 2D - GitHub Pages.
+Three.js r186 (nhúng sẵn, không CDN) - JavaScript thuần - một file HTML - WebGL + biểu đồ Canvas 2D - WebAudio (âm thanh tổng hợp) - GitHub Pages.
 
 ### Tái hiện lại
 
-- `docs/` là hồ sơ build gốc (tháng 11/2026, thời Rev 2-3): README, MASTER_PROMPT, TOOLS, kịch bản tour. Nó mô tả bản build lúc đó; hành vi Rev 3.8 hiện tại được mô tả ở trên.
+- `docs/` là hồ sơ build gốc (tháng 11/2026, thời Rev 2-3): README, MASTER_PROMPT, TOOLS, kịch bản tour. Nó mô tả bản build lúc đó; hành vi Rev 3.9.4 hiện tại được mô tả ở trên.
 - `../../WORKFLOW-lab2-mecha-cat-teardown.md` là quy trình 9 bước đã dựng lab này từ bài teardown của Elvar ([How I Turn Any Machine Into a 3D Simulator You Can Take Apart](https://x.com/elvar_official/status/2116174609355571402)).
 - Tham khảo phương pháp: [teardown skill](https://github.com/elvarofficial/teardown) (miễn phí, MIT) - chỉ đọc để học phương pháp, không sao chép máy mẫu của họ.
 
