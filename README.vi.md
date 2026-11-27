@@ -24,9 +24,8 @@ Mở lên và chọn một lab. Không cần cài đặt, không cần build, kh
 | **Lab 03 - Lightwater World** | Thế giới dưới nước WebGPU dựng bằng code, fork từ Noniv/abyssal-garden (MIT). Bơi third-person trong vai cá vàng có sọc sáng, gặp sứa phát sáng, worm mecha 8 đốt và đàn cá mới trong nước xanh ngọc sáng. Không engine, không file model. | [Mở Lab 03](https://dankezo.github.io/lightwaterworld/) |
 | **Lab 04 - Rental Cat POV** | Phim ngắn 20 giây góc nhìn mèo bằng C++ và Metal, raw fork của rockeymen/rental-cat-pov, chưa sửa gì: mèo đập bóng len, rình cá vàng, rồi nhảy lên sofa ngủ. Chỉ chạy trên Mac. | [Mở Lab 04](https://github.com/dankezo/rental-cat-pov) |
 | **Lab 05 - Papertrails** | Thế giới giấy gập vô tận của Shikhar (@xikhar): các ô giấy phẳng gập lên trước mặt khi bạn đi, gập xuống phía sau. Làm bằng Fable 5.2 và Opus 5.5, chạy trên trình duyệt bằng three.js. MIT, chỉ tham khảo - không phải repo của mình. | [Mở Lab 05](https://xikhar.github.io/papertrails/) |
-| **Lab 06 - Hanoi 3D** | Hà Nội giấy gập, fork từ xikhar/papertrails (MIT). Đi bộ trên bản đồ giấy tĩnh 40x40 với 10 địa danh - Hồ Gươm, Đền Ngọc Sơn, Hồ Tây, Phố Cổ, Lăng Chủ Tịch, Văn Miếu, Chùa Một Cột, Nhà Thờ Lớn, Nhà Hát Lớn, Cầu Long Biên - kèm checklist khám phá, toast và minimap. Mở bằng `?map=hanoi`. | [Mở Lab 06](https://dankezo.github.io/hanoi-3d/?map=hanoi) |
 
-Mã nguồn Lab 01: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Mã nguồn Lab 02: repo này. Mã nguồn Lab 03: [dankezo/lightwaterworld](https://github.com/dankezo/lightwaterworld). Mã nguồn Lab 04: [dankezo/rental-cat-pov](https://github.com/dankezo/rental-cat-pov) (raw fork). Mã nguồn Lab 05: [xikhar/papertrails](https://github.com/xikhar/papertrails) (tham khảo, MIT). Mã nguồn Lab 06: [dankezo/hanoi-3d](https://github.com/dankezo/hanoi-3d) (fork từ Papertrails, MIT).
+Mã nguồn Lab 01: [dankezo/cat-jelly](https://github.com/dankezo/cat-jelly). Mã nguồn Lab 02: repo này. Mã nguồn Lab 03: [dankezo/lightwaterworld](https://github.com/dankezo/lightwaterworld). Mã nguồn Lab 04: [dankezo/rental-cat-pov](https://github.com/dankezo/rental-cat-pov) (raw fork). Mã nguồn Lab 05: [xikhar/papertrails](https://github.com/xikhar/papertrails) (tham khảo, MIT).
 
 ## ✨ Điểm hay
 
@@ -55,7 +54,7 @@ Mỗi lab đều có tài liệu đầy đủ, master prompt và danh sách côn
 
 ```
 3Dlabobo/
-├── index.html                       # Hub - 6 ô redirect, Lab 01 + Lab 02 + Lab 03 + Lab 04 + Lab 05 + Lab 06
+├── index.html                       # Hub - 5 ô redirect, Lab 01 + Lab 02 + Lab 03 + Lab 04 + Lab 05
 ├── labs/
 │   ├── lab-01-cat-jelly-press/      # Máy ép mèo thạch (press.html + README.md)
 │   └── lab-02-mecha-cat-teardown/   # Tháo rời mèo mecha (index.html + README.md + docs/)
